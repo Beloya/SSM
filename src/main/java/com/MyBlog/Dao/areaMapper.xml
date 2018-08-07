@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.MyBlog.Dao.areaMapper">
+   <cache type="com.MyBlog.cache.RedisCache" blocking="false"  
+           flushInterval="0" readOnly="true" size="1024" eviction="FIFO"/>
+    <select id="findsf" resultType="area">
+        select codeid,parentid,cityName from area where parentid=0
+    </select>
+      <select id="findcity" resultType="area">
+        select codeid,parentid,cityName from area where parentid=#{codeid}
+    </select>
+    <select id="findByid" parameterType="int" resultType="area">
+            select codeid,parentid,cityName from area where codeid=#{codeid}
+    </select>
+    <select id="findBycityName" parameterType="String" resultType="area">
+        select codeid,parentid,cityName from area where cityName=#{cityName} and parentid<![CDATA[<>]]>0
+    </select>
+<insert id="Add" parameterType="area">
+    insert into area(codeid,parentid,cityName) values(#{codeid},#{parentid},#{cityName});
+</insert>
+<delete id="del" parameterType="int">
+    delete from area where codeid=#{codeid}
+</delete>
+<update id="Update" parameterType="area">
+    update area set parentid=#{parentid},cityName=#{cityName} where codeid=#{codeid}
+</update>
+    </mapper>

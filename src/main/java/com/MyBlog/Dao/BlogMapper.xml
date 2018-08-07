@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.MyBlog.Dao.BlogMapper">
+<cache type="com.MyBlog.cache.RedisCache" blocking="false"  
+           flushInterval="0" readOnly="true" size="1024" eviction="LRU"/>
+
+<resultMap type="com.MyBlog.entity.Blog" id="BlogFILED">
+    <id property="id" column="ID"/>
+    <result property="blogname" column="BlogName"/>
+    <result property="revision" column="REVISION"/>
+    <result property="createdBy" column="CREATED_BY"/>
+    <result property="createdTime" column="CREATED_TIME"/>
+    <result property="updatedBy" column="UPDATED_BY"/>
+    <result property="updatedTime" column="UPDATED_TIME"/>
+    <result property="title" column="Title"/>
+    <result property="messagesay" column="MessageSay"/>
+    <result property="headerskin" column="HeaderSkin"/>
+      <result property="archivescount" column="ArchivesCount"/>
+      <result property="typecount" column="TypeCount"/>
+    <association property="users" javaType="com.MyBlog.entity.Users" >
+  <id property="U_Id" column="U_Id"/>
+<result property="RId" column="RId" />
+<result property="userName" column="userName" />
+<result property="UserImg" column="UserImg" />
+<result property="passWord" column="passWord" />
+<result property="CreatorId" column="CreatorId" />
+<result property="CreateDate" column="CreateDate" />
+<result property="DataLevel" column="DataLevel" />
+<result property="Email" column="Email" />
+<result property="salt" column="salt" />
+<result property="Sex" column="Sex" />
+<result property="locked" column="locked" />
+    </association>
+    </resultMap>
+    
+<select id="FindByUserName" parameterType="String" resultMap="BlogFILED">
+    select * from blog b join users on userName=CREATED_BY 
+    left join (select count(AID) as ArchivesCount from archives a where a.CREATED_BY=CREATED_BY and Status=0) ac on 1=1
+    left join (select count(TID) as TypeCount from type t where t.CREATED_BY=CREATED_BY  and Status=0) tc on 1=1
+     where CREATED_BY=#{UserName}
+</select>
+    
+<select id="FindAll" resultMap="BlogFILED">
+    select * from blog  join users on userName=CREATED_BY
+</select>
+<select id="FindById" parameterType="int" resultMap="BlogFILED">
+    select * from blog  join users on userName=CREATED_BY where ID=#{ID}
+</select>
+<insert id="AddBlog" parameterType="Blog">
+    insert into blog(BlogName,CREATED_BY,CREATED_TIME,Title) values(#{BlogName},#{CREATED_BY},#{CREATED_TIME},#{Title})
+</insert>
+<delete id="delete" parameterType="int">
+    delete * from blog where ID=#{ID}
+</delete>
+    </mapper>

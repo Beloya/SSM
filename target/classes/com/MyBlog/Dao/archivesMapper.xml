@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.MyBlog.Dao.archivesMapper">
+    <cache type="com.MyBlog.cache.RedisCache" blocking="false"   flushInterval="7200000"
+            readOnly="true" size="1024" eviction="LRU"/>
+    <resultMap type="com.MyBlog.entity.archives" id="archivesFILED">
+        <id property="aid" column="AID" />
+        <result property="title" column="Title"/>
+        <result property="context" column="context"/>
+        <result property="type" column="Type"/>
+        <result property="createdBy" column="CREATED_BY"/>
+        <result property="createdTime" column="CREATED_TIME"/>
+        <result property="updatedBy" column="UPDATED_BY"/>
+        <result property="updatedTime" column="UPDATED_TIME"/>
+        <result property="status" column="Status"/>
+        <result property="readcount" column="ReadCount"/>
+        <result property="flag" column="Flag"/>
+        <result property="vid" column="VID"/>
+              <association property="archivesvisibility" javaType="com.MyBlog.entity.Archivesvisibility">
+            <id property="id" column="ID" />
+<result property="vdescribe" column="Vdescribe" />
+<result property="status" column="Status"/>
+        </association>
+            <association property="etype"   javaType="com.MyBlog.entity.type">
+            <id property="tid" column="TID" />
+             <result property="tdescribe" column="Tdescribe" />
+            <result property="revision" column="REVISION"/>
+            <result property="createdBy" column="CREATED_BY"/>
+             <result property="createdTime" column="CREATED_TIME"/>
+            <result property="updatedBy" column="UPDATED_BY"/>
+            <result property="updatedTime" column="UPDATED_TIME"/>
+            <result property="status" column="Status"/>
+        </association>
+               <collection property="archivesflags" javaType="ArrayList"  select="getaflag" ofType="com.MyBlog.entity.archivesFlag" column="AID">
+            <id property="aid" column="AID"/>
+            <result property="id" column="ID"/>
+            <result property="fid" column="FID"/>
+              <result property="fdescribe" column="Fdescribe"/>
+               <result property="createdBy" column="CREATED_BY"/>
+            <result property="createdTime" column="UPDATED_BY"/>
+            <result property="updatedTime" column="UPDATED_TIME"/>
+             <association property="flag"   javaType="com.MyBlog.entity.Flag">
+              <id property="fid" column="FID"/>
+            <result property="fdescribe" column="Fdescribe"/>
+            <result property="revision" column="REVISION"/>
+            <result property="createdBy" column="CREATED_BY"/>
+            <result property="createdTime" column="UPDATED_BY"/>
+            <result property="updatedTime" column="UPDATED_TIME"/>
+            <result property="status" column="Status"/>
+        </association>
+        </collection>
+              <collection property="flags" select="getflag" ofType="com.MyBlog.entity.Flag" column="FID">
+            <id property="fid" column="FID"/>
+            <result property="fdescribe" column="Fdescribe"/>
+            <result property="revision" column="REVISION"/>
+            <result property="createdBy" column="CREATED_BY"/>
+            <result property="createdTime" column="UPDATED_BY"/>
+            <result property="updatedTime" column="UPDATED_TIME"/>
+            <result property="status" column="Status"/>
+        </collection>
+ 
+    </resultMap>
+       <select id="FindAll" resultMap="archivesFILED">
+        select * from archives a  left join archivesvisibility av on a.VID=av.ID 
+        left join type t on t.TID=a.type 
+        where a.Status=0
+         order by a.CREATED_TIME desc
+    </select>
+      
+    <select id="FindByStatus" parameterType="int" resultMap="archivesFILED">
+        select * from archives a  left join archivesvisibility av on a.VID=av.ID left join type t on t.TID=a.type where a.Status=#{Status} order by a.CREATED_TIME desc
+    </select>
+     <select id="FindById" parameterType="int" resultMap="archivesFILED">
+         select * from archives a left join type t on t.TID=a.type  left join archivesvisibility av on a.VID=av.ID where a.AID=#{AID} and a.Status=0
+    </select>
+         <select id="FindByParam" parameterType="archives" resultMap="archivesFILED">
+         select * from archives a left join type t on t.TID=a.type  left join archivesvisibility av on a.VID=av.ID 
+        <where> 
+         <if test="type!=null">
+         a.Type=#{type}
+         </if>
+               <if test="title!=null">
+         and a.Title like {title}
+         </if>
+                 <if test="context!=null">
+         and a.contextlike #{context}
+         </if>
+         <if test="status!=null">
+          and a.Status=#{status}
+         </if>
+         </where>
+    </select>
+    
+    <select id="getaflag" parameterType="int" resultType="archivesFlag">
+    select * from archiveflag af left join flag f on f.fid=af.fid where af.AID=#{AID} 
+    </select>
+        <select id="getflag" parameterType="int" resultType="Flag">
+    select * from flag f where f.fid=#{fid}
+    </select>
+
+    <update id="readCountUp" parameterType="archives"  flushCache="false">
+        Update archives set readcount=readcount+1 where AID=#{aid}
+    </update>
+       <update id="Update" parameterType="archives">
+        Update archives set readcount=#{readcount},Title=#{title},context=#{context},type=#{type},status=#{status},vid=#{vid},UPDATED_BY=#{updatedBy},UPDATED_TIME=#{updatedTime} where AID=#{aid}
+    </update>
+    <insert id="Addarchives" parameterType="archives" >
+            <selectKey resultType="int" order="AFTER" keyProperty="aid">  
+                SELECT LAST_INSERT_ID() 
+     </selectKey>  
+        insert into archives(Title,context,Type,CREATED_BY,CREATED_TIME,Status,VID)
+         values(#{title},#{context},#{type},#{createdBy},#{createdTime},#{status},#{vid});
+    </insert>
+    <delete id="delete" parameterType="int">
+        delete * from archives where AID=#{AID}
+    </delete>
+    </mapper>

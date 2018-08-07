@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<!DOCTYPE urlrewrite PUBLIC "-//tuckey.org//DTD UrlRewrite 3.2//EN"  
+        "http://tuckey.org/res/dtds/urlrewrite3.2.dtd">
+
+<urlrewrite>
+
+<rule>
+
+        <from>/login</from>
+
+        <to>/login.jsp</to>
+		
+</rule>
+<rule>
+
+        <from>/404</from>
+
+        <to>/404.jsp</to>
+		
+</rule>
+<rule>
+
+        <from>/500</from>
+
+        <to>/500.jsp</to>
+		
+</rule>
+<rule>  
+   
+   <from>^/archives/(\d+)\_([0-9]+)(/)?$</from>  <!-- (/)? 匹配前面的字符1或0次   匹配 数字结尾的 或者数字/结尾的 11112或 11112/ -->  
+    <to>/archives.do?AID=$1&amp;page=$2</to>  
+</rule>  
+<rule>  
+   
+   <from>^/(\d+)$</from>  <!-- (/)? 匹配前面的字符1或0次   匹配 数字结尾的 或者数字/结尾的 11112或 11112/ -->  
+    <to>/index.do?page=$1</to>  
+</rule>  
+<rule>  
+   
+   <from>^/time_axis_(\d+)$</from>  <!-- (/)? 匹配前面的字符1或0次   匹配 数字结尾的 或者数字/结尾的 11112或 11112/ -->  
+    <to>/FilterIndex.do?page=$1</to>  
+</rule> 
+
+<rule>  
+   
+   <from>^/classify(\d+)\_([0-9]+)(/)?$</from>  <!-- (/)? 匹配前面的字符1或0次   匹配 数字结尾的 或者数字/结尾的 11112或 11112/ -->  
+    <to>/categoriesIndex.do?TID=$1&amp;page=$2</to>  
+</rule> 
+
+<rule>  
+   
+   <from>^/hall/(\d+)?$</from>  <!-- (/)? 匹配前面的字符1或0次   匹配 数字结尾的 或者数字/结尾的 11112或 11112/ -->  
+    <to>/AllSay.do?page=$1</to>  
+</rule>  
+	<rule>
+		<note>
+			将所有.do文件映射为.html
+		</note>
+		<from>^/([_a-zA-Z]+[_0-9a-zA-Z-/]*[_0-9a-zA-Z]+).html$</from>
+		<to type="forward">/$1.do</to>
+
+	</rule>
+	<rule>
+		<note>
+			将所有.html文件映射为.shtml
+		</note>
+		<from>^/([_a-zA-Z]+[_0-9a-zA-Z-/]*[_0-9a-zA-Z]+).shtml$</from>
+		<to type="forward">/$1.html</to>
+	</rule>
+		<rule>
+		<note>
+			将所有.jsp文件映射为.htm
+		</note>
+		<from>^/([_a-zA-Z]+[_0-9a-zA-Z-/]*[_0-9a-zA-Z]+).htm$</from>
+		<to type="forward">/$1.jsp</to>
+	</rule>
+
+
+</urlrewrite>  

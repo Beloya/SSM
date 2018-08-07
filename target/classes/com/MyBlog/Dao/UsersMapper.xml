@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.MyBlog.Dao.UsersMapper">
+<!--cache type="com.MyBlog.cache.RedisCache" blocking="false"   flushInterval="1000*60*45"
+            readOnly="true" size="1024" eviction="LRU"/-->
+
+<resultMap type="com.MyBlog.entity.Users" id="UsersFILED">
+<id property="U_Id" column="U_Id"/>
+<result property="RId" column="RId" />
+<result property="userName" column="userName" />
+<result property="UserImg" column="UserImg" />
+<result property="passWord" column="passWord" />
+<result property="CreatorId" column="CreatorId" />
+<result property="CreateDate" column="CreateDate" />
+<result property="DataLevel" column="DataLevel" />
+<result property="Email" column="Email" />
+<result property="Salt" column="salt" />
+<result property="Sex" column="Sex" />
+<result property="locked" column="locked" />
+<association property="Role" javaType="com.MyBlog.entity.Roles" >
+<id property="R_Id" column="R_Id" />
+<result property="RoleName" column="RoleName" />
+<result property="description" column="description"/>
+<result property="available" column="available"/>
+</association>
+ <collection property="LRP" ofType="com.MyBlog.entity.Role_Permissions" column="RP_Id">
+ <id property="RP_Id" column="RP_Id"/>
+ <result property="permission" column="permission"/>
+ </collection>
+</resultMap>
+<select id="FindByUserName" parameterType="String" resultMap="UsersFILED">
+select * from users u join roles r on u.RId=r.R_Id left join   roles_permissions rp1 on rp1.RId=r.R_Id where userName=#{userName}
+</select>
+<select id="FindAll" resultMap="UsersFILED"  >
+select * from users u join roles r on u.RId=r.R_Id left join   roles_permissions rp1 on rp1.RId=r.R_Id
+</select>
+<insert id="CreateUser" parameterType="Users">
+insert into users(Rid,userName,passWord,UserImg,CreatorId,CreateDate,DataLevel,Email,Sex,locked) values(#{RId},#{userName},#{passWord},#{UserImg},#{CreatorId},#{CreateDate},#{DataLevel},#{Email},#{Sex},#{locked})
+</insert>
+</mapper>

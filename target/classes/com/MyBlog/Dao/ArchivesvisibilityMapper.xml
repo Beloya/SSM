@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.MyBlog.Dao.ArchivesvisibilityMapper">
+    <select id="FindAll" resultType="ArchivesVisibility">
+        select * from archivesvisibility
+    </select>
+    <insert id="Addarchivesvisibilit" parameterType="ArchivesVisibility">
+        insert into archivesvisibility(Vdescribe,CREATED_BY,CREATED_TIME,Status) values(#{Vdescribe},#{CREATED_BY},#{CREATED_TIME},#{Status})
+    </insert>
+    <update id="Update" parameterType="ArchivesVisibility">
+    Update      archivesvisibility Vdescribe=#{Vdescribe},UPDATED_BY=#{UPDATED_BY},#{UPDATED_TIME},Status=#{Status} where ID=#{ID}
+    </update>
+    <delete id="delete" parameterType="int">
+        delete * from archivesvisibility where ID=#{ID}
+    </delete>
+    </mapper>

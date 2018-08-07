@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.MyBlog.Dao.typeMapper">
+    <cache type="com.MyBlog.cache.RedisCache" blocking="false"  
+            readOnly="true" size="1024" eviction="LRU"/>
+    
+     <resultMap type="com.MyBlog.entity.type" id="typeFILED">
+            <id property="tid" column="TID" />
+             <result property="tdescribe" column="Tdescribe" />
+            <result property="revision" column="REVISION"/>
+            <result property="createdBy" column="CREATED_BY"/>
+             <result property="createdTime" column="CREATED_TIME"/>
+            <result property="updatedBy" column="UPDATED_BY"/>
+            <result property="updatedTime" column="UPDATED_TIME"/>
+            <result property="status" column="Status"/>
+        </resultMap>
+    <select id="FindAll" resultMap="typeFILED">
+        select * from type
+    </select>
+       <select id="FindParam" parameterType="type" resultMap="typeFILED">
+        select * from type
+        <where>
+          <if test="tid!=null">
+         TID=#{tid}
+         </if>
+                 <if test="createdBy!=null">
+         and CREATED_BY=#{createdBy}
+         </if>
+         <if test="status!=null">
+          and Status=#{status}
+         </if>
+         </where>
+    </select>
+    <insert id="AddType" parameterType="type">
+               <selectKey resultType="int" order="AFTER" keyProperty="tid">  
+                SELECT LAST_INSERT_ID() 
+     </selectKey>  
+        insert into type(Tdescribe,CREATED_BY,CREATED_TIME,Status) values(#{tdescribe},#{createdBy},#{createdTime},#{status})
+    </insert>
+    <update id="Update" parameterType="type">
+        Update type set Tdescribe=#{tdescribe},Status=#{status},UPDATED_BY=#{updatedBy},UPDATED_TIME=#{updatedTime} where TID=#{tid}
+    </update>
+    <delete id="delete" parameterType="int">
+        delete * from type where FID=#{FID}
+    </delete>
+</mapper>

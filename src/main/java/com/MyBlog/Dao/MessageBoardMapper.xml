@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.MyBlog.Dao.MessageBoardMapper">
+  <resultMap id="BaseResultMap" type="com.MyBlog.entity.MessageBoard">
+    <id column="MBID"  property="mbid" />
+       <result column="Context"  property="context" />
+    <result column="REVISION" property="revision" />
+    <result column="CREATED_BY" property="createdBy" />
+    <result column="CREATED_TIME"  property="createdTime" />
+    <result column="UPDATED_BY" property="updatedBy" />
+    <result column="UPDATED_TIME"  property="updatedTime" />
+    <result column="Status"  property="status" />
+        <result column="Name"  property="name" />
+    <result column="MBPID"  property="mbpid" />
+        <association property="users" javaType="com.MyBlog.entity.Users">       
+            <id property="U_Id" column="U_Id"/>
+<result property="RId" column="RId" />
+<result property="userName" column="userName" />
+<result property="UserImg" column="UserImg" />
+<result property="passWord" column="passWord" />
+<result property="CreatorId" column="CreatorId" />
+<result property="CreateDate" column="CreateDate" />
+<result property="DataLevel" column="DataLevel" />
+<result property="Email" column="Email" />
+<result property="salt" column="salt" />
+<result property="Sex" column="Sex" />
+<result property="locked" column="locked" />
+        </association>
+        <collection property="childmblist"  select="getchild" ofType="com.MyBlog.entity.MessageBoard" column="MBID">
+    <id column="MBID"  property="mbid" />
+       <result column="Context"  property="context" />
+    <result column="REVISION" property="revision" />
+    <result column="CREATED_BY" property="createdBy" />
+    <result column="CREATED_TIME"  property="createdTime" />
+    <result column="UPDATED_BY" property="updatedBy" />
+    <result column="UPDATED_TIME"  property="updatedTime" />
+    <result column="Status"  property="status" />
+        <result column="Name"  property="name" />
+    <result column="MBPID"  property="mbpid" />
+        </collection>
+  </resultMap>
+ <select id="FindAll" parameterType="int" resultMap="BaseResultMap">
+  select * from message_board mb left join users u on u.userName=mb.CREATED_BY 
+  </select>
+    <select id="FindBymbId" parameterType="int" resultMap="BaseResultMap">
+  select * from message_board mb left join users u on u.userName=ac.CREATED_BY where MBID=#{mbid} 
+  </select>
+   <select id="FindByChild" parameterType="int" resultMap="BaseResultMap">
+  select * from message_board mb left join users u on u.userName=ac.CREATED_BY where  mb.MBPID is  null 
+  order by ac.CREATED_TIME desc
+  </select>
+  <select id="commitcount" parameterType="int" resultType="int">
+  select count(mb.MBID) from message_board mb left join Users u on u.userName=ac.CREATED_BY where MBPID is null
+  </select>
+  <select id="getchild" parameterType="int" resultType="com.MyBlog.entity.Archivescommit">
+  select * from message_board mb1 where mb1.MBPID=#{mbpid} 
+  </select>
+  <insert id="AddMessageBoard" parameterType="MessageBoard">
+      insert into message_board(Context,MBPID,CREATED_BY,CREATED_TIME,Status,Name) values(#{context},#{mbpid},#{createdBy},#{createdTime},#{status},#{name})
+  </insert>
+  <delete id="delete" parameterType="int">
+      DELETE FROM  message_board where MBID=#{mbid}
+  </delete>
+  <update id="Update" parameterType="MessageBoard">
+      Update message_board Set Context=#{context},MBPID=#{mbpid},UPDATED_BY={updatedBy},UPDATED_TIME=#{updatedTime},Status=#{status},NAME=#{name}
+  </update>
+ 
+</mapper>

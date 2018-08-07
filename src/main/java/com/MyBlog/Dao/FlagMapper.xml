@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.MyBlog.Dao.FlagMapper">
+    
+    <select id="FindAll" resultType="Flag">
+        select * from flag
+    </select>
+    <insert id="AddFlag" parameterType="Flag">
+               <selectKey resultType="int" order="AFTER" keyProperty="fid">  
+                SELECT LAST_INSERT_ID() 
+     </selectKey>  
+        insert into flag(Fdescribe,CREATED_BY,CREATED_TIME,Status) values(#{fdescribe},#{createdBy},#{createdTime},#{status})
+    </insert>
+    <update id="Update" parameterType="Flag">
+        Update flag set Fdescribe=#{Fdescribe},Status=#{Status},UPDATED_BY=#{updatedBy},#{updatedTime} where FID=#{FID}
+    </update>
+    <delete id="delete" parameterType="int">
+        delete * from flag where FID=#{FID}
+    </delete>
+    </mapper>

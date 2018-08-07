@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.MyBlog.Dao.archivesFlagMapper">
+    <select id="FindAll" resultType="archivesFlag">
+        select * from archiveflag
+    </select>
+    <insert id="AddarchivesFlag" parameterType="archivesFlag">
+        insert into archiveflag(AID,FID,CREATED_BY,CREATED_TIME) values(#{aid},#{fid},#{createdBy},#{createdTime})
+    </insert>
+    <update id="Update" parameterType="archivesFlag">
+        Update archiveflag set AID=#{aid},FID=#{fid},CREATED_BY=#{createdBy},CREATED_TIME=#{createdTime} where ID=#{id}
+    </update>
+    <delete id="delete" parameterType="int">
+        delete * from archiveflag where ID=#{id}
+    </delete>
+    </mapper>
