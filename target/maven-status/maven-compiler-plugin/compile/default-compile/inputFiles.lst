@@ -1,5 +1,6 @@
 E:\eclipse_workspace\MyBlog1\src\main\java\com\MyBlog\Dao\areaMapper.java
 E:\eclipse_workspace\MyBlog1\src\main\java\com\MyBlog\entity\Email.java
+E:\eclipse_workspace\MyBlog1\src\main\java\com\MyBlog\ServiceImpl\redisSessionService.java
 E:\eclipse_workspace\MyBlog1\src\main\java\com\MyBlog\Aop\BlogInfoAspect.java
 E:\eclipse_workspace\MyBlog1\src\main\java\com\MyBlog\entity\area.java
 E:\eclipse_workspace\MyBlog1\src\main\java\com\MyBlog\Dao\archivesFlagMapper.java
@@ -39,6 +40,7 @@ E:\eclipse_workspace\MyBlog1\src\main\java\com\MyBlog\Controller\LoginController
 E:\eclipse_workspace\MyBlog1\src\main\java\com\MyBlog\utils\SpringRedisCache.java
 E:\eclipse_workspace\MyBlog1\src\main\java\com\MyBlog\cache\RedisCache.java
 E:\eclipse_workspace\MyBlog1\src\main\java\com\MyBlog\entity\Users.java
+E:\eclipse_workspace\MyBlog1\src\main\java\com\MyBlog\utils\TestMyBatis.java
 E:\eclipse_workspace\MyBlog1\src\main\java\com\MyBlog\entity\MessageBoard.java
 E:\eclipse_workspace\MyBlog1\src\main\java\com\MyBlog\entity\JsonData.java
 E:\eclipse_workspace\MyBlog1\src\main\java\com\MyBlog\utils\FormTokenInterceptor.java

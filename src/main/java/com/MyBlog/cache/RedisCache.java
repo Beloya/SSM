@@ -7,6 +7,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.apache.ibatis.cache.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.jedis.JedisConnection;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
@@ -19,6 +20,7 @@ public class RedisCache implements Cache{
 
 	   private static final Logger logger = LoggerFactory.getLogger(RedisCache.class);
 
+	  
 	    public static JedisConnectionFactory jedisConnectionFactory;
 
 	    private final String id;
@@ -158,6 +160,7 @@ public class RedisCache implements Cache{
 
 	    public synchronized static void setJedisConnectionFactory(JedisConnectionFactory jedisConnectionFactory) {
 	    	RedisCache.jedisConnectionFactory= jedisConnectionFactory;
+	    	
 	    }
 
 }

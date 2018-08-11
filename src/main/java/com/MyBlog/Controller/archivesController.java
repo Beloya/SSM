@@ -184,7 +184,7 @@ return Msg;
 		model.addAttribute("formToken", formToken);
 		  model.addAttribute("archivesvisibilities", archivesvisibilities);
 		  model.addAttribute("flags", flags);
-		return "edit";
+		return "/jsp/edit";
 	}
 	@RequestMapping("/archives")
 	public String archives(Integer AID,Integer page,HttpServletRequest request,HttpServletResponse response,Model model){
@@ -199,7 +199,7 @@ return Msg;
 		List<Archivescommit> archivescommits=acservice.FindByAIdChild(AID);
 		long commitCount=((Page) archivescommits).getTotal();
 		if(archives==null)
-			return "redirect:"+"/404";
+			return "redirect:"+"/jsp/404";
 	flags=archives.getFlags();
 	
 		pager.setTotal((int)commitCount);
@@ -214,7 +214,7 @@ return Msg;
 		model.addAttribute("flags", flags);
 		model.addAttribute("commitCount", commitCount);
 		model.addAttribute("pager", pager);
-		return "detail";
+		return "/jsp/detail";
 	}
 	
 	@RequestMapping("deletearchives")
@@ -242,7 +242,7 @@ return Msg;
 			  model.addAttribute("archivesvisibilities", archivesvisibilities);
 			  model.addAttribute("flags", flags);
 		model.addAttribute("archives", archives);
-		return "edit";
+		return "/jsp/edit";
 	}
 	
 	@RequestMapping("/CreatearchivesCommit")

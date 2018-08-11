@@ -1,5 +1,6 @@
 package com.MyBlog.utils;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,11 +19,14 @@ import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.MyBlog.ServiceImpl.UserServiceImpl;
+import com.MyBlog.Session.redisSessionService;
+import com.MyBlog.cache.SpringRedisCache;
 import com.MyBlog.entity.Role_Permissions;
 import com.MyBlog.entity.Users;
 
@@ -33,6 +37,10 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	  public static final String SESSION_USER_KEY = "Login";  
 	@Autowired
 	  private UserServiceImpl userService;  
+	@Autowired
+	private redisSessionService redissession;
+	@Autowired
+	SpringRedisCache sre;
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 
@@ -74,13 +82,16 @@ public class ShiroDbRealm extends AuthorizingRealm {
 			
 			 throw new LockedAccountException();  
 		}
-		
-		  Session session = SecurityUtils.getSubject().getSession();  
-	        session.setAttribute(ShiroDbRealm.SESSION_USER_KEY, ui);
-	        session.setAttribute("user", ui);
+		Subject subject= SecurityUtils.getSubject();
+	
+	  Session session = subject.getSession(); 
+	
+		 session.setAttribute(ShiroDbRealm.SESSION_USER_KEY, ui);
+		  session.setAttribute("user", ui);
 	        String realmName = this.getName();  
 	        Object principal = token.getPrincipal();  
-	        session.setTimeout(-1000l);
+	        session.setTimeout(43200000);
+	   
 	        return new SimpleAuthenticationInfo(principal, userLogin.getPassWord(), realmName);
 	}
 	  private Users tokenToUser(UsernamePasswordToken authcToken) {  

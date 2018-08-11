@@ -70,12 +70,21 @@
         <!-- 内存中的最大值 -->
         <property name="maxInMemorySize" value="40960" />  
     </bean> 
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="org.springframework.web.servlet.resource.ResourceUrlProviderExposingInterceptor">
+                <constructor-arg>
+                    <ref bean="resourceUrlProvider"/>
+                </constructor-arg>
+            </bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
 <!-- 切面层扫描 -->
    <context:component-scan base-package="com.MyBlog.Aop"/>
 <!-- 定时任务扫描 -->
  <context:component-scan base-package="com.MyBlog.quartz" />
     <!--启动@AspectJ支持 默认是false-->
     <aop:aspectj-autoproxy proxy-target-class="true"/>
-    
    <task:annotation-driven />
 </beans>

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.MyBlog.Service.archivesService;
 import com.MyBlog.Service.blogService;
 import com.MyBlog.Service.typeService;
+import com.MyBlog.cache.SpringRedisCache;
 import com.MyBlog.entity.Blog;
 import com.MyBlog.entity.Flag;
 import com.MyBlog.entity.Pager;
@@ -24,7 +25,6 @@ import com.MyBlog.entity.Users;
 import com.MyBlog.entity.archives;
 import com.MyBlog.entity.type;
 import com.MyBlog.utils.BlogInfoSignle;
-import com.MyBlog.utils.SpringRedisCache;
 import com.github.pagehelper.ISelect;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -51,13 +51,12 @@ public class IndexController {
 	 
 	long archivescount= ((Page) archives).getTotal();
 	PageHelper.startPage(pager.getPage(), pager.getSize());
-	List<type> types=tservice.FindAll();
 	pager.setTotal((int)archivescount);
 
 		model.addAttribute("archives", archives);
 
 		model.addAttribute("pager", pager);
-		return "index";
+		return "/jsp/index";
 	}
 	
 	@RequestMapping("/categories")
@@ -72,7 +71,7 @@ public class IndexController {
 		model.addAttribute("types", types);
 		model.addAttribute("typecount", typecount);
 
-		return "categories";
+		return "/jsp/categories";
 	}
 
 	
@@ -103,7 +102,7 @@ public class IndexController {
 		model.addAttribute("types", types);
 		model.addAttribute("pager", pager);
 		
-		return "categoriesIndex";
+		return "/jsp/categoriesIndex";
 	}
 	
 	@RequestMapping("/FilterIndex")
@@ -136,6 +135,6 @@ public class IndexController {
 		model.addAttribute("typecount", typecount);
 		model.addAttribute("pager", pager);
 		model.addAttribute("years", year);
-		return "FilterIndex";
+		return "/jsp/FilterIndex";
 	}
 }

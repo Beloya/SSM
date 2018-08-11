@@ -8,21 +8,28 @@
 
         <from>/login</from>
 
-        <to>/login.jsp</to>
+        <to>/jsp/login.jsp</to>
 		
 </rule>
 <rule>
 
         <from>/404</from>
 
-        <to>/404.jsp</to>
+        <to>/jsp/404.jsp</to>
 		
 </rule>
 <rule>
 
         <from>/500</from>
 
-        <to>/500.jsp</to>
+        <to>/jsp/500.jsp</to>
+		
+</rule>
+<rule>
+
+        <from>/test</from>
+
+        <to>/jsp/Test.jsp</to>
 		
 </rule>
 <rule>  
@@ -56,22 +63,22 @@
 		<note>
 			将所有.do文件映射为.html
 		</note>
-		<from>^/([_a-zA-Z]+[_0-9a-zA-Z-/]*[_0-9a-zA-Z]+).html$</from>
+		<from>^/([_a-zA-Z]+[_0-9a-zA-Z-/]*[_0-9a-zA-Z]+)$</from>
 		<to type="forward">/$1.do</to>
 
 	</rule>
-	<rule>
+	<!-- rule>
 		<note>
 			将所有.html文件映射为.shtml
 		</note>
 		<from>^/([_a-zA-Z]+[_0-9a-zA-Z-/]*[_0-9a-zA-Z]+).shtml$</from>
 		<to type="forward">/$1.html</to>
-	</rule>
+	</rule-->
 		<rule>
 		<note>
 			将所有.jsp文件映射为.htm
 		</note>
-		<from>^/([_a-zA-Z]+[_0-9a-zA-Z-/]*[_0-9a-zA-Z]+).htm$</from>
+		<from>^/([_a-zA-Z]+[_0-9a-zA-Z-/]*[_0-9a-zA-Z]+).li$</from>
 		<to type="forward">/$1.jsp</to>
 	</rule>
 

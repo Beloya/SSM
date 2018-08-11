@@ -105,32 +105,6 @@ public class LoginController {
 	  
 	  
 	  
-	  /*
-	  @RequiresPermissions("普通:文章:view") 
-	  @RequestMapping("/view")
-	  public String ViewP(){
-		  
-		  Subject subject = SecurityUtils.getSubject();
-		 System.out.println("管理员:"+subject.hasRole("管理员"));
-try {
-	subject.checkPermission("普通:文章:view");
-} catch (UnauthorizedException e) {
-e.printStackTrace();
-}
-		  
-		  return "ViewP";
-	  }
-	  @RequiresPermissions("普通:文章:update") 
-	  @RequestMapping("/edit")
-	  public String updateP(){
-		  Subject subject = SecurityUtils.getSubject();
-			 System.out.println("编辑权限:"+subject.isPermitted("普通:文章:update"));
-			 try{
-		  subject.checkPermission("普通:文章:update");}
-	   catch (UnauthorizedException e) {
-		  e.printStackTrace();
-		  }
-		  return "EditP";
-	  }*/
+
 	  
 }
