@@ -37,8 +37,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	  public static final String SESSION_USER_KEY = "Login";  
 	@Autowired
 	  private UserServiceImpl userService;  
-	@Autowired
-	private redisSessionService redissession;
+
 	@Autowired
 	SpringRedisCache sre;
 	@Override
@@ -83,10 +82,9 @@ public class ShiroDbRealm extends AuthorizingRealm {
 			 throw new LockedAccountException();  
 		}
 		Subject subject= SecurityUtils.getSubject();
-	
-	  Session session = subject.getSession(); 
-	
-		 session.setAttribute(ShiroDbRealm.SESSION_USER_KEY, ui);
+		
+		  Session session = subject.getSession(); 
+		// session.setAttribute(ShiroDbRealm.SESSION_USER_KEY, ui);
 		  session.setAttribute("user", ui);
 	        String realmName = this.getName();  
 	        Object principal = token.getPrincipal();  

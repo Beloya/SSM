@@ -52,7 +52,8 @@
           <filter-name>shiroFilter</filter-name>  
      
           <url-pattern>/*</url-pattern>  
-             
+             <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
       </filter-mapping>  
       
       <!-- filter>
@@ -109,10 +110,21 @@
         <param-value>true</param-value>
     </init-param>
     <init-param>
+  		<param-name>sessionStatEnable</param-name>
+  		<param-value>true</param-value>
+  	</init-param>
+    <init-param>
         <param-name>principalCookieName</param-name>
         <param-value>USER_COOKIE</param-value>
     </init-param>
-  
+  <init-param>
+  		<param-name>principalSessionName</param-name>
+  		<param-value>user_userName</param-value>
+  	</init-param>
+  	<init-param>
+    <param-name>profileEnable</param-name>
+    <param-value>true</param-value>
+</init-param>
 </filter>
 <filter-mapping>
     <filter-name>DruidWebStatFilter</filter-name>

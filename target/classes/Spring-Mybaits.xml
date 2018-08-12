@@ -45,9 +45,9 @@
 		<property name="minIdle" value="${minIdle}"></property>
 		<!-- 获取连接最大等待时间 -->
 		<property name="maxWait" value="${maxWait}"></property>
-		<property name="timeBetweenEvictionRunsMillis" value="3600000" />  
-		<property name="minEvictableIdleTimeMillis" value="7200000" /> 
-		<property name="removeAbandoned" value="true"/>
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />  
+		<property name="minEvictableIdleTimeMillis" value="300000" /> 
+	
 		<!-- 验证数据库连接的有效性 -->
 		     <property name="validationQuery" value="SELECT 1" />
 		     <!-- 指明连接是否被空闲连接回收器(如果有)进行检验.如果检测失败,则连接将被从池中去除.   -->
@@ -110,38 +110,12 @@
 		<property name="testOnBorrow" value="${redis.testOnBorrow}" />
 	</bean>
 	    <bean id="jedisConnectionFactory"
-          class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
-         >
+          class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" >
         <constructor-arg name="sentinelConfig" ref="redisSentinelConfiguration"></constructor-arg>
         <constructor-arg name="poolConfig" ref="poolConfig"></constructor-arg>
         <property name="password" value="${redis.pass}"></property>
     </bean>
-    	<!--bean id="jedisCluster" class="cn.slimsmart.jediscluster.spring.JedisClusterFactory">
-		<property name="connectionTimeout" value="3000" />
-		<property name="soTimeout" value="3000" />
-		<property name="maxRedirections" value="5" />
-		<property name="genericObjectPoolConfig" ref="genericObjectPoolConfig" />
-		<property name="jedisClusterNodes">
-			<set>
-				<value>${redis.host3.cloudq}:${redis.port3.cloudq}</value>
-			
-			</set>
-		</property>
-	    </bean-->
-	<!-- Spring-redis连接池管理工厂 -->
-	<!-- bean id="jedisConnectionFactory"
-		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
-		p:host-name="${redis.host}" 
-		p:port="${redis.port}"
-		 p:password="${redis.pass}"
-		  p:timeout="${redis.timeout}"
-		   p:usePool="true"
-		p:pool-config-ref="poolConfig" /-->
-		
-		<!--bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
-    <constructor-arg name="sentinelConfig" ref="redisSentinelConfiguration"/>
-    <constructor-arg name="poolConfig" ref="poolConfig" />
-</bean-->
+    
 		 <!--配置redisSentinelConfiguration 哨兵模式-->
     <bean id="redisSentinelConfiguration"
           class="org.springframework.data.redis.connection.RedisSentinelConfiguration">
@@ -165,9 +139,10 @@
       class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration">
     <property name="maxInactiveIntervalInSeconds" value="600"/>
 </bean-->
+<!-- 静态资源检查 -->
 <bean id="resourceUrlProvider" class="org.springframework.web.servlet.resource.ResourceUrlProvider"/>
 		<bean id="genericUtils"  class="com.MyBlog.utils.GenericUtils"/>
-	
+	<!-- spring-data-redis -->
 	<bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
 		<property name="connectionFactory" ref="jedisConnectionFactory" />
 		  <property name="keySerializer">
@@ -189,6 +164,7 @@
 	<bean id="redisCacheTransfer" class="com.MyBlog.cache.RedisCacheTransfer">
 		<property name="jedisConnectionFactory" ref="jedisConnectionFactory" />
 	</bean>
+	
 	<!-- 配置RedisCacheConfig -->
 	 <bean id="redisrCacheManager" class="com.MyBlog.cache.SpringRedisCache">  
         <property name="redisTemplate" ref="redisTemplate" />  

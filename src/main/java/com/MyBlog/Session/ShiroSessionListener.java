@@ -12,7 +12,7 @@ public class ShiroSessionListener implements SessionListener {
 	    private redisSessionService sessionDao;
 	public void onStart(Session session) {
 		// TODO Auto-generated method stub
-		   logger.info("ShiroSessionListener session {} 被创建", session.getId());
+		   //logger.info("ShiroSessionListener session {} 被创建", session.getId());
 	}
 
 	public void onStop(Session session) {

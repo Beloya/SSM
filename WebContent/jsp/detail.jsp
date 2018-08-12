@@ -275,7 +275,7 @@ word-break:break-all;">
 
 
 								<div class="site-state-item site-state-categories">
-									<a href="<%=request.getContextPath() %>/categories.html"> <span
+									<a href="<%=request.getContextPath() %>/categories"> <span
 										class="site-state-item-count">${applicationScope.BlogInfo.typecount }</span> <span
 										class="site-state-item-name">分类</span>
 									</a>
@@ -406,7 +406,7 @@ word-break:break-all;">
 														class="avatar avatar-44 photo" height="44" width="44">
 													<div class="comments-authore-title">
 														<div class="comments-name" itemprop="author">
-															<a href="<%=request.getContextPath() %>/user/detail.html?userName=${archivescommits.users.userName}" rel="external nofollow" class="url external">
+															<a href="<%=request.getContextPath() %>/user/detail?userName=${archivescommits.users.userName}" rel="external nofollow" class="url external">
 															<c:if test="${!empty archivescommits.users.userName}">${archivescommits.users.userName }</c:if>
 																<c:if test="${empty archivescommits.users.userName}">${archivescommits.name}(观光团)</c:if>
 															</a>
@@ -649,7 +649,7 @@ word-break:break-all;">
 			  
 		
 		  $.ajax({ 
-		    	url: "<%=request.getContextPath()%>/delCommit.html", 
+		    	url: "<%=request.getContextPath()%>/delCommit", 
 		    	type:'POST',
 		    	data:"CID="+CID,
                    success: function(result){
@@ -669,7 +669,7 @@ word-break:break-all;">
 	}
 	function arEdit(aid){
 	
- window.location.href="<%=request.getContextPath()%>/editarchives.html?AID="+aid;
+ window.location.href="<%=request.getContextPath()%>/editarchives?AID="+aid;
 	}
 	function arDel(aid){
 		layer.confirm('确定删除？', {icon: 2, title:'提示'}, function(index){
@@ -797,7 +797,7 @@ word-break:break-all;">
 				  $("#submit").html("<i class='layui-icon layui-anim layui-anim-rotate layui-anim-loop'>&#xe63d;</i>");
 					$("#submit").addClass("layui-btn-disabled");
 				  $.ajax({ 
-				    	url: "<%=request.getContextPath()%>/CreatearchivesCommit.html", 
+				    	url: "<%=request.getContextPath()%>/CreatearchivesCommit", 
 				    	type:'POST',
 				    	data:data.field,
 		                     success: function(result){

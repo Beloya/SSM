@@ -62,6 +62,8 @@ public class BlogInfoAspect {
 	    //访问命名切入点来应用后置通知  
 	 //  @AfterReturning("execution(* com.MyBlog.Controller.*.New*(..))")  
 	    public void afterReturn(JoinPoint call) {  
+	    
+	    	
 		   HttpServletRequest request1 = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 		   String className = call.getTarget().getClass().getName();
 	        String methodName = call.getSignature().getName();
@@ -101,6 +103,8 @@ public class BlogInfoAspect {
 	    //应用最终通知  
 	   @After("execution(* com.MyBlog.Controller.*.New*(..))")  
 	    public void after(JoinPoint call) {  
+			long start=System.currentTimeMillis();
+		
 		   HttpServletRequest request1 = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 	        String className = call.getTarget().getClass().getName();
 	        String methodName = call.getSignature().getName();
@@ -134,9 +138,11 @@ public class BlogInfoAspect {
 		   email.setTomail("468501955@qq.com");
 		   
 		  EmailUtil emailUtil=eFactory.CreateEmail();
-		  
+		 
 		  emailUtil.SendAttMail(email);
 	        System.out.println(className+"."+methodName+"()最终执行步骤(finally)...");
+	    	long end=System.currentTimeMillis();
+	    	
 	    }  
 	    //应用异常抛出后通知  
 	   @AfterThrowing("execution(* com.MyBlog.Controller.*.*(..))")  

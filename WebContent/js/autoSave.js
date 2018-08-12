@@ -4,11 +4,9 @@ function AutoSave(it) {
 	if (!_value) {
 		var _LastContent = GetCookie('AutoSaveContent');
 		
-		if (!_LastContent) return;
-		layer.confirm('发现草稿是否加载？', {icon: 2, title:'提示'}, function(index){
-			var index = layer.load(2, {time: 5*1000});
+		if (!_LastContent||_LastContent=='#*-1#') return;
+		
 			return _LastContent;
-		});
 				
 	} else {
 		
@@ -44,5 +42,12 @@ function DeleteCookie (name) {
 	var exp=new Date();
 	exp.setTime (exp.getTime()-1);
 	var cval=GetCookie (name);
-	document.cookie=name+"="+cval+";expires="+exp.toGMTString();
+	
+	var expDays = 30;
+	exp.setTime( exp.getTime() + (expDays * 86400000) ); // 24*60*60*1000 = 86400000
+	var expires='; expires=' + exp.toGMTString();
+
+	// SetCookie
+	document.cookie = "AutoSaveContent=" + escape ('#*-1#') + expires;
+	//document.cookie=name+"="+cval+";expires="+exp.toGMTString();
 }

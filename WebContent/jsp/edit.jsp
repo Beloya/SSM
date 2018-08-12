@@ -189,8 +189,8 @@
     	  ,laydate = layui.laydate,
     	  _LastContent;
      
-    	  
-    	    if(( _LastContent=GetCookie('AutoSaveContent'))!=null){
+    	  var _LastContent=GetCookie('AutoSaveContent');
+    	    if( _LastContent!=null&&_LastContent!='#*-1#'){
     	    	 var cfindex=  layer.open({
     	    		   content: '发现草稿,是否加载'
     	    		   ,btn: ['确认', '取消']

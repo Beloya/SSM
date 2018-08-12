@@ -11,8 +11,8 @@
     </bean-->
  <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
 <property name="securityManager" ref="securityManager"/>
- <property name="loginUrl" value="jsp/login" />
-        <property name="successUrl" value="jsp/suc.htm" />
+ <property name="loginUrl" value="/login" />
+        <!--  property name="successUrl" value="jsp/suc.htm" /-->
         <property name="unauthorizedUrl" value="/jsp/erro.htm" />
         <property name="filterChainDefinitions">
             <value>
@@ -29,27 +29,17 @@
               </property>
 </bean>
 
-     <!-- 会话Cookie --> 
-       <!--bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie">  
-    <constructor-arg value="sid"/>  
-   
-    
-    <property name="maxAge" value="43200000"/> 
-</bean-->  
   <!-- Session ID 生成器 -->
     <bean id="sessionIdGenerator" class="org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator"></bean>
 <!-- redis操作 -->
   <bean id="redisSessionService" class="com.MyBlog.Session.redisSessionService">
-        <property name="expire" value="43200000"/>
+        <property name="expire" value="10800"/>
         <property name="sessionIdGenerator" ref="sessionIdGenerator"></property>
     </bean> 
-    
+    <!-- Session管理器 -->
 <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager"> 
         <!-- 会话超时时间，单位：毫秒  20m=1200000ms, 30m=1800000ms, 60m=3600000ms-->
         <property name="globalSessionTimeout" value="43200000"/>
-   
-
-       
         <!-- 会话验证器调度时间 -->
         <property name="sessionValidationInterval" value="1800000"/>
         <property name="sessionFactory" ref="sessionFactory"/>
@@ -70,23 +60,17 @@
 </bean>
 <!-- 自定义Session工厂方法 返回会标识是否修改主要字段的自定义Session-->
     <bean id="sessionFactory" class="com.MyBlog.Session.ShiroSessionFactory"/>
-
-
-
-
     
      <!-- sessionIdCookie的实现,用于重写覆盖容器默认的JSESSIONID -->
     <bean id="sharesession" class="org.apache.shiro.web.servlet.SimpleCookie">
         <!-- cookie的name,对应的默认是 JSESSIONID -->
         <constructor-arg name="name" value="shrio_session"/>  
         <!-- jsessionId的path为 / 用于多个系统共享jsessionId -->
-        <property name="path" value="/"/>
+       
+        <property name="path" value=""/>
  
         <property name="httpOnly" value="true"/>
     </bean> 
-
-  
-    
   <bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
          <constructor-arg value="COOKIE_NAME" />
         <property name="httpOnly" value="true" />
@@ -102,8 +86,7 @@
       
       <!-- 配置进行授权和认证的 Realm -->  
         <bean id="myRealm" class="com.MyBlog.utils.ShiroDbRealm">   
-             <property name="userService" ref="userService" />  
-             
+             <property name="userService" ref="userService" />        
          </bean>  
          
          <bean id="userService" class="com.MyBlog.ServiceImpl.UserServiceImpl" />  
@@ -111,8 +94,7 @@
    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">  
             <!--property name="cacheManager" ref="shiroEhcacheManager"/-->   
              <property name="realm" ref="myRealm"/>   
-             <property name="sessionMode" value="native">  
-             </property>  
+          
                 <!--将session托管给redis进行管理，便于搭建集群系统-->
               <property name="sessionManager" ref="sessionManager"/>
               <property name="rememberMeManager" ref="rememberMeManager"/> 

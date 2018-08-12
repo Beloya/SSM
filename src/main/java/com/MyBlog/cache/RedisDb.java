@@ -3,44 +3,27 @@ package com.MyBlog.cache;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.Transaction;
 
 public class RedisDb {
+	@Autowired
 	 private static JedisPool jedisPool;
-	    // session 在redis过期时间是30分钟30*60
-	    private static int expireTime = 1800;
+	
 	    // 计数器的过期时间默认2天
-	    private static int countExpireTime = 2*24*3600; 
-	    private static String password = "123456";
-	    private static String redisIp = "10.10.31.149";
-	    private static int redisPort = 6379;
-	    private static int maxActive = 200;
-	    private static int maxIdle = 200;
-	    private static long maxWait = 5000;
+	    private static int countExpireTime = 1*24*3600; 
 	    private static Logger logger = Logger.getLogger(RedisDb.class);
 
-	    static {
-	        initPool();        
-	    }
-	    // 初始化连接池
-	    public static void initPool(){
-	        JedisPoolConfig config = new JedisPoolConfig();
-	        config.setMaxTotal(maxActive);
-	        config.setMaxIdle(maxIdle);
-	        config.setMaxWaitMillis(maxWait);
-	        config.setTestOnBorrow(false);
 
-	        jedisPool = new JedisPool(config, redisIp, redisPort, 10000, password);
-	    }
 	    // 从连接池获取redis连接
 	    public static Jedis getJedis(){
 	        Jedis jedis = null;
 	        try{
 	            jedis = jedisPool.getResource();
-//	            jedis.auth(password);
 	        } catch(Exception e){
 	         
 	        }
@@ -101,8 +84,9 @@ public class RedisDb {
 	        }
 	    }
 	    // 保存byte类型数据
-	    public static void setObject(byte[] key, byte[] value){
+	    public static void setObject(byte[] key, byte[] value,int expireTime){
 	        Jedis jedis = getJedis();
+
 	        String result = "";
 	        if(jedis != null){
 	            try{
@@ -112,8 +96,9 @@ public class RedisDb {
 	                // redis中session过期时间
 	                jedis.expire(key, expireTime);
 	            } catch(Exception e){
-	               
+	            
 	            } finally{
+	            	
 	                recycleJedis(jedis);
 	            }
 	        }    
@@ -136,7 +121,7 @@ public class RedisDb {
 	    }
 	    
 	    // 更新byte类型的数据，主要更新过期时间
-	    public static void updateObject(byte[] key){
+	    public static void updateObject(byte[] key,int expireTime){
 	        Jedis jedis = getJedis();
 	        if(jedis != null){
 	            try{
@@ -153,10 +138,14 @@ public class RedisDb {
 	    
 	    // key对应的整数value加1
 	    public static void inc(String key){
+	    
 	        Jedis jedis = getJedis();
+	   	
 	        if(jedis != null){
 	            try{
+	            	
 	                if(!jedis.exists(key)){
+	                	
 	                    jedis.set(key, "1");
 	                    jedis.expire(key, countExpireTime);
 	                } else {
@@ -164,8 +153,9 @@ public class RedisDb {
 	                    jedis.incr(key);
 	                }
 	            }catch(Exception e){
-	               
+	            	
 	            } finally{
+	            
 	                recycleJedis(jedis);
 	            }
 	        }    
