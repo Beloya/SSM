@@ -1,4 +1,4 @@
-package com.MyBlog.Session;
+package com.MyBlog.Shiro.Session;
 
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.SessionContext;

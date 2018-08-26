@@ -23,6 +23,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import com.MyBlog.Base.EmailUtil;
 import com.MyBlog.Base.EmailUtilFactory;
 import com.MyBlog.Service.blogService;
+import com.MyBlog.ServiceImpl.ShiroSession;
+import com.MyBlog.Shiro.Session.redisSessionService;
 import com.MyBlog.entity.Archivescommit;
 import com.MyBlog.entity.Blog;
 import com.MyBlog.entity.Email;
@@ -36,6 +38,8 @@ import com.MyBlog.utils.QQEmailUtilFactory;
 public class BlogInfoAspect {
 	 @Autowired
 	private blogService blogService;
+	//	@Autowired
+		redisSessionService redissession;
 	 HttpServletRequest request = BlogInfoSignle.blogInfoSignle.getRequest();
 	    //定义切入点，提供一个方法，这个方法的名字就是改切入点的id  
 	    @Pointcut("execution(* com.MyBlog.Controller.*.*(..))")  
@@ -44,7 +48,7 @@ public class BlogInfoAspect {
 	    @Before("execution(* com.MyBlog.Controller.*.*(..))")    
 	    public void before(JoinPoint call) {  
 	    	Blog blog=BlogInfoSignle.blogInfoSignle.getblog();
-	    	
+	   	
 	    	
 	    	 if(blog==null||request==null){
 	    		 System.out.println("初始化赋值....");
@@ -55,7 +59,7 @@ public class BlogInfoAspect {
 	    		 request.getServletContext().setAttribute("BlogInfo", blog);
 	    
 	    	 }
-	      /*  String className = call.getTarget().getClass().getName();
+	      /* String className = call.getTarget().getClass().getName();
 	        String methodName = call.getSignature().getName();
 	        System.out.println("开始执行:"+className+"."+methodName+"()方法...");*/
 	    }  
@@ -149,6 +153,7 @@ public class BlogInfoAspect {
 	    public void afterThrowing(JoinPoint call) {  
 		   
 	        String className = call.getTarget().getClass().getName();
+
 	        String methodName = call.getSignature().getName();
 	        StringBuilder html = new StringBuilder();
 			   EmailUtilFactory eFactory=new QQEmailUtilFactory();

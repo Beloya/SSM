@@ -50,7 +50,7 @@ String formToken=UUID.randomUUID().toString();
 		model.addAttribute("formToken", formToken);
 		model.addAttribute("pager", pager);
 		model.addAttribute("mblist", mblist);
-		return "AllSay";	
+		return "/jsp/AllSay";	
 	}
 
 	

@@ -18,7 +18,7 @@ import org.springframework.util.CollectionUtils;
 
 public class SpringRedisCache {
 
-    @Resource
+   // @Resource
 	 private RedisTemplate<String, Object> redisTemplate;
     private static final String ShrioKEY = "shrio_session";
 	    public void setRedisTemplate(RedisTemplate<String, Object> redisTemplate) {

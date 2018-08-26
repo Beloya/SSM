@@ -26,9 +26,9 @@
 				<value>classpath:jdbc.properties</value>
 				<value>classpath:redis.properties</value>
 			</list>
-		</property>
+		</property> 
 	</bean>
-	  <!-- 指定连接数据库的驱动 -->
+	  <!-- 连接池 -->
 	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
 		init-method="init" destroy-method="close">
 		<property name="driverClassName" value="${driver}" />
@@ -55,10 +55,10 @@
 		       <property name="testOnBorrow" value="false" />
 		       <!-- returnObject对返回的connection进行validateObject校验 -->
 		       <property name="testOnReturn" value="false" />
-		       <!-- 打开PSCache，并且指定每个连接上PSCache的大小   缓存游标-->
-		        <property name="poolPreparedStatements" value="true" />
+		       <!-- 打开PSCache，并且指定每个连接上PSCache的大小   缓存游标,推荐oracle打开-->
+		        <!--property name="poolPreparedStatements" value="true" />
 		        <property name="maxPoolPreparedStatementPerConnectionSize"
-                  value="20" />
+                  value="20" /-->
 		         <!-- 配置监控统计拦截的filters，去掉后监控界面sql无法统计 -->
 		            <property name="filters" value="stat" />
 	</bean>
@@ -104,6 +104,10 @@
 	<!-- redis数据源 -->
 	<bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
 		<property name="maxIdle" value="${redis.maxIdle}" />
+
+		  <property name="numTestsPerEvictionRun" value="10024"/>
+		   <property name="timeBetweenEvictionRunsMillis" value="180000"/>
+		    <property name="minEvictableIdleTimeMillis" value="300000"/>
 		<property name="maxTotal" value="${redis.maxActive}" />
 		<property name="maxWaitMillis" value="${redis.maxWait}" />
 		        <property name="blockWhenExhausted" value="${redis.blockWhenExhausted}" /> 
@@ -116,6 +120,17 @@
         <property name="password" value="${redis.pass}"></property>
     </bean>
     
+   <!-- bean id="jedisPool" class="redis.clients.jedis.JedisSentinelPool">
+	<constructor-arg name="masterName" value="mymaster" />
+	<constructor-arg name="sentinels">
+		<set>
+			<value>${redis.host3.cloudq}:${redis.port3.cloudq}</value>
+		
+		</set>
+	</constructor-arg>
+	<constructor-arg ref="poolConfig" />
+	<constructor-arg index="3" value="${redis.pass}" />
+</bean-->
 		 <!--配置redisSentinelConfiguration 哨兵模式-->
     <bean id="redisSentinelConfiguration"
           class="org.springframework.data.redis.connection.RedisSentinelConfiguration">
@@ -143,7 +158,7 @@
 <bean id="resourceUrlProvider" class="org.springframework.web.servlet.resource.ResourceUrlProvider"/>
 		<bean id="genericUtils"  class="com.MyBlog.utils.GenericUtils"/>
 	<!-- spring-data-redis -->
-	<bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
+	<!--bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
 		<property name="connectionFactory" ref="jedisConnectionFactory" />
 		  <property name="keySerializer">
             <bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />
@@ -157,18 +172,20 @@
         <property name="hashValueSerializer">
             <bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
         </property>
-         <!--开启事务  -->  
+        
         <property name="enableTransactionSupport"  value="true"></property>  
+	</bean-->
+<bean id="RedisUtil" class="com.MyBlog.cache.RedisUtil">
+		<property name="jedisConnectionFactory" ref="jedisConnectionFactory" />
 	</bean>
-
 	<bean id="redisCacheTransfer" class="com.MyBlog.cache.RedisCacheTransfer">
 		<property name="jedisConnectionFactory" ref="jedisConnectionFactory" />
 	</bean>
 	
 	<!-- 配置RedisCacheConfig -->
-	 <bean id="redisrCacheManager" class="com.MyBlog.cache.SpringRedisCache">  
+	 <!-- bean id="redisrCacheManager" class="com.MyBlog.cache.SpringRedisCache">  
         <property name="redisTemplate" ref="redisTemplate" />  
-    </bean>
+    </bean-->
 
 
 </beans>

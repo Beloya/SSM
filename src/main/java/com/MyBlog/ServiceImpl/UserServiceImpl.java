@@ -65,29 +65,29 @@ public class UserServiceImpl implements userService{
 	       
 	            subject.login(usernamePasswordToken);
 	            LoginMsg.put("code","0");
-	            LoginMsg.put("Msg","登陆成功");
+	            LoginMsg.put("msg","登陆成功");
 	       
 	        } 
 	        catch(UnknownAccountException e){
 	        	 LoginMsg.put("code","1");
-		            LoginMsg.put("Msg","账号或密码错误");
+		            LoginMsg.put("msg","账号或密码错误");
 	        }
 	        catch(IncorrectCredentialsException e){
 	
 	        	 LoginMsg.put("code","1");
-		            LoginMsg.put("Msg","账号或密码错误");
+		            LoginMsg.put("msg","账号或密码错误");
 	        }
 	        catch(LockedAccountException e){
 	
 	        	 LoginMsg.put("code","1");
-		            LoginMsg.put("Msg","账号被锁定");
+		            LoginMsg.put("msg","账号被锁定");
 	        }
 	        catch (Exception e) {
 	         
 	            e.printStackTrace();
 	            System.out.println("登陆异常");
 	            LoginMsg.put("code","1");
-	            LoginMsg.put("Msg","系统错误");
+	            LoginMsg.put("msg","系统错误");
 	
 	        }
 	      return LoginMsg;
@@ -109,7 +109,7 @@ public class UserServiceImpl implements userService{
 		 user.setPassWord(passWordmd5);
 		 uMapper.CreateUser(user);
 		 Msg.put("code","0");
-         Msg.put("Msg","注册成功");
+         Msg.put("msg","注册成功");
          Subject subject = SecurityUtils.getSubject();   
          UsernamePasswordToken usernamePasswordToken = new      		
 	                UsernamePasswordToken(user.getUserName(),passWordmd5);

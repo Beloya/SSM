@@ -24,7 +24,7 @@ public class RedisCache implements Cache{
 	    public static JedisConnectionFactory jedisConnectionFactory;
 
 	    private final String id;
-
+        private int DB_Index=0;
 	    /**
 	     * The {@code ReadWriteLock}.
 	     */
@@ -44,8 +44,9 @@ public class RedisCache implements Cache{
 	        try
 	        {
 	            connection = (JedisConnection) jedisConnectionFactory.getConnection();
+	           connection.select(DB_Index);
 	            connection.flushDb();
-	            connection.flushAll();
+	         //   connection.flushAll();
 	        }
 	        catch (JedisConnectionException e)
 	        {
@@ -71,6 +72,7 @@ public class RedisCache implements Cache{
 	        try
 	        {
 	            connection = (JedisConnection) jedisConnectionFactory.getConnection();
+	            connection.select(DB_Index);
 	            RedisSerializer<Object> serializer = new JdkSerializationRedisSerializer();
 	            result = serializer.deserialize(connection.get(serializer.serialize(key)));
 	        }
@@ -99,6 +101,7 @@ public class RedisCache implements Cache{
 	        try
 	        {
 	            connection = (JedisConnection) jedisConnectionFactory.getConnection();
+	            connection.select(DB_Index);
 	            result = Integer.valueOf(connection.dbSize().toString());
 	        }
 	        catch (JedisConnectionException e)
@@ -120,6 +123,7 @@ public class RedisCache implements Cache{
 	        try
 	        {
 	            connection = (JedisConnection) jedisConnectionFactory.getConnection();
+	            connection.select(DB_Index);
 	            RedisSerializer<Object> serializer = new JdkSerializationRedisSerializer();
 	            connection.set(serializer.serialize(key), serializer.serialize(value));
 	        }
@@ -142,6 +146,7 @@ public class RedisCache implements Cache{
 	        try
 	        {
 	            connection = (JedisConnection) jedisConnectionFactory.getConnection();
+	            connection.select(DB_Index);
 	            RedisSerializer<Object> serializer = new JdkSerializationRedisSerializer();
 	            result =connection.expire(serializer.serialize(key), 0);
 	        }

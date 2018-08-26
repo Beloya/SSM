@@ -173,9 +173,9 @@ word-break:break-all;
 						</article> 
 						</c:if>
 						
-						<c:if test="${archives.archivesvisibility.vdescribe=='私有' }">
+						<c:if test="${archives.archivesvisibility.vdescribe=='私有'&&sessionScope.user.userName==applicationScope.BlogInfo.createdBy }">
 						
-						<shiro:hasAnyRoles name="博主,管理员">
+						
 						<article class="post post-type-normal" itemscope=""
 							>
 						<div class="post-date">
@@ -225,7 +225,7 @@ word-break:break-all;
 						</div>
   <script type="text/javascript"> $("#ARcount_${archives.aid}").text($("#ARbody_${archives.aid}").text().length)</script>
 						</article> 
-					</shiro:hasAnyRoles>
+					
 						</c:if>
 						</c:forEach> 
 						<nav class="pagination">

@@ -76,7 +76,7 @@ border:none;
 
       <div class="app__text-line app__text-line--3" style="text-align:center;color:#0099CC;">快速登录</div>
           <div class="app__text-line app__text-line--3" style="text-align:center;color:#0099CC;">你好</div>
-       <div class="app__text-line app__text-line--3" style="text-align:center;color:#0099CC;"><shiro:principal/></div>
+       <div class="app__text-line app__text-line--3" style="text-align:center;color:#0099CC;"><%=users.getUserName() %></div>
 
   <div class="app__text-line app__text-line--2">
     <button class="layui-btn layui-btn-fluid layui-btn-radius layui-btn-normal" id="quickloginbtn" onclick="QuickLogin();" ><i class="layui-icon ">&#xe609;</i>快速登录</button>
@@ -90,10 +90,10 @@ border:none;
     <div class="app__text app__text--1">
 
       <div class="app__text-line app__text-line--4" style="text-align:center;color:#0099CC;">欢迎 </div>
-       <div class="app__text-line app__text-line--3"> <img src="<%=request.getContextPath() %>/<%=users.getUserImg() %>" class="layui-nav-img"><shiro:principal/></div>
+       <div class="app__text-line app__text-line--3"> <img src="<%=request.getContextPath() %>/<%=users.getUserImg() %>" class="layui-nav-img"><%=users.getUserName() %></div>
 
   <div class="app__text-line app__text-line--2">
-     <a href="<%=request.getContextPath()%>/index.html"><button class="layui-btn layui-btn-fluid layui-btn-radius layui-btn-normal" ><i class="layui-icon ">&#xe609;</i>进入首页</button>
+     <a href="<%=request.getContextPath()%>/"><button class="layui-btn layui-btn-fluid layui-btn-radius layui-btn-normal" ><i class="layui-icon ">&#xe609;</i>进入首页</button>
 </a>
      </div>
        </div>
@@ -172,12 +172,13 @@ layui.use(['form', 'layedit', 'laydate'], function(){
 		    	type:'POST',
 		    	data:'UserName='+data.field.username+'&PassWord='+data.field.passWord+'&RememberMe='+data.field.RememberMe,
                      success: function(result){
+                    	 
          if(result.code=="1"){
         	 layer.msg(result.Msg, {
        		  icon: 5,
        		  time: 2000 //2秒关闭（如果不配置，默认是3秒）
        		}, function(){
-       		  //do something
+       		  
        		});  
                     
                     		$("#loginbtn").html("<i class='layui-icon'>&#xe609;</i>登录");
@@ -188,9 +189,19 @@ layui.use(['form', 'layedit', 'laydate'], function(){
       window.location.href="<%=request.getContextPath()%>/";
            
 }else{
-	window.location.href=result.preUrl;
+
       }
              
+         }
+         else{
+        		console.log(result);
+        	  	 layer.msg(result.msg, {
+        	  		  icon: 5,
+        		  time: 2000 //2秒关闭（如果不配置，默认是3秒）
+        		}, function(){
+        			$("#loginbtn").html("登录");
+        			$("#loginbtn").removeClass("layui-btn-disabled");
+        		}); 
          }
 		      }});
 		    return false;
@@ -213,7 +224,8 @@ layui.use(['form', 'layedit', 'laydate'], function(){
 	       		  icon: 5,
 	       		  time: 2000 //2秒关闭（如果不配置，默认是3秒）
 	       		}, function(){
-	       		  //do something
+	       			$("#loginbtn").html("登录");
+	       			$("#loginbtn").removeClass("layui-btn-disabled");
 	       		});  
 	                    
 	                    		$("#SigInbtn").html("<i class='layui-icon'>&#xe609;</i>登录");
@@ -222,6 +234,14 @@ layui.use(['form', 'layedit', 'laydate'], function(){
 	         if(result.code=="0"){
 	      window.location.href="<%=request.getContextPath()%>/index"
 	}
+	         else{
+	        	 layer.msg(result.msg, {
+		       		  icon: 5,
+	   		  time: 2000 //2秒关闭（如果不配置，默认是3秒）
+	   		}, function(){
+	   	
+	   		}); 
+	         }
 			      }});
 		    return false;
 		  });
@@ -242,14 +262,14 @@ function QuickLogin(){
 	        		  icon: 5,
 	        		  time: 2000 //2秒关闭（如果不配置，默认是3秒）
 	        		}, function(){
-	        		  //do something
+	        		
 	        		});  
             
             		$("#quickloginbtn").html("<i class='layui-icon'>&#xe609;</i>登录");
             		$("#quickloginbtn").removeClass("layui-btn-disabled");
  }
  if(result.code=="0"){
-window.location.href="<%=request.getContextPath()%>/index.html"
+window.location.href="<%=request.getContextPath()%>/"
 } 
     	 }
     	 });

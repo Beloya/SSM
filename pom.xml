@@ -4,8 +4,13 @@
   <artifactId>MyBlog1</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging> 
+  
   <dependencies>  
- 
+<dependency>
+    <groupId>commons-lang</groupId>
+    <artifactId>commons-lang</artifactId>
+    <version>2.6</version>
+</dependency>
   <dependency>  
         <groupId>org.springframework</groupId>
         <artifactId>spring-core</artifactId>

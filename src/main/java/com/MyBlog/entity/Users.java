@@ -10,8 +10,10 @@ public class Users implements Serializable{
 /**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-private int U_Id;
+	private static final long serialVersionUID = -1258130476887554264L;
+
+
+private long U_Id;
 private int RId;
 private String userName;
 private String UserImg;
@@ -24,12 +26,34 @@ private int Sex;
 private String salt;
 private int locked;
 private Roles Role;
+/**最后登录时间*/
+private Date lastLoginTime;
 private Role_Permissions Role_Permissions;
 private List<Roles> LRole;
 private List<Role_Permissions> LRP;
 
+public Users() {
+}
 
 
+public Users(Users users) {
+	this.U_Id = users.U_Id;
+	this.RId = users.RId;
+	this.userName = users.userName;
+	this.UserImg = users.UserImg;
+	this.passWord = users.passWord;
+	this.CreatorId = users.CreatorId;
+	this.CreateDate = users.CreateDate;
+	this.DataLevel = users.DataLevel;
+	this.Email = users.Email;
+	this.Sex = users.Sex;
+	this.salt = users.salt;
+	this.locked = users.locked;
+	this.Role = users.Role;
+	this.Role_Permissions = users.Role_Permissions;
+	this.LRole = users.LRole;
+	this.LRP = users.LRP;
+}
 public Roles getRole() {
 	return Role;
 }
@@ -50,12 +74,17 @@ public void setLocked(int locked) {
 }
 
 
-public int getU_Id() {
+
+
+public long getU_Id() {
 	return U_Id;
 }
-public void setU_Id(int u_Id) {
+
+
+public void setU_Id(long u_Id) {
 	U_Id = u_Id;
 }
+
 
 public String getUserImg() {
 	return UserImg;
@@ -128,6 +157,16 @@ public List<Role_Permissions> getLRP() {
 }
 public void setLRP(List<Role_Permissions> lRP) {
 	LRP = lRP;
+}
+
+
+public Date getLastLoginTime() {
+	return lastLoginTime;
+}
+
+
+public void setLastLoginTime(Date lastLoginTime) {
+	this.lastLoginTime = lastLoginTime;
 }
 
 

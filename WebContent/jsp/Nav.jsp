@@ -7,6 +7,8 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
+<%@page import="org.apache.shiro.subject.Subject"%>
+<%@page import="org.apache.shiro.SecurityUtils"%>
 <%@page import="java.text.DateFormat"%>
 <%@page import="java.text.ParseException"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -34,11 +36,12 @@ background-image: url("<%=request.getContextPath()%>/images/${applicationScope.B
 </head>
 <body>
 <% 
-Users users=new Users();
-if((users=(Users)session.getAttribute("user"))!=null){
-	
-}
 
+Subject subject = SecurityUtils.getSubject();
+Users users=new Users();
+if(subject.getSession()!=null&&subject.getSession().getAttribute("user")!=null){
+	users=(Users)subject.getSession().getAttribute("user");
+}
 %>
 <ul class="layui-nav  MyNav">
 <div class="layui-row">
@@ -83,7 +86,7 @@ if((users=(Users)session.getAttribute("user"))!=null){
 <shiro:authenticated>
 
    <li class="layui-nav-item" lay-unselect="" style="opacity:1; float:right;margin-right:10%;">
-    <a href="javascript:;"><img src="<%=request.getContextPath() %><%=users.getUserImg() %>" class="layui-nav-img"><shiro:principal/></a>
+    <a href="javascript:;"><img src="<%=request.getContextPath() %><%=users.getUserImg() %>" class="layui-nav-img"><%=users.getUserName() %></a>
     <dl class="layui-nav-child">
       <dd><a href="javascript:;">修改信息</a></dd>
       <shiro:hasAnyRoles name="管理员,博主"> 
