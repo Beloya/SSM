@@ -117,14 +117,16 @@ word-break:break-all;
 							class="posts-expand layui-col-xs6 layui-col-sm10 layui-col-md6 layui-col-md-offset1 layui-col-sm-offset1">
 						
 					<c:forEach items="${archives }" var="archives">
+					<!-- fmt:formatDate var="CURCreatedTime" value="${archives.createdTime}" pattern="yyyy-MM-dd" scope="request"/-->
+					${Calendar.setTime(archives.createdTime)}
+
+					<!--fmt:formatDate var="CURCreatedTimedd" value="${archives.createdTime}" pattern="dd" scope="request"/-->
 					<c:if test="${archives.archivesvisibility.vdescribe=='公开' }">
 						<article class="post post-type-normal" itemscope=""
 							>
 						<div class="post-date">
-							<div class="post-month"><fmt:formatDate
-									value="${archives.createdTime}" pattern="MM月" /></div>
-							<div class="post-day"><fmt:formatDate
-									value="${archives.createdTime}" pattern="dd" /></div>
+							<div class="post-month">${Calendar.get(Calendar_MONTH)+1}月</div>
+							<div class="post-day">${Calendar.get(Calendar_DAY_OF_MONTH)}</div>
 						</div>
 						<div class="post-block">
 							<link itemprop="mainEntityOfPage"
@@ -142,8 +144,7 @@ word-break:break-all;
 								<span class="post-time"> <span class="post-meta-item-icon"> <i class="fa fa-calendar-o"></i>
 								</span><span class="post-meta-item-text">发表于</span> <time title="创建于"
 										itemprop="dateCreated datePublished"
-										datetime="2018-05-30T23:45:43+00:00"><fmt:formatDate
-									value="${archives.createdTime}" pattern="yyyy-MM-dd" /></time>
+										datetime="${Calendar.get(Calendar_Year)}-${Calendar.get(Calendar_MONTH)+1}-${Calendar.get(Calendar_DAY_OF_MONTH)}">${Calendar.get(Calendar_Year)}-${Calendar.get(Calendar_MONTH)+1}-${Calendar.get(Calendar_DAY_OF_MONTH)}</time>
 								</span><span class="post-wordcount"><span
 									class="post-meta-divider">•</span> <span
 									class="post-meta-item-icon"><i class="fa fa-file-word-o"></i>
@@ -179,10 +180,8 @@ word-break:break-all;
 						<article class="post post-type-normal" itemscope=""
 							>
 						<div class="post-date">
-							<div class="post-month"><fmt:formatDate
-									value="${archives.createdTime}" pattern="MM月" /></div>
-							<div class="post-day"><fmt:formatDate
-									value="${archives.createdTime}" pattern="dd" /></div>
+							<div class="post-month">${Calendar.get(Calendar_MONTH)+1}</div>
+							<div class="post-day">${Calendar.get(Calendar_DAY_OF_MONTH)}</div>
 						</div>
 						<div class="post-block">
 							<link itemprop="mainEntityOfPage"
@@ -200,8 +199,7 @@ word-break:break-all;
 								<span class="post-time"> <span class="post-meta-item-icon"> <i class="fa fa-calendar-o"></i>
 								</span><span class="post-meta-item-text">发表于</span> <time title="创建于"
 										itemprop="dateCreated datePublished"
-										datetime="2018-05-30T23:45:43+00:00"><fmt:formatDate
-									value="${archives.createdTime}" pattern="yyyy-MM-dd" /></time>
+										datetime="2018-05-30T23:45:43+00:00">${Calendar.get(Calendar_Year)}-${Calendar.get(Calendar_MONTH)+1}-${Calendar.get(Calendar_DAY_OF_MONTH)}</time>
 								</span><span class="post-wordcount"><span
 									class="post-meta-divider">•</span> <span
 									class="post-meta-item-icon"><i class="fa fa-file-word-o"></i>

@@ -35,24 +35,25 @@ import com.alibaba.fastjson.JSONObject;
 @SuppressWarnings({"unchecked","static-access"})
 public class KickoutSessionFilter extends AccessControlFilter {
 	//静态注入
-	static String kickoutUrl;
+	private static String kickoutUrl;
 	//在线用户
-	final static String ONLINE_USER = KickoutSessionFilter.class.getCanonicalName()+ "_online_user";
+	private static String ONLINE_USER;
 	//踢出状态，true标示踢出
-	final static String KICKOUT_STATUS = KickoutSessionFilter.class.getCanonicalName()+ "_kickout_status";
+	private static String KICKOUT_STATUS;
 	static RedisUtil redisutil;
 	private static int expire;
 	//session获取
 		static ShiroSessionRepository shiroSessionRepository;
 		  private static  int DB_INDEX;
+   /*
+    * 单用户登录检查
+    * @see org.apache.shiro.web.filter.AccessControlFilter#isAccessAllowed(javax.servlet.ServletRequest, javax.servlet.ServletResponse, java.lang.Object)
+    */
 	@Override
 	protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object obj) throws Exception {
 		HttpServletRequest httpRequest = ((HttpServletRequest)request);
 		String url = httpRequest.getRequestURI();
 		Subject subject = getSubject(request, response);
-		
-		
-		
 		Session session = subject.getSession();
 		Serializable sessionId = session.getId();
 		/**
@@ -73,17 +74,20 @@ public class KickoutSessionFilter extends AccessControlFilter {
 			return  Boolean.FALSE;
 	}
 		//从缓存获取用户-Session信息 <UserId,SessionId>
-		byte[] key = SerializeUtil.serialize(SerializeUtil.serialize(ONLINE_USER));
-		LinkedHashMap<Long, Serializable> infoMap = SerializeUtil.deserialize(redisutil.get(DB_INDEX,SerializeUtil.serialize(ONLINE_USER)), LinkedHashMap.class);
-		//如果不存在，创建一个新的
-				infoMap = null == infoMap ? new LinkedHashMap<Long, Serializable>() : infoMap;
-				//获取tokenId
-				Long userId = TokenManager.getUserId();
-
-				//如果已经包含当前Session，并且是同一个用户，跳过。
-				if(infoMap.containsKey(userId) && infoMap.containsValue(sessionId)){
-					//更新存储到缓存1个小时（这个时间最好和session的有效期一致或者大于session的有效期）
-					redisutil.setex(DB_INDEX,SerializeUtil.serialize(ONLINE_USER), SerializeUtil.serialize(infoMap), expire);
+		byte[] key = SerializeUtil.serialize(ONLINE_USER);
+	//	HashMap<Long, Serializable> infoMap = null;
+		Serializable online_sessionId=null;
+		//获取tokenId
+		 Long	userId = TokenManager.getUserId();
+		 //如果未登录则不检查
+		 if(userId==null){
+			 return  Boolean.TRUE;
+		 }
+		online_sessionId=(Serializable) SerializeUtil.unserialize(redisutil.hget(key,SerializeUtil.serialize(userId)));
+				//如果已经包含当前Session，且是同一个用户，跳过。
+				if(online_sessionId==sessionId){
+					//更新存储到缓存（这个时间最好和session的有效期一致或者大于session的有效期）
+					redisutil.hset(key, SerializeUtil.serialize(userId),SerializeUtil.serialize(sessionId), expire);
 					return Boolean.TRUE;
 				}
 				//如果用户相同，Session不相同，处理
@@ -91,9 +95,10 @@ public class KickoutSessionFilter extends AccessControlFilter {
 				 * 如果用户Id相同,Session不相同
 				 * 1.获取到原来的session，并且标记为踢出。
 				 */
-				if(infoMap.containsKey(userId) && !infoMap.containsValue(sessionId)){
-					Serializable oldSessionId = infoMap.get(userId);
+				if(online_sessionId!=sessionId&&online_sessionId!=null){
+					Serializable oldSessionId =online_sessionId;
 					Session oldSession = shiroSessionRepository.getSession(oldSessionId);
+					System.out.println("oldSession:"+oldSession);
 					if(null != oldSession){
 						//标记session已经踢出
 						oldSession.setAttribute(KICKOUT_STATUS, Boolean.TRUE);
@@ -101,17 +106,15 @@ public class KickoutSessionFilter extends AccessControlFilter {
 						LoggerUtil.fmtDebug(getClass(), "kickout old session success,oldId[%s]",oldSessionId);
 					}else{
 						shiroSessionRepository.deleteSession(oldSessionId);
-						infoMap.remove(userId);
+						//infoMap.remove(userId);
 						//存储到缓存1个小时（这个时间最好和session的有效期一致或者大于session的有效期）
-						redisutil.setex(DB_INDEX,SerializeUtil.serialize(ONLINE_USER),  SerializeUtil.serialize(infoMap), expire);
+						redisutil.hset(key, SerializeUtil.serialize(userId),SerializeUtil.serialize(sessionId), expire);
 					}
 					return  Boolean.TRUE;
+				} else{
+					redisutil.hset(key, SerializeUtil.serialize(userId),SerializeUtil.serialize(sessionId), expire);
 				}
-				if(!infoMap.containsKey(userId) && !infoMap.containsValue(sessionId)){
-					infoMap.put(userId, sessionId);
-					//存储到缓存1个小时（这个时间最好和session的有效期一致或者大于session的有效期）
-					redisutil.setex(DB_INDEX,SerializeUtil.serialize(ONLINE_USER),  SerializeUtil.serialize(infoMap), expire);
-				}
+           
 				return Boolean.TRUE;
 		
 	}
@@ -173,6 +176,18 @@ public class KickoutSessionFilter extends AccessControlFilter {
 	}
 	public static void setExpire(int expire) {
 		KickoutSessionFilter.expire = expire;
+	}
+	public static String getONLINE_USER() {
+		return ONLINE_USER;
+	}
+	public static void setONLINE_USER(String oNLINE_USER) {
+		ONLINE_USER = oNLINE_USER;
+	}
+	public static String getKICKOUT_STATUS() {
+		return KICKOUT_STATUS;
+	}
+	public static void setKICKOUT_STATUS(String kICKOUT_STATUS) {
+		KICKOUT_STATUS = kICKOUT_STATUS;
 	}
 	
 	

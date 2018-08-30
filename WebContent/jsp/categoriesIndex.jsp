@@ -53,7 +53,7 @@ line-height:3;
 								<c:forEach items="${archives }" var="archive">
 								<c:if test="${type.tid== type.tid}">
 								</c:if>
-				
+							${Calendar.setTime(archive.createdTime)}
 							<article class="post post-type-normal" itemscope=""
 								itemtype="">
 							<header class="post-header">
@@ -64,9 +64,8 @@ line-height:3;
 							</h2>
 							<div class="post-meta">
 								<time class="post-time" itemprop="dateCreated"
-									datetime="" content="<fmt:formatDate
-									value="${archive.createdTime}" pattern="yyyy-MM-dd" />"><fmt:formatDate
-									value="${archive.createdTime}" pattern="MM-dd" /></time>
+									datetime="" content="${Calendar.get(Calendar_Year)}-${Calendar.get(Calendar_MONTH)+1}-${Calendar.get(Calendar_DAY_OF_MONTH)}">
+									${Calendar.get(Calendar_MONTH)+1}-${Calendar.get(Calendar_DAY_OF_MONTH)}</time>
 							</div>
 							</header></article>
 						

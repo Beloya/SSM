@@ -25,6 +25,7 @@
 			<list>
 				<value>classpath:jdbc.properties</value>
 				<value>classpath:redis.properties</value>
+				<value>classpath:Shiro.properties</value>
 			</list>
 		</property> 
 	</bean>
@@ -119,18 +120,7 @@
         <constructor-arg name="poolConfig" ref="poolConfig"></constructor-arg>
         <property name="password" value="${redis.pass}"></property>
     </bean>
-    
-   <!-- bean id="jedisPool" class="redis.clients.jedis.JedisSentinelPool">
-	<constructor-arg name="masterName" value="mymaster" />
-	<constructor-arg name="sentinels">
-		<set>
-			<value>${redis.host3.cloudq}:${redis.port3.cloudq}</value>
-		
-		</set>
-	</constructor-arg>
-	<constructor-arg ref="poolConfig" />
-	<constructor-arg index="3" value="${redis.pass}" />
-</bean-->
+
 		 <!--配置redisSentinelConfiguration 哨兵模式-->
     <bean id="redisSentinelConfiguration"
           class="org.springframework.data.redis.connection.RedisSentinelConfiguration">
@@ -150,42 +140,19 @@
         </property>
     </bean>
 
-<!--bean id="redisHttpSessionConfiguration"
-      class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration">
-    <property name="maxInactiveIntervalInSeconds" value="600"/>
-</bean-->
+
 <!-- 静态资源检查 -->
 <bean id="resourceUrlProvider" class="org.springframework.web.servlet.resource.ResourceUrlProvider"/>
 		<bean id="genericUtils"  class="com.MyBlog.utils.GenericUtils"/>
-	<!-- spring-data-redis -->
-	<!--bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
-		<property name="connectionFactory" ref="jedisConnectionFactory" />
-		  <property name="keySerializer">
-            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />
-        </property>
-        <property name="valueSerializer">
-            <bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
-        </property>
-        <property name="hashKeySerializer">
-            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />
-        </property>
-        <property name="hashValueSerializer">
-            <bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
-        </property>
-        
-        <property name="enableTransactionSupport"  value="true"></property>  
-	</bean-->
+
 <bean id="RedisUtil" class="com.MyBlog.cache.RedisUtil">
 		<property name="jedisConnectionFactory" ref="jedisConnectionFactory" />
 	</bean>
-	<bean id="redisCacheTransfer" class="com.MyBlog.cache.RedisCacheTransfer">
+
+	<bean id="MybaitsredisCacheTransfer" class="com.MyBlog.cache.MybaitsRedisCacheTransfer">
 		<property name="jedisConnectionFactory" ref="jedisConnectionFactory" />
+		<property name="MybaitsKey" value="Mybaits_Cache" />
 	</bean>
 	
-	<!-- 配置RedisCacheConfig -->
-	 <!-- bean id="redisrCacheManager" class="com.MyBlog.cache.SpringRedisCache">  
-        <property name="redisTemplate" ref="redisTemplate" />  
-    </bean-->
-
 
 </beans>

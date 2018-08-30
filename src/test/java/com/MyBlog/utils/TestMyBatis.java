@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -100,8 +102,8 @@ public class TestMyBatis {
 	private MessageBoardMapper mbmapper;
 	@Autowired
 	private typeService tservice;
-	@Autowired
-	SpringRedisCache re=new SpringRedisCache();
+	//@Autowired
+	//SpringRedisCache re=new SpringRedisCache();
 	//@Test
 	public void test1() {
 
@@ -133,9 +135,12 @@ public class TestMyBatis {
 }
 	@Test
 	public void MbTest() throws GeneralSecurityException, ParseException {
-		//re.hset("Hello", "world", "1");
-	
-		//System.out.println(re.sget("shrio_session"));
+		
+	//	LocalDate ldate = LocalDate.now();
+		Date date=new Date();
+		Calendar calendar=Calendar.getInstance();calendar.setTime(date);
+		DateFormatutils Dcalendar=(DateFormatutils) DateFormatutils.getInstance();
+		System.out.println(Dcalendar.get(calendar.MONTH));
 
 	}
 //	@Test

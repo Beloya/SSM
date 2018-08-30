@@ -15,8 +15,9 @@ public class JedisShiroCache <K, V> implements Cache<K, V> {
 	/**
 	 * 为了不和其他的缓存混淆，采用追加前缀方式以作区分
 	 */
-    private   String REDIS_SHIRO_CACHE ;
+    private   String REDIS_SHIRO_CACHE ="shiro_cache";
 	private   int DB_INDEX;
+	private int expire=90;
 
     private RedisUtil redisutil;
     
@@ -27,11 +28,7 @@ public class JedisShiroCache <K, V> implements Cache<K, V> {
         this.name = name;
         this.redisutil = redisutil;
     }
-    public JedisShiroCache(RedisUtil redisutil,  int DB_INDEX,String REDIS_SHIRO_CACHE ) {
-        this.redisutil = redisutil;
-        this.DB_INDEX = DB_INDEX;
-        this.REDIS_SHIRO_CACHE = REDIS_SHIRO_CACHE;
-    }
+
     public JedisShiroCache() {
    super();
     }
@@ -44,8 +41,9 @@ public class JedisShiroCache <K, V> implements Cache<K, V> {
 		 byte[] byteKey = SerializeUtil.serialize(key);
 	        byte[] byteValue = new byte[0];
 	        try {
-		redisutil.hget(SerializeUtil.serialize(REDIS_SHIRO_CACHE), byteValue);
-		
+	        
+	        	byteValue=redisutil.hget(SerializeUtil.serialize(REDIS_SHIRO_CACHE), byteKey);
+		//System.out.println("JedisShiroGetCache:"+byteValue);
 	        }
 	        catch (Exception e) {
 	        	LoggerUtil.error(SELF, e.getMessage());
@@ -61,8 +59,8 @@ public class JedisShiroCache <K, V> implements Cache<K, V> {
 	public V put(K key, V value) throws CacheException {
 		 V previos = get(key);
 try {
-	System.out.println("JedisShiroCache:"+value);
-	redisutil.hset(SerializeUtil.serialize(REDIS_SHIRO_CACHE),SerializeUtil.serialize(key), SerializeUtil.serialize(value));
+	//System.out.println("JedisShiroSetCache:"+value);
+	redisutil.hset(SerializeUtil.serialize(REDIS_SHIRO_CACHE),SerializeUtil.serialize(key), SerializeUtil.serialize(value),expire);
 	
 }catch (Exception e) {
 	LoggerUtil.error(SELF, e.getMessage());
@@ -133,4 +131,13 @@ try {
 	   private String buildCacheKey(Object key) {
 	        return REDIS_SHIRO_CACHE + getName() + ":" + key;
 	    }
+
+	public int getExpire() {
+		return expire;
+	}
+
+	public void setExpire(int expire) {
+		this.expire = expire;
+	}
+	   
 }

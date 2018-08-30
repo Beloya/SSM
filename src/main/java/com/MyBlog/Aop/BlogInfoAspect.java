@@ -1,6 +1,7 @@
 package com.MyBlog.Aop;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -38,8 +39,7 @@ import com.MyBlog.utils.QQEmailUtilFactory;
 public class BlogInfoAspect {
 	 @Autowired
 	private blogService blogService;
-	//	@Autowired
-		redisSessionService redissession;
+
 	 HttpServletRequest request = BlogInfoSignle.blogInfoSignle.getRequest();
 	    //定义切入点，提供一个方法，这个方法的名字就是改切入点的id  
 	    @Pointcut("execution(* com.MyBlog.Controller.*.*(..))")  
@@ -56,7 +56,9 @@ public class BlogInfoAspect {
 	    		 BlogInfoSignle.blogInfoSignle.setRequest(request);
 	    		 blog= blogService.FindByUserName("Beloya");
 	    		 BlogInfoSignle.blogInfoSignle.setBlog(blog);
+	    		 Calendar calendar=Calendar.getInstance();
 	    		 request.getServletContext().setAttribute("BlogInfo", blog);
+	    		 request.getServletContext().setAttribute("Calendar",calendar);
 	    
 	    	 }
 	      /* String className = call.getTarget().getClass().getName();

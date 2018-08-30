@@ -209,13 +209,19 @@ public class RedisUtil {
 	     * @param map 对应关系
 	     * @return 状态，成功返回OK
 	     */
-	    public long hset(byte []key, byte []field,byte []value) {
+	    public long hset(byte []key, byte []field,byte []value,Integer expire) {
 	    	Jedis jedis = null;
 	        try {
 	        	jedis=getJedis();
 	        	 System.out.println("RedisSet:key="+SerializeUtil.deserialize(key)+" field="+SerializeUtil.deserialize(field)+" value="+SerializeUtil.deserialize(value));
 	        Long s = jedis.hset(key, field, value);
-	    
+	       if(expire!=null) {
+	    	   jedis.expire(key, expire);
+	       }
+	       else {
+	    	   jedis.expire(key, this.expire);
+	    	   
+	       }
 	        return s;
 	        }
 	        catch (Exception e) {
@@ -256,7 +262,7 @@ public class RedisUtil {
 	        try {
 	        	jedis=getJedis();
 	        byte[] s = jedis.hget(key, field);
-	    //	System.out.println("RedisGet:key="+SerializeUtil.deserialize(key)+" value="+SerializeUtil.deserialize(field)+" value="+SerializeUtil.deserialize(s));
+	    	System.out.println("RedisGet:key="+SerializeUtil.deserialize(key)+" value="+SerializeUtil.deserialize(field)+" value="+SerializeUtil.deserialize(s));
 	        return s;
 	        }
 	        catch (Exception e) {
@@ -336,9 +342,9 @@ public class RedisUtil {
 	    	Jedis jedis = null;
 	        try {
 	        	jedis=getJedis(dbIndex);
-	        	
+	       
 	            value = jedis.get(key);
-	           
+	         	System.out.println("GET key:"+SerializeUtil.unserialize(key)+" value:"+SerializeUtil.unserialize(value));
 	        } finally {
 	        	recycleJedis(jedis);
 	        }
@@ -372,6 +378,7 @@ public class RedisUtil {
 		        try {
 		        	jedis=getJedis(dbIndex);
 	            jedis.set(key, value);
+	        	System.out.println("SET key:"+SerializeUtil.unserialize(key)+" value:"+SerializeUtil.unserialize(value));
 	            if (expire != 0) {
 	                jedis.expire(key, expire);
 	            }
@@ -395,7 +402,7 @@ public class RedisUtil {
 	        try {
 	        	jedis=getJedis();
 	            jedis.set(key, value);
-	            if (this.expire != 0) {
+	            if (this.expire == 0) {
 	                jedis.expire(key, this.expire);
 	            }
 	        } finally {
@@ -503,8 +510,8 @@ public class RedisUtil {
 			Jedis jedis = null;
 	  
 			try {
-				jedis=getJedis(dbIndex);
-		
+				jedis=getJedis();
+		System.out.println("SET "+"key:"+SerializeUtil.unserialize(key)+" value:"+SerializeUtil.unserialize(value));
 				jedis.setex(key, expire, value);
 	        } catch (Exception e) {
 	            e.printStackTrace();
@@ -516,22 +523,23 @@ public class RedisUtil {
 
 		public Collection<Session> AllSession(int dbIndex, String redisShiroSession) throws Exception {
 			Jedis jedis = null;
-	        boolean isBroken = false;
+	    
 	        Set<Session> sessions = new HashSet<Session>();
 			try {
 	            jedis = getJedis(dbIndex);           
-	            Map<byte[], byte[]> byteKeys = jedis.hgetAll((JedisShiroSessionRepository.REDIS_SHIRO_SESSION).getBytes());  
+	            Set<byte[]> byteKeys = jedis.keys((JedisShiroSessionRepository.REDIS_SHIRO_ALL).getBytes());  
 	            if (byteKeys != null && byteKeys.size() > 0) {  
-	                for (byte[] bs : byteKeys.values()) {  
-	                
-	                	Session obj = SerializeUtil.deserialize(jedis.hget(SerializeUtil.serialize(JedisShiroSessionRepository.REDIS_SHIRO_SESSION),bs),Session.class);  
+	                for (byte[] bs : byteKeys) {  
+	                	//String bsstr=bs.toString();
+   	
+	                	Session obj = null;
+	                	obj=SerializeUtil.deserialize(jedis.hget(bs,SerializeUtil.serialize(bs)),Session.class);  
 	                     if(obj instanceof Session){
 	                    	 sessions.add(obj);  
 	                     }
 	                }  
 	            }  
 	        } catch (Exception e) {
-	            isBroken = true;
 	            throw e;
 	        } finally {
 	            recycleJedis(jedis);

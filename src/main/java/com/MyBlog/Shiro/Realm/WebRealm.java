@@ -36,6 +36,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.MyBlog.ServiceImpl.ShiroSession;
 import com.MyBlog.ServiceImpl.UserServiceImpl;
+import com.MyBlog.Shiro.CustomShiroSessionDAO;
 import com.MyBlog.Shiro.Session.redisSessionService;
 import com.MyBlog.Shiro.Token.ShiroToken;
 import com.MyBlog.cache.SpringRedisCache;
@@ -53,10 +54,11 @@ public class WebRealm extends AuthorizingRealm implements Realm{
 		@Autowired
 	  private UserServiceImpl userService;  
 //	@Autowired
-	redisSessionService redissession;
-
+	//redisSessionService redissession;
+		
+	private CustomShiroSessionDAO customshirosessionDAO;
     //private ShiroRedisCache<String, Object> redisCache;
-	SpringRedisCache sre;
+	//SpringRedisCache sre;
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		Users user=null;
@@ -87,7 +89,7 @@ public class WebRealm extends AuthorizingRealm implements Realm{
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
 		
 		String username = (String) token.getPrincipal();
-	System.out.println(username);
+	
 		Users ui = userService.FindByUserName(username);  
 		
 		if(ui == null)  {
@@ -137,6 +139,14 @@ public class WebRealm extends AuthorizingRealm implements Realm{
 				principalCollection, getName());
 		System.out.println("清除principalCollection");
 		super.clearCachedAuthorizationInfo(principals);
+	}
+
+	public CustomShiroSessionDAO getCustomshirosessionDAO() {
+		return customshirosessionDAO;
+	}
+
+	public void setCustomshirosessionDAO(CustomShiroSessionDAO customshirosessionDAO) {
+		this.customshirosessionDAO = customshirosessionDAO;
 	}
 	
 

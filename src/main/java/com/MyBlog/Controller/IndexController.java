@@ -25,6 +25,7 @@ import com.MyBlog.entity.Users;
 import com.MyBlog.entity.archives;
 import com.MyBlog.entity.type;
 import com.MyBlog.utils.BlogInfoSignle;
+import com.MyBlog.utils.DateFormatutils;
 import com.github.pagehelper.ISelect;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -52,9 +53,8 @@ public class IndexController {
 	long archivescount= ((Page) archives).getTotal();
 	PageHelper.startPage(pager.getPage(), pager.getSize());
 	pager.setTotal((int)archivescount);
-
 		model.addAttribute("archives", archives);
-
+    
 		model.addAttribute("pager", pager);
 		return "/jsp/index";
 	}
@@ -67,6 +67,7 @@ public class IndexController {
 	PageHelper.startPage(1, 10);
 	List<type> types=tservice.FindAll();
 	long typecount= ((Page) types).getTotal();
+
 		model.addAttribute("archivescount", archivescount);
 		model.addAttribute("types", types);
 		model.addAttribute("typecount", typecount);
@@ -129,7 +130,7 @@ public class IndexController {
 		c.setTime(date);
 		year.add(c.get(Calendar.YEAR));
 	}
-	
+
 		model.addAttribute("archivescount", archivescount);
 		model.addAttribute("archives", archives);
 		model.addAttribute("typecount", typecount);

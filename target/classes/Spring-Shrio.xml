@@ -10,29 +10,22 @@
         http://www.springframework.org/schema/util
         http://www.springframework.org/schema/util/spring-util-4.3.xsd">      
       
-   <!-- bean id="shiroEhcacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
-        <property name="cacheManagerConfigFile" value="classpath:ehcache-shiro.xml"/>
-    </bean-->
 
  
- 
+    <bean id="sessionFactory" class="com.MyBlog.Shiro.Session.ShiroSessionFactory"/>
 
   <!-- Session ID 生成器 -->
     <bean id="sessionIdGenerator" class="org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator"></bean>
     <!-- session 创建、删除、查询 -->
     	<bean id="jedisShiroSessionRepository" class="com.MyBlog.Shiro.Session.JedisShiroSessionRepository" >
 		 <property name="redisUtil" ref="RedisUtil"/>
-          <property name="REDIS_SHIRO_SESSION" value="Shiro_Session"/>
-           <property name="REDIS_SHIRO_ALL" value="*Shiro_Session*"/>  
-		 	 <property name="DB_INDEX" value="1"/>
-		 	  <property name="SESSION_VAL_TIME_SPAN" value="18000"/>
+          <property name="REDIS_SHIRO_SESSION" value="${REDIS_SHIRO_SESSION}"/>
+           <property name="REDIS_SHIRO_ALL" value="${REDIS_SHIRO_ALL}"/>  
+		 	 <property name="DB_INDEX" value="${SESSION_DB_INDEX}"/>
+		 	  <property name="SESSION_VAL_TIME_SPAN" value="${SESSION_VAL_TIME_SPAN}"/>
 	</bean>
 	
-	<bean id="JedisShiroCache" class="com.MyBlog.Shiro.Cache.JedisShiroCache" >
-		 <property name="redisutil" ref="RedisUtil"/>
-           <property name="REDIS_SHIRO_CACHE" value="shiro_cache"/>  
-		 	 <property name="DB_INDEX" value="1"/>
-	</bean>
+
 	
 		<!-- custom shiro session listener -->
     <bean id="customSessionListener" class="com.MyBlog.Shiro.Listenter.CustomSessionListener">
@@ -64,11 +57,13 @@
 	
 		<!-- session 校验单个用户是否多次登录 -->
 	<bean id="kickoutSessionFilter"   class="com.MyBlog.Shiro.Filter.KickoutSessionFilter">  
-	    <property name="kickoutUrl" value="/login"/>  
+	    <property name="kickoutUrl" value="${kickoutUrl}"/>  
 	    <property name="redisutil" ref="RedisUtil"/>
-	    <property name="DB_INDEX" value="2"/>
-	      <property name="expire" value="7200"/>
-	 
+	    
+	    <property name="DB_INDEX" value="${kickout_DB_INDEX}"/>
+	      <property name="expire" value="${kickout_expire}"/>
+	  <property name="ONLINE_USER" value="${kickout_ONLINE_USER}"/>
+	  	  <property name="KICKOUT_STATUS" value="${KICKOUT_STATUS}"/>
 	</bean>  
 <!-- 静态注入，相当于调用SecurityUtils.setSecurityManager(securityManager) -->
 	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
@@ -90,15 +85,15 @@
 
     
     <!-- Session管理器 -->
-<bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager"> 
+<bean id="sessionManager" class="com.MyBlog.Shiro.Session.ShiroWebSessionManager"> 
         <!-- 会话超时时间，单位：毫秒  20m=1200000ms, 30m=1800000ms, 60m=3600000ms-->
-        <property name="globalSessionTimeout" value="3600000"/>
+        <property name="globalSessionTimeout" value="${LocationSessionTimeout}"/>
         <!-- 会话验证器调度时间 -->
-        <property name="sessionValidationInterval" value="1800000"/>
-
+        <property name="sessionValidationInterval" value="${sessionValidationInterval}"/>
+ <property name="sessionFactory" ref="sessionFactory"/>
          <property name="sessionDAO" ref="customShiroSessionDAO"></property>
            <property name="deleteInvalidSessions" value="true"/>
-        <property name="sessionIdUrlRewritingEnabled" value="false" />
+        <!--property name="sessionIdUrlRewritingEnabled" value="false" /-->
         <property name="sessionIdCookie" ref="sharesession"/>
         <property name="sessionIdCookieEnabled" value="true"/>
    	   <property name="sessionListeners">
@@ -139,31 +134,33 @@
      -->
      <!--  -->
        <bean id="StringUtils" class="com.MyBlog.utils.StringUtils">
-        <property name="LOGIN_URL" value="/login"/>   
+        <property name="LOGIN_URL" value="${LOGIN_URL}"/>   
         <!-- 踢出提示 -->
-            <property name="KICKED_OUT" value="/jsp/erro.htm"/>   
-              <property name="UNAUTHORIZED" value="/jsp/erro.htm"/>   
+            <property name="KICKED_OUT" value="${LOGIN_URL}"/>   
+              <property name="UNAUTHORIZED" value="${LOGIN_URL}"/>   
        </bean>
              <bean id="ShiroFilterUtils" class="com.MyBlog.utils.ShiroFilterUtils">
-        <property name="LOGIN_URL" value="/login"/>   
+        <property name="LOGIN_URL" value="${LOGIN_URL}"/>   
         <!-- 踢出提示 -->
-            <property name="KICKED_OUT" value="/jsp/erro.htm"/>   
-              <property name="UNAUTHORIZED" value="/jsp/erro.htm"/>   
+            <property name="KICKED_OUT" value="${LOGIN_URL}"/>   
+              <property name="UNAUTHORIZED" value="${LOGIN_URL}"/>   
        </bean>
            <!-- 配置进行授权和认证的 Realm -->  
-        <bean id="myRealm" class="com.MyBlog.Shiro.Realm.WebRealm" />   
+        <bean id="myRealm" class="com.MyBlog.Shiro.Realm.WebRealm" >   
+        </bean>
           
      
 <!-- 认证数据库存储-->
        <bean id="login" class="com.MyBlog.Shiro.Filter.LoginFilter"/>    
        <bean id="role" class="com.MyBlog.Shiro.Filter.RoleFilter">
-        <property name="LOGIN_URL" value="/login"/>   
-            <property name="UNAUTHORIZED_URL" value="/jsp/erro.htm"/>   
+        <property name="LOGIN_URL" value="${LOGIN_URL}"/>   
+            <property name="UNAUTHORIZED_URL" value="${LOGIN_URL}"/>   
        </bean>
         <bean id="permission" class="com.MyBlog.Shiro.Filter.PermissionFilter"/>
    <bean id="simple" class="com.MyBlog.Shiro.Filter.SimpleAuthFilter">
-      <property name="LOGIN_URL" value="/login"/>   
-            <property name="UNAUTHORIZED_URL" value="/jsp/erro.htm"/>   
+      <property name="LOGIN_URL" value="${LOGIN_URL}"/>   
+            <property name="UNAUTHORIZED_URL" value="${LOGIN_URL}"/>   
+            <property name="customshirosessionDAO" ref="customShiroSessionDAO"></property>
        </bean>
         
        
@@ -172,7 +169,7 @@
 <property name="securityManager" ref="securityManager"/>
  <property name="loginUrl" value="/login" />
         <!--  property name="successUrl" value="jsp/suc.htm" /-->
-        <property name="unauthorizedUrl" value="/login" />
+        <property name="unauthorizedUrl" value="${LOGIN_URL}" />
                  <property name="filters">
               <util:map>
                 <entry key="login" value-ref="login"></entry>
@@ -184,35 +181,32 @@
        </property>
         <property name="filterChainDefinitions">
             <value>
- 
+  /js/**=anon
+/img/**=anon
+/images/**=anon 
+/css/**=anon
+/plugins/**=anon     
              /delCommit=perms[普通:评论:delete]  
                /Newarchives=perms[普通:文章:create]  
                /Createarchives=perms[普通:文章:create] 
            /deletearchives=perms[普通:文章:delete]
            /editarchives=perms[普通:文章:edit]
-            /admin/**=perms[系统:管理:view]
-       /druid/**=perms[系统:监控:view]
-      /druidWeb/**=perms[系统:监控:view]
- 
- /js/**=anon
-/img/**=anon
-/images/**=anon 
-/css/**=anon
-/plugins/**=anon      
-      /**=simple,kickout
- 
+            /admin/**=perms[系统:管理:view],kickout
+       /druid/**=perms[系统:监控:view],kickout
+      /druidWeb/**=perms[系统:监控:view],kickout
+      /**=simple
             </value>
               </property>
        
 </bean> 
    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">  
-            <!--property name="cacheManager" ref="shiroEhcacheManager"/-->   
+         <!-- property name="cacheManager" ref="customShiroCacheManager"/-->
              <property name="realm" ref="myRealm"/>   
-                <property name="cacheManager" ref="customShiroCacheManager"/>
+               
                 <!--将session托管给redis进行管理，便于搭建集群系统-->
               <property name="sessionManager" ref="sessionManager"/>
               <property name="rememberMeManager" ref="rememberMeManager"/> 
-               
+                
        </bean>  
       <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>  
   

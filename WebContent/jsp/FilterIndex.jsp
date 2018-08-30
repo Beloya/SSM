@@ -52,7 +52,7 @@ line-height:3;
 							</div>
 								<c:forEach items="${archives }" var="archive">
 								<c:if test="${archive.createdTime.getYear()+1900== year}">
-							
+								${Calendar.setTime(archive.createdTime)}
 							</c:if>
 							<article class="post post-type-normal" itemscope=""
 								itemtype="">
@@ -64,9 +64,8 @@ line-height:3;
 							</h2>
 							<div class="post-meta">
 								<time class="post-time" itemprop="dateCreated"
-									datetime="" content="<fmt:formatDate
-									value="${archive.createdTime}" pattern="yyyy-MM-dd" />"><fmt:formatDate
-									value="${archive.createdTime}" pattern="MM-dd" /></time>
+									datetime="" content="${Calendar.get(Calendar_Year)}-${Calendar.get(Calendar_MONTH)+1}-${Calendar.get(Calendar_DAY_OF_MONTH)}">
+									${Calendar.get(Calendar_MONTH)+1}-${Calendar.get(Calendar_DAY_OF_MONTH)}</time>
 							</div>
 							</header></article>
 						

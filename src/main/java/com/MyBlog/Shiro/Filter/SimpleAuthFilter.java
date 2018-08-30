@@ -15,6 +15,7 @@ import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.util.WebUtils;
 
 import com.MyBlog.Logger.LoggerUtil;
+import com.MyBlog.Shiro.CustomShiroSessionDAO;
 import com.MyBlog.Shiro.Session.CustomSessionManager;
 import com.MyBlog.Shiro.Session.SessionStatus;
 import com.MyBlog.utils.ShiroFilterUtils;
@@ -26,17 +27,20 @@ import com.alibaba.fastjson.JSONObject;
 public class SimpleAuthFilter extends AccessControlFilter{
 	private	static  String LOGIN_URL ;
 	private	static  String UNAUTHORIZED_URL;
+	private CustomShiroSessionDAO customshirosessionDAO;
 	@Override
 	protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue)
 			throws Exception {
 		HttpServletRequest httpRequest = ((HttpServletRequest)request);
 		String url = httpRequest.getRequestURI();
+		Subject subject = getSubject(request, response);
+		Session session = subject.getSession();
 		if(url.startsWith("/")){
 			return Boolean.TRUE;
 		}
-		Subject subject = getSubject(request, response);
-		Session session = subject.getSession();
+
 		Map<String, String> resultMap = new HashMap<String, String>();
+		
 		SessionStatus sessionStatus = (SessionStatus) session.getAttribute(CustomSessionManager.SESSION_STATUS);
 		if (null != sessionStatus && !sessionStatus.isOnlineStatus()) {
 			//判断是不是Ajax请求
@@ -46,6 +50,7 @@ public class SimpleAuthFilter extends AccessControlFilter{
 				resultMap.put("msg", "您已经被踢出，请重新登录！");
 				out(response, resultMap);
 			}
+		
 			return  Boolean.FALSE;
 		}
 		return Boolean.TRUE;
@@ -94,6 +99,14 @@ public class SimpleAuthFilter extends AccessControlFilter{
 
 	public  void setUNAUTHORIZED_URL(String uNAUTHORIZED_URL) {
 		UNAUTHORIZED_URL = uNAUTHORIZED_URL;
+	}
+
+	public CustomShiroSessionDAO getCustomshirosessionDAO() {
+		return customshirosessionDAO;
+	}
+
+	public void setCustomshirosessionDAO(CustomShiroSessionDAO customshirosessionDAO) {
+		this.customshirosessionDAO = customshirosessionDAO;
 	}
 	
 }

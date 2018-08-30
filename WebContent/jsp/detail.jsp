@@ -35,6 +35,7 @@ word-break:break-all;
 </style>
 </head>
 <body>
+
 	<div class="container sidebar-position-right page-home">
 		<nav class="Top"> <%@ include file="Nav.jsp"%>
 		<p id="offscreen-text" class="offscreen-text"></p>
@@ -51,10 +52,8 @@ word-break:break-all;
 							<article class="post post-type-normal" itemscope=""
 								itemtype="http://schema.org/Article">
 							<div class="post-date">
-								<div class="post-month"><fmt:formatDate
-									value="${archives.createdTime}" pattern="MM月" /></div>
-								<div class="post-day"><fmt:formatDate
-									value="${archives.createdTime}" pattern="dd" /></div>
+								<div class="post-month">${Calendar.get(Calendar_MONTH)+1}月</div>
+								<div class="post-day">${Calendar.get(Calendar_DAY_OF_MONTH)}</div>
 							</div>
 							<div class="post-block">
 							
@@ -62,24 +61,24 @@ word-break:break-all;
 								<h1 class="post-title" itemprop="name headline">${archives.title}</h1>
 								<div class="post-meta">
 								<c:if test="${empty archives.updatedTime}">
+									${Calendar.setTime(archives.createdTime)}
 									<span class="post-time"><span
 										class="post-meta-item-icon"><i class="fa fa-calendar-o"></i>
 									</span>
 									<span class="post-meta-item-text">发表于</span> <time title="创建于"
 											itemprop="dateCreated datePublished"
-											datetime="${archives.createdTime}">
-											<fmt:formatDate
-									value="${archives.createdTime}" pattern="yyyy-MM-dd HH:ss" /></time> </span>
+											datetime="${Calendar.get(Calendar_Year)}-${Calendar.get(Calendar_MONTH)+1}-${Calendar.get(Calendar_DAY_OF_MONTH)}">
+${Calendar.get(Calendar_Year)}-${Calendar.get(Calendar_MONTH)+1}-${Calendar.get(Calendar_DAY_OF_MONTH)}&nbsp;${Calendar.get(Calendar_HOUR_OF_DAY)}:${Calendar.get(Calendar_MINUTE)}</time> </span>
 									</c:if>
 										<c:if test="${!empty archives.updatedTime}">
+											${Calendar.setTime(archives.updatedTime)}
 									<span class="post-time"><span
 										class="post-meta-item-icon"><i class="fa fa-calendar-o"></i>
 									</span>
 									<span class="post-meta-item-text">更新于</span> <time title="创建于"
 											itemprop="dateCreated datePublished"
-											datetime="${archives.updatedTime}">
-											<fmt:formatDate
-									value="${archives.updatedTime}" pattern="yyyy-MM-dd HH:mm" /></time> </span>
+											datetime="${archives.updatedTime}"  >
+${Calendar.get(Calendar_Year)}-${Calendar.get(Calendar_MONTH)+1}-${Calendar.get(Calendar_DAY_OF_MONTH)}&nbsp;${Calendar.get(Calendar_HOUR_OF_DAY)}:${Calendar.get(Calendar_MINUTE)}</time> </span>
 									</c:if>
 									
 									<span
@@ -144,8 +143,8 @@ word-break:break-all;">
 									<div
 										style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center">
 										<div></div>
-										<button id="rewardButton" disable="enable"
-											onclick="var qr=document.getElementById(&quot;QR&quot;);&quot;none&quot;===qr.style.display?qr.style.display=&quot;block&quot;:qr.style.display=&quot;none&quot;">
+<button id="rewardButton" disable="enable"
+onclick="var qr=document.getElementById(&quot;QR&quot;);&quot;none&quot;===qr.style.display?qr.style.display=&quot;block&quot;:qr.style.display=&quot;none&quot;">
 											<span>赞赏</span>
 										</button>
 										<div id="QR" style="display: none">
@@ -421,8 +420,9 @@ word-break:break-all;">
 													<a
 														href="">
 														<time datetime="" itemprop="datePublished">
-														<fmt:formatDate value="${archivescommits.createdTime }"
-															pattern="yyyy年MM月dd日  HH:mm:ss" /></time>
+														${Calendar.setTime(archivescommits.createdTime)}
+${Calendar.get(Calendar_Year)}年${Calendar.get(Calendar_MONTH)+1}月${Calendar.get(Calendar_DAY_OF_MONTH)}日&nbsp;${Calendar.get(Calendar_HOUR_OF_DAY)}:${Calendar.get(Calendar_MINUTE)}
+													</time>
 													</a> </header> <section class="comment-content comment">
 													<div itemprop="reviewBody">
 														<p>${archivescommits.context }</p>

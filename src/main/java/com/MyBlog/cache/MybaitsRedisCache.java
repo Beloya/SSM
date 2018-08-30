@@ -13,39 +13,73 @@ import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
+import com.MyBlog.utils.SerializeUtil;
+
+import redis.clients.jedis.Jedis;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 
 
-public class RedisCache implements Cache{
+public class MybaitsRedisCache implements Cache{
 
-	   private static final Logger logger = LoggerFactory.getLogger(RedisCache.class);
-
-	  
+	   private static final Logger logger = LoggerFactory.getLogger(MybaitsRedisCache.class);
 	    public static JedisConnectionFactory jedisConnectionFactory;
+       private static String MybaitsKey;
+       JedisConnection connection = null;
 
-	    private final String id;
+		private final String id;
         private int DB_Index=0;
 	    /**
 	     * The {@code ReadWriteLock}.
 	     */
 	    private final ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
-
-	    public RedisCache(final String id) {
+	    public MybaitsRedisCache(final String id) {
 	        if (id == null) {
 	            throw new IllegalArgumentException("Cache instances require an ID");
 	        }
 	        logger.debug("MybatisRedisCache:id=" + id);
 	        this.id = id;
 	    }
-
+	    // 从连接池获取redis连接
+	    public  Jedis getJedis(){
+	        Jedis jedis = null;
+	        connection = null;
+	        try{
+	        	
+	        	  connection = (JedisConnection) jedisConnectionFactory.getConnection();
+		          jedis=connection.getJedis();
+		        
+		         
+	        } catch(Exception e){
+	       
+	        	recycleJedis(jedis);
+	        }
+	        
+	        return jedis;
+	    }
+	    
+	    // 回收redis连接
+	    public  void recycleJedis(Jedis jedis){
+	        if(jedis != null){
+	            try{
+	                jedis.close();
+	               // connection.close();
+	            } catch(Exception e){
+	            	
+	            
+	            	//jedis.close();
+	            	
+	            }
+	        }        
+	    }
 	    public void clear()
 	    {
 	        JedisConnection connection = null;
+	        Jedis jedis = null;
 	        try
 	        {
-	            connection = (JedisConnection) jedisConnectionFactory.getConnection();
-	           connection.select(DB_Index);
-	            connection.flushDb();
+	        	jedis=getJedis();
+	         //  connection.select(DB_Index);
+	        	jedis.del(SerializeUtil.serialize(MybaitsKey));
 	         //   connection.flushAll();
 	        }
 	        catch (JedisConnectionException e)
@@ -54,9 +88,7 @@ public class RedisCache implements Cache{
 	        }
 	        finally
 	        {
-	            if (connection != null) {
-	                connection.close();
-	            }
+	        	recycleJedis(jedis);
 	        }
 	    }
 
@@ -69,12 +101,14 @@ public class RedisCache implements Cache{
 	    {
 	        Object result = null;
 	        JedisConnection connection = null;
+	        Jedis jedis = null;
 	        try
 	        {
-	            connection = (JedisConnection) jedisConnectionFactory.getConnection();
-	            connection.select(DB_Index);
+	        	jedis =getJedis();
+	         //   connection.select(DB_Index);
+	            
 	            RedisSerializer<Object> serializer = new JdkSerializationRedisSerializer();
-	            result = serializer.deserialize(connection.get(serializer.serialize(key)));
+	            result = serializer.deserialize(jedis.hget(serializer.serialize(MybaitsKey),serializer.serialize(key)));
 	        }
 	        catch (JedisConnectionException e)
 	        {
@@ -82,9 +116,7 @@ public class RedisCache implements Cache{
 	        }
 	        finally
 	        {
-	            if (connection != null) {
-	                connection.close();
-	            }
+	        	recycleJedis(jedis);
 	        }
 	        return result;
 	    }
@@ -98,11 +130,12 @@ public class RedisCache implements Cache{
 	    {
 	        int result = 0;
 	        JedisConnection connection = null;
+	        Jedis jedis = null;
 	        try
 	        {
-	            connection = (JedisConnection) jedisConnectionFactory.getConnection();
-	            connection.select(DB_Index);
-	            result = Integer.valueOf(connection.dbSize().toString());
+	        	jedis = getJedis();
+	          //  connection.select(DB_Index);
+	            result = Integer.valueOf(jedis.dbSize().toString());
 	        }
 	        catch (JedisConnectionException e)
 	        {
@@ -110,9 +143,7 @@ public class RedisCache implements Cache{
 	        }
 	        finally
 	        {
-	            if (connection != null) {
-	                connection.close();
-	            }
+	        	recycleJedis(jedis);
 	        }
 	        return result;
 	    }
@@ -120,12 +151,13 @@ public class RedisCache implements Cache{
 	    public void putObject(Object key, Object value)
 	    {
 	        JedisConnection connection = null;
+	        Jedis jedis = null;
 	        try
 	        {
-	            connection = (JedisConnection) jedisConnectionFactory.getConnection();
-	            connection.select(DB_Index);
+	        	jedis = getJedis();
+	          //  connection.select(DB_Index);
 	            RedisSerializer<Object> serializer = new JdkSerializationRedisSerializer();
-	            connection.set(serializer.serialize(key), serializer.serialize(value));
+	            jedis.hset(SerializeUtil.serialize(MybaitsKey),serializer.serialize(key), serializer.serialize(value));
 	        }
 	        catch (JedisConnectionException e)
 	        {
@@ -133,9 +165,7 @@ public class RedisCache implements Cache{
 	        }
 	        finally
 	        {
-	            if (connection != null) {
-	                connection.close();
-	            }
+	        	recycleJedis(jedis);
 	        }
 	    }
 
@@ -143,12 +173,13 @@ public class RedisCache implements Cache{
 	    {
 	        JedisConnection connection = null;
 	        Object result = null;
+	        Jedis jedis = null;
 	        try
 	        {
-	            connection = (JedisConnection) jedisConnectionFactory.getConnection();
-	            connection.select(DB_Index);
+	        	jedis = getJedis();
+	           // connection.select(DB_Index);
 	            RedisSerializer<Object> serializer = new JdkSerializationRedisSerializer();
-	            result =connection.expire(serializer.serialize(key), 0);
+	            result =jedis.hdel(SerializeUtil.serialize(MybaitsKey),serializer.serialize(key));
 	        }
 	        catch (JedisConnectionException e)
 	        {
@@ -156,16 +187,23 @@ public class RedisCache implements Cache{
 	        }
 	        finally
 	        {
-	            if (connection != null) {
-	                connection.close();
-	            }
+	        	recycleJedis(jedis);
 	        }
 	        return result;
 	    }
 
 	    public synchronized static void setJedisConnectionFactory(JedisConnectionFactory jedisConnectionFactory) {
-	    	RedisCache.jedisConnectionFactory= jedisConnectionFactory;
+	    	MybaitsRedisCache.jedisConnectionFactory= jedisConnectionFactory;
 	    	
 	    }
+
+		public static String getMybaitsKey() {
+			return MybaitsKey;
+		}
+
+		public static void setMybaitsKey(String mybaitsKey) {
+			MybaitsKey =mybaitsKey;
+		}
+
 
 }

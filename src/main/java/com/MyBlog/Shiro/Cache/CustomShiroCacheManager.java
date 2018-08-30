@@ -4,9 +4,10 @@ import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.util.Destroyable;
+import org.springframework.stereotype.Service;
 
 
-
+@Service
 public class CustomShiroCacheManager implements CacheManager, Destroyable {
 	private ShiroCacheManager shiroCacheManager;
 	public void destroy() throws Exception {
@@ -16,7 +17,7 @@ public class CustomShiroCacheManager implements CacheManager, Destroyable {
 
 	public <K, V> Cache<K, V> getCache(String name) throws CacheException {
 		
-		 return getShiroCacheManager().getCache(name);
+		 return shiroCacheManager.getCache(name);
 	}
 
 	public ShiroCacheManager getShiroCacheManager() {

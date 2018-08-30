@@ -12,7 +12,7 @@ public class ShiroSession extends SimpleSession implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private boolean isChanged;
+	private boolean isChanged=false;
 
     public ShiroSession() {
         super();

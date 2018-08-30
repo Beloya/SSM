@@ -17,6 +17,10 @@ import com.MyBlog.utils.ShiroFilterUtils;
 
 public class LoginFilter extends AccessControlFilter{
 	final static Class<LoginFilter> CLASS = LoginFilter.class;
+	/*
+	 * 登录检查
+	 * @see org.apache.shiro.web.filter.AccessControlFilter#isAccessAllowed(javax.servlet.ServletRequest, javax.servlet.ServletResponse, java.lang.Object)
+	 */
 	@Override
 	protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue)
 			throws Exception {

@@ -40,7 +40,7 @@ private final static String key="Shiro_Session";
 	    protected Serializable doCreate(Session session) {
 	    	super.doCreate(session);
 	        Serializable sessionId = generateSessionId(session);  
-	        redisOP.hset(key.getBytes(),sessionId.toString().getBytes(), sessionToByte(session));
+	        redisOP.hset(key.getBytes(),sessionId.toString().getBytes(), sessionToByte(session),expire);
 	        System.out.println("创建Session:"+session);
 	        return sessionId;
 	    }
@@ -102,7 +102,7 @@ private final static String key="Shiro_Session";
 	    	  
 	    	}
 	 
-				 redisOP.hset(key.getBytes(),session.getId().toString().getBytes(), sessionToByte(session));
+				 redisOP.hset(key.getBytes(),session.getId().toString().getBytes(), sessionToByte(session),expire);
 				  
 				    System.out.println("Session中用户信息:"+session.getAttribute("user"));
 	    

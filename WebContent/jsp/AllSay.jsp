@@ -205,7 +205,7 @@ data">
 									<ol class="commentlist"> 
 							<div id="layer-photos-demo" class="layer-photos-demo">
 										<c:forEach items="${mblist}" var="list">
-										
+												
 												<li class="comment even thread-even depth-1"
 													id="li-comment-${list.mbid }"
 													itemprop="reviews" itemscope=""
@@ -234,8 +234,9 @@ data">
 													<a
 														href="">
 														<time datetime="" itemprop="datePublished">
-														<fmt:formatDate value="${list.createdTime }"
-															pattern="yyyy年MM月dd日  HH:mm:ss" /></time>
+																	${Calendar.setTime(list.createdTime )}
+${Calendar.get(Calendar_Year)}年${Calendar.get(Calendar_MONTH)+1}月${Calendar.get(Calendar_DAY_OF_MONTH)}&nbsp;${Calendar.get(Calendar_HOUR_OF_DAY)}:${Calendar.get(Calendar_MINUTE)}
+													</time>
 													</a> </header> <section class="comment-content comment">
 														
 													<div itemprop="reviewBody">

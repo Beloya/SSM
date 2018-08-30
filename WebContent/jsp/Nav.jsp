@@ -43,6 +43,15 @@ if(subject.getSession()!=null&&subject.getSession().getAttribute("user")!=null){
 	users=(Users)subject.getSession().getAttribute("user");
 }
 %>
+<c:set var="Calendar" value="${applicationScope.Calendar}"></c:set>
+<c:set var="Calendar_Year" value="1"></c:set>
+<c:set var="Calendar_MONTH" value="2"></c:set>
+<c:set var="Calendar_DAY_OF_MONTH" value="5"></c:set>
+<c:set var="Calendar_HOUR_OF_DAY" value="11"></c:set>
+<c:set var="Calendar_MINUTE" value="12"></c:set>
+<c:set var="Calendar_SECOND" value="13"></c:set>
+
+
 <ul class="layui-nav  MyNav">
 <div class="layui-row">
 
