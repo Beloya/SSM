@@ -24,3 +24,4 @@ hs_err_pid*
 target/classes/jdbc.properties
 target/classes/redis.properties
 *.properties
+*.properties
