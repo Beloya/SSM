@@ -82,7 +82,8 @@ public class LoginController {
 			  if(subject.isRemembered()&&!subject.isAuthenticated()&&session.getAttribute("user")==null){
 				Object Principal=  subject.getPrincipal();
 				if(Principal!=null) {
-					String userName=Principal.toString();
+					Users Principaluser=(Users) Principal;
+					String userName=Principaluser.getUserName();
 					Users user=userService.FindByUserName(userName);
 					 UsernamePasswordToken usernamePasswordToken = new 
 				                UsernamePasswordToken(user.getUserName(),user.getPassWord());

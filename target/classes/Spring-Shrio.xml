@@ -85,6 +85,7 @@
 
     
     <!-- Session管理器 -->
+    <!-- com.MyBlog.Shiro.Session.ShiroWebSessionManager-->
 <bean id="sessionManager" class="com.MyBlog.Shiro.Session.ShiroWebSessionManager"> 
         <!-- 会话超时时间，单位：毫秒  20m=1200000ms, 30m=1800000ms, 60m=3600000ms-->
         <property name="globalSessionTimeout" value="${LocationSessionTimeout}"/>
@@ -119,7 +120,8 @@
     </bean> 
   <bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
         <property name="httpOnly" value="true" />
-    <constructor-arg value="COOKIE_NAME" />
+   <constructor-arg value="rememberMe"/> 
+                <property name="path" value="/"/>
         <property name="maxAge" value="604800" />
     </bean>
     <bean id="rememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager">

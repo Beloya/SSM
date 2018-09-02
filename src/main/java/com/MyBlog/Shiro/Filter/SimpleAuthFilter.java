@@ -16,8 +16,10 @@ import org.apache.shiro.web.util.WebUtils;
 
 import com.MyBlog.Logger.LoggerUtil;
 import com.MyBlog.Shiro.CustomShiroSessionDAO;
+import com.MyBlog.Shiro.Realm.WebRealm;
 import com.MyBlog.Shiro.Session.CustomSessionManager;
 import com.MyBlog.Shiro.Session.SessionStatus;
+import com.MyBlog.entity.Users;
 import com.MyBlog.utils.ShiroFilterUtils;
 import com.alibaba.fastjson.JSONObject;
 
@@ -41,6 +43,21 @@ public class SimpleAuthFilter extends AccessControlFilter{
 
 		Map<String, String> resultMap = new HashMap<String, String>();
 		
+		 Users user = (Users) session.getAttribute("user");  
+	        Object recs = session.getAttribute(WebRealm.SESSION_USER_KEY);  
+	        //判断session是否失效，若失效刷新之  
+	        if(user == null || recs == null){  
+	        	user =  (Users) subject.getPrincipal();  
+	           
+	            session.setAttribute("user", user);  
+	            session.setAttribute(WebRealm.SESSION_USER_KEY,user);  
+	        }  
+	
+	/*	  if(!subject.isAuthenticated() && subject.isRemembered()){
+			  
+			  
+		  }
+		*/
 		SessionStatus sessionStatus = (SessionStatus) session.getAttribute(CustomSessionManager.SESSION_STATUS);
 		if (null != sessionStatus && !sessionStatus.isOnlineStatus()) {
 			//判断是不是Ajax请求

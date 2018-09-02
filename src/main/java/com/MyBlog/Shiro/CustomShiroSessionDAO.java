@@ -76,7 +76,10 @@ public class CustomShiroSessionDAO extends AbstractSessionDAO   {
 				String uri = request.getServletPath();
 				// 如果是静态文件，则不获取SESSION
 				if (Servlets.isStaticFile(uri)){
-					return null;
+		            Object s = request.getAttribute(sessionId.toString());
+		            if (s != null) {
+		                return (Session) s;
+		            }
 				}
 			
 			
@@ -84,7 +87,9 @@ public class CustomShiroSessionDAO extends AbstractSessionDAO   {
 		
 		if(session==null){
 				session= getShiroSessionRepository().getSession(sessionId);  
-		
+		if(request!=null){
+			 request.setAttribute(sessionId.toString(),session);
+		}
 				
 		}
 	      return session; 
