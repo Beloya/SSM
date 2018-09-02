@@ -27,13 +27,10 @@
 </rule>
 <rule>
 
-        <from>/3DMusic</from>
-        <to>/jsp/lab/3DMusic.jsp</to>
-		
-</rule>
-<rule>
         <from>/test</from>
+
         <to>/jsp/Test.jsp</to>
+		
 </rule>
 <rule>  
    
@@ -64,7 +61,7 @@
 </rule>  
 	<rule>
 		<note>
-			将所有.do文件映射为无后缀
+			将所有.do文件映射为.html
 		</note>
 		<from>^/([_a-zA-Z]+[_0-9a-zA-Z-/]*[_0-9a-zA-Z]+)$</from>
 		<to type="forward">/$1.do</to>
@@ -79,7 +76,7 @@
 	</rule-->
 		<rule>
 		<note>
-			将所有.jsp文件映射为.li
+			将所有.jsp文件映射为.htm
 		</note>
 		<from>^/([_a-zA-Z]+[_0-9a-zA-Z-/]*[_0-9a-zA-Z]+).li$</from>
 		<to type="forward">/$1.jsp</to>

@@ -38,7 +38,8 @@
  	<!-- 配置静态资源，直接映射到对应的文件夹，不被DispatcherServlet处理，3.04新增功能，需要重新设置spring-mvc-3.0.xsd -->
 	<mvc:resources mapping="/images/**" location="/images/" />
 	<mvc:resources mapping="/img/**" location="/img/" />
-	<mvc:resources mapping="/Html/**" location="/Html/" />
+	<mvc:resources mapping="/Html" location="/Html" />
+	<mvc:resources mapping="/TestHtml" location="/TestHtml" />
 	<mvc:resources mapping="/plugins/**" location="/plugins/" />
 	<mvc:resources mapping="/js/**" location="/js/" />
 	<mvc:resources mapping="/css/**" location="/css/" />

@@ -33,13 +33,15 @@ public class archivesServiceImpl implements archivesService{
 	private archivesFlagMapper afmapper;
 	 @Resource
 		private blogService blogService;
-	public List<archives> FindAll() {	
+	public List<archives> FindAll() {
+		// TODO Auto-generated method stub
 		return amapper.FindAll();
 	}
 
 	
-	public archives FindById(int AID) {	
-	return amapper.FindById(AID);
+	public archives FindById(int AID) {
+		// TODO Auto-generated method stub
+		return amapper.FindById(AID);
 	}
 
 	

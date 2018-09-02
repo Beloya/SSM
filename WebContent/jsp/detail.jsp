@@ -413,9 +413,7 @@ onclick="var qr=document.getElementById(&quot;QR&quot;);&quot;none&quot;===qr.st
 														<div class="comments-class">天然呆</div>
 													<shiro:user>    
 														<c:if test="${applicationScope.BlogInfo.createdBy==sessionScope.user.userName||archivescommits.users.userName==sessionScope.user.userName }">
-														
 														<div class="comments-ua" onclick="commitdel(${archivescommits.cid});" style="float: right;color:#FFB800;cursor:pointer;">删除</div>
-												
 												</c:if>
 												</shiro:user>
 													</div>
@@ -438,11 +436,9 @@ ${Calendar.get(Calendar_Year)}年${Calendar.get(Calendar_MONTH)+1}月${Calendar.
 												
 															
 															</a><p style="width:90%;">${childcommits.context}</p>
-															<shiro:user>  
-															<c:if test="${createuser.userName==sessionScope.user.userName||childcommits.users.userName==sessionScope.user.userName }">	
-														<div class="" onclick="commitdel(${childcommits.cid});" style="float: right;color:#FFB800;cursor:pointer;margin-top:-15px;">删除</div>			
+															<c:if test="${createuser.userName==sessionScope.user.userName||childcommits.users.userName==sessionScope.user.userName }">
+														<div class="" onclick="commitdel(${childcommits.cid});" style="float: right;color:#FFB800;cursor:pointer;margin-top:-15px;">删除</div>
 												</c:if>
-												</shiro:user>
 															</blockquote>
 															</c:forEach>
 													

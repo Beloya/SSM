@@ -98,8 +98,7 @@ public class KickoutSessionFilter extends AccessControlFilter {
 				if(online_sessionId!=sessionId&&online_sessionId!=null){
 					Serializable oldSessionId =online_sessionId;
 					Session oldSession = shiroSessionRepository.getSession(oldSessionId);
-					
-					//System.out.println("oldSession:"+oldSession);
+					System.out.println("oldSession:"+oldSession);
 					if(null != oldSession){
 						//标记session已经踢出
 						oldSession.setAttribute(KICKOUT_STATUS, Boolean.TRUE);

@@ -53,8 +53,12 @@ public class WebRealm extends AuthorizingRealm implements Realm{
 	  public static final String SESSION_USER_KEY = "Login";  
 		@Autowired
 	  private UserServiceImpl userService;  
+//	@Autowired
+	//redisSessionService redissession;
+		
 	private CustomShiroSessionDAO customshirosessionDAO;
-
+    //private ShiroRedisCache<String, Object> redisCache;
+	//SpringRedisCache sre;
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		Users user=null;
