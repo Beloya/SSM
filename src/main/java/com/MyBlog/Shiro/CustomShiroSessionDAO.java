@@ -69,23 +69,24 @@ public class CustomShiroSessionDAO extends AbstractSessionDAO   {
 	  
 	    @Override  
 	    protected Session doReadSession(Serializable sessionId) {  
-	    	  Session session=null;
-	    	
+	    	  Session session=null;    	
 			HttpServletRequest request = Servlets.getRequest();
 			if (request != null){
+		         Object s = request.getAttribute(sessionId.toString());
 				String uri = request.getServletPath();
 				// 如果是静态文件，则不获取SESSION
 				if (Servlets.isStaticFile(uri)){
-					return null;
+		            if (s != null) {
+		                return (Session) s;
+		            }   
 				}
-			
-			
+				  if (s != null) {
+		                return (Session) s;
+		            }
 			}
-		
-		if(session==null){
 				session= getShiroSessionRepository().getSession(sessionId);  
-		
-				
+		if(request!=null){
+			 request.setAttribute(sessionId.toString(),session);
 		}
 	      return session; 
 	
@@ -104,10 +105,6 @@ public class CustomShiroSessionDAO extends AbstractSessionDAO   {
 	    public void uncache(Session session) {  
 	    	delete(session);
 	    	System.out.println("delete:"+session);
-	
-	    	
-	
-	
 	
 	    }
 		public static ShiroSessionRepository getShiroSessionRepository() {

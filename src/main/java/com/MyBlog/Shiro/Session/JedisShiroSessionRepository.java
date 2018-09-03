@@ -7,6 +7,7 @@ import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.MyBlog.Logger.LoggerUtil;
+import com.MyBlog.Shiro.Utils.ShiroSessionUtils;
 import com.MyBlog.cache.RedisUtil;
 import com.MyBlog.utils.SerializeUtil;
 
@@ -31,16 +32,7 @@ public void saveSession(Session session) {
         	SessionStatus sessionStatus = new SessionStatus();
         	session.setAttribute(CustomSessionManager.SESSION_STATUS, sessionStatus);
         }
-        
         byte[] value = SerializeUtil.serialize(session);
-
-
-    
-
-
-        /*
-        直接使用 (int) (session.getTimeout() / 1000) 的话，session失效和redis的TTL 同时生效
-         */
         redisUtil.hset(SerializeUtil.serialize(buildRedisSessionKey(session.getId())),key, value,SESSION_VAL_TIME_SPAN);
     } catch (Exception e) {
     	LoggerUtil.fmtError(getClass(), e, "save session error，id:[%s]",session.getId());
@@ -52,8 +44,8 @@ public void deleteSession(Serializable id) {
         throw new NullPointerException("session id is empty");
     }
     try {
+    
     	redisUtil.del(DB_INDEX,SerializeUtil.serialize(buildRedisSessionKey(id)));
-   
     } catch (Exception e) {
     	LoggerUtil.fmtError(getClass(), e, "删除session出现异常，id:[%s]",id);
     }
@@ -62,13 +54,19 @@ public void deleteSession(Serializable id) {
 
 @SuppressWarnings("unchecked")
 public Session getSession(Serializable id) {
+	
     if (id == null)
     	 throw new NullPointerException("session id is empty");
     Session session = null;
     try {
+    	
+    	     
         byte[] value = redisUtil.hget(SerializeUtil.serialize(buildRedisSessionKey(id)), SerializeUtil
                 .serialize(id));
         session = SerializeUtil.deserialize(value, Session.class);
+     
+
+        
     } catch (Exception e) {
     	LoggerUtil.fmtError(getClass(), e, "获取session异常，id:[%s]",id);
     }

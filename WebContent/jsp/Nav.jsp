@@ -84,7 +84,7 @@ if(subject.getSession()!=null&&subject.getSession().getAttribute("user")!=null){
 <shiro:notAuthenticated>
 <shiro:user>       
   <li class="layui-nav-item" lay-unselect="" style="float:right;">
- <a href="javascript:;" >你好&nbsp;<shiro:principal/></a>
+ <a href="javascript:;" >你好&nbsp; <shiro:principal property="userName"/></a>
  <dl class="layui-nav-child">
   <dd><a style="cursor:pointer;"  onclick="QuickLogin();">快速登录</a></dd>
       <dd><a style="cursor:pointer;"  onclick="userChange();">切换</a></dd>

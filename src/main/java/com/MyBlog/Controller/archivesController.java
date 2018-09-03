@@ -182,7 +182,6 @@ return Msg;
 	String formToken=UUID.randomUUID().toString();
 		
 		request.getSession().setAttribute("formToken", formToken);
-		request.getSession().setMaxInactiveInterval(-1000);
 		model.addAttribute("types", types);
 		model.addAttribute("formToken", formToken);
 		  model.addAttribute("archivesvisibilities", archivesvisibilities);
@@ -206,11 +205,8 @@ return Msg;
 	flags=archives.getFlags();
 	
 		pager.setTotal((int)commitCount);
-		String formToken=UUID.randomUUID().toString();
-		
+		String formToken=UUID.randomUUID().toString();		
 		request.getSession().setAttribute("formToken", formToken);
-		request.getSession().setMaxInactiveInterval(-1000);
-		
 		model.addAttribute("formToken", formToken);
 	
 		model.addAttribute("archivescommits", archivescommits);

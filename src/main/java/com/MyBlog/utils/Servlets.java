@@ -21,8 +21,15 @@ public class Servlets {
     }
  
     public static boolean isStaticFile(String uri) {
+    
         ResourceUrlProvider resourceUrlProvider = (ResourceUrlProvider) GenericUtils.getBean(ResourceUrlProvider.class);
         String staticUri = resourceUrlProvider.getForLookupPath(uri);
+    	if(uri.indexOf("/druid/")!=-1&&uri.indexOf(".html")!=-1) {
+    		staticUri=null;
+    	}
+    	else if(uri.indexOf("/druid/")!=-1) {
+    		staticUri=uri;
+    	}
         return staticUri != null;
     }
 

@@ -39,27 +39,26 @@ import com.MyBlog.utils.QQEmailUtilFactory;
 public class BlogInfoAspect {
 	 @Autowired
 	private blogService blogService;
+	
 
-	 HttpServletRequest request = BlogInfoSignle.blogInfoSignle.getRequest();
 	    //定义切入点，提供一个方法，这个方法的名字就是改切入点的id  
 	    @Pointcut("execution(* com.MyBlog.Controller.*.*(..))")  
 	    private void allMethod(){}  
 	    //针对指定的切入点表达式选择的切入点应用前置通知  
 	    @Before("execution(* com.MyBlog.Controller.*.*(..))")    
 	    public void before(JoinPoint call) {  
-	    	Blog blog=BlogInfoSignle.blogInfoSignle.getblog();
-	   	
-	    	
-	    	 if(blog==null||request==null){
+	    	Blog blog=null;
+	     	 HttpServletRequest request =null;
+	    	blog=BlogInfoSignle.blogInfoSignle.getblog();
+	  
+	    	 if(blog==null){
 	    		 System.out.println("初始化赋值....");
 	    		 request=((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-	    		 BlogInfoSignle.blogInfoSignle.setRequest(request);
 	    		 blog= blogService.FindByUserName("Beloya");
 	    		 BlogInfoSignle.blogInfoSignle.setBlog(blog);
 	    		 Calendar calendar=Calendar.getInstance();
 	    		 request.getServletContext().setAttribute("BlogInfo", blog);
 	    		 request.getServletContext().setAttribute("Calendar",calendar);
-	    
 	    	 }
 	      /* String className = call.getTarget().getClass().getName();
 	        String methodName = call.getSignature().getName();
@@ -75,7 +74,7 @@ public class BlogInfoAspect {
 	        String methodName = call.getSignature().getName();
 	        StringBuilder html = new StringBuilder();
 
-	        request = BlogInfoSignle.blogInfoSignle.getRequest();
+	      
 		   EmailUtilFactory eFactory=new QQEmailUtilFactory();
 		   Email email=new Email();
 		   email.setEmail("468501955@qq.com");

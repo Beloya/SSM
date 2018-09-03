@@ -33,20 +33,18 @@ public class archivesServiceImpl implements archivesService{
 	private archivesFlagMapper afmapper;
 	 @Resource
 		private blogService blogService;
-	public List<archives> FindAll() {
-		// TODO Auto-generated method stub
+	public List<archives> FindAll() {	
 		return amapper.FindAll();
 	}
 
 	
-	public archives FindById(int AID) {
-		// TODO Auto-generated method stub
-		return amapper.FindById(AID);
+	public archives FindById(int AID) {	
+	return amapper.FindById(AID);
 	}
 
 	
 	public int Addarchives(archives a,String Flag) {
-		 HttpServletRequest request = BlogInfoSignle.blogInfoSignle.getRequest();
+		 HttpServletRequest request = null;
 		archivesFlag aFlag=new archivesFlag();
 		Subject subject=SecurityUtils.getSubject();
 	int AID=-1;
@@ -67,7 +65,6 @@ public class archivesServiceImpl implements archivesService{
 		 request=((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 		Blog blog= blogService.FindByUserName("Beloya");
 		BlogInfoSignle.blogInfoSignle.setBlog(blog);
-		BlogInfoSignle.blogInfoSignle.setRequest(request);
 		 request.getServletContext().setAttribute("BlogInfo", blog);
 			} catch (UnauthorizedException e) {
 				throw new UnauthorizedException();

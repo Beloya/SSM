@@ -149,7 +149,7 @@ a {
 </div>
 <script type="text/javascript">
 function Music() {
-	location.href="<%=request.getContextPath()%>/TestHtml/3DMusic.htm";
+	location.href="<%=request.getContextPath()%>/3DMusic";
 }
 function Back() {
 	location.href="<%=request.getContextPath()%>/";

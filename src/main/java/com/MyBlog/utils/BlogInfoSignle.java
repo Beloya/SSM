@@ -1,5 +1,7 @@
 package com.MyBlog.utils;
 
+import java.text.DateFormat;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +11,8 @@ import com.MyBlog.entity.Blog;
 
 public enum  BlogInfoSignle {
 blogInfoSignle;
-private Blog blog;
-private HttpServletRequest request;
+private  Blog blog;
+
 private BlogInfoSignle(){
 
 }
@@ -24,11 +26,6 @@ public Blog getBlog() {
 public void setBlog(Blog blog) {
 	this.blog = blog;
 }
-public HttpServletRequest getRequest() {
-	return request;
-}
-public void setRequest(HttpServletRequest request) {
-	this.request = request;
-}
+
 
 }

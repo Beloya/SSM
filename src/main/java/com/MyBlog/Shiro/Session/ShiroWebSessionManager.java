@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -28,6 +29,9 @@ import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.WebSessionKey;
 import org.apache.shiro.web.session.mgt.WebSessionManager;
 import org.apache.shiro.web.util.WebUtils;
+
+import com.MyBlog.Shiro.Utils.ShiroSessionUtils;
+import com.MyBlog.utils.Servlets;
 
 
 public class ShiroWebSessionManager  extends DefaultSessionManager implements WebSessionManager {
@@ -74,7 +78,10 @@ public class ShiroWebSessionManager  extends DefaultSessionManager implements We
     private void removeSessionIdCookie(HttpServletRequest request, HttpServletResponse response) {
         getSessionIdCookie().removeFrom(request, response);
     }
-
+    protected void delete(Session session) {
+    	  ShiroSessionUtils.clear();
+        super.delete(session);
+    }
     private String getSessionIdCookieValue(ServletRequest request, ServletResponse response) {
         if (!isSessionIdCookieEnabled()) {
             log.debug("Session ID cookie is disabled - session id will not be acquired from a request cookie.");
@@ -164,7 +171,15 @@ public class ShiroWebSessionManager  extends DefaultSessionManager implements We
         return uri; // what remains is the value
     }
 
-   
+    protected void onChange(Session session) {
+    	HttpServletRequest request = Servlets.getRequest();
+    	if(request!=null){
+			 request.setAttribute(session.getId().toString(),session);
+		}
+    ShiroSessionUtils.setObj(session);
+        super.onChange(session);
+    }
+
     protected Session retrieveSession(SessionKey sessionKey) throws UnknownSessionException {
         Serializable sessionId = getSessionId(sessionKey);
         if (sessionId == null) {
@@ -172,10 +187,26 @@ public class ShiroWebSessionManager  extends DefaultSessionManager implements We
                     + "session could not be found."+ sessionKey);
             return null;
         }
+    	HttpServletRequest Httprequest = Servlets.getRequest();
+    	String uri = null;	
+   	  Object rs =null;
+    	  Session st=null;
+   ServletRequest request = null;
+    	    uri=Httprequest.getServletPath();
+    	    rs=Httprequest.getAttribute(sessionId.toString());
+    	    st=(Session) ShiroSessionUtils.getSession(sessionId);
+        if (Servlets.isStaticFile(uri)){
+            if (Httprequest != null) {
+            	
+            	  if(rs!=null) {
+                return (Session) rs;
+            	  }
+            	  if(st!=null) {
 
-
-  
-        ServletRequest request = null;
+            	       	 return (Session) st; 
+            	        }
+            }   
+        }  
         if (sessionKey instanceof WebSessionKey) {
             request = ((WebSessionKey) sessionKey).getServletRequest();
         }
@@ -187,24 +218,15 @@ public class ShiroWebSessionManager  extends DefaultSessionManager implements We
             }
         }
      
-
-
         Session s = retrieveSessionFromDataSource(sessionId);
         if (s == null) {
         
             String msg = "Could not find session with ID [" + sessionId + "]";
             throw new UnknownSessionException(msg);
         }
-
-
-
-   
-        if (request != null) {
-            request.setAttribute(sessionId.toString(),s);
+        if(st==null) {
+        	ShiroSessionUtils.setObj(s);
         }
-
-
-
         return s;
     }
 

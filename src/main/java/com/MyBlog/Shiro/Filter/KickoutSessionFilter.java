@@ -21,6 +21,7 @@ import com.MyBlog.Shiro.Session.ShiroSessionRepository;
 import com.MyBlog.Shiro.Token.TokenManager;
 import com.MyBlog.cache.RedisUtil;
 import com.MyBlog.utils.SerializeUtil;
+import com.MyBlog.utils.Servlets;
 import com.MyBlog.utils.ShiroFilterUtils;
 import com.alibaba.fastjson.JSONObject;
 
@@ -55,7 +56,10 @@ public class KickoutSessionFilter extends AccessControlFilter {
 		String url = httpRequest.getRequestURI();
 		Subject subject = getSubject(request, response);
 		Session session = subject.getSession();
-		Serializable sessionId = session.getId();
+		if(url.startsWith("/css/")|| url.startsWith("/js/")|| (!subject.isAuthenticated() && !subject.isRemembered())){
+			return Boolean.TRUE;
+		}
+		Serializable sessionId = session.getId();  
 		/**
 		 * 判断是否已经踢出
 		 * 1.如果是Ajax 访问，那么给予json返回值提示。
@@ -73,6 +77,8 @@ public class KickoutSessionFilter extends AccessControlFilter {
 			}
 			return  Boolean.FALSE;
 	}
+		
+		
 		//从缓存获取用户-Session信息 <UserId,SessionId>
 		byte[] key = SerializeUtil.serialize(ONLINE_USER);
 	//	HashMap<Long, Serializable> infoMap = null;
@@ -85,9 +91,9 @@ public class KickoutSessionFilter extends AccessControlFilter {
 		 }
 		online_sessionId=(Serializable) SerializeUtil.unserialize(redisutil.hget(key,SerializeUtil.serialize(userId)));
 				//如果已经包含当前Session，且是同一个用户，跳过。
-				if(online_sessionId==sessionId){
+				if(online_sessionId.equals(sessionId)){
 					//更新存储到缓存（这个时间最好和session的有效期一致或者大于session的有效期）
-					redisutil.hset(key, SerializeUtil.serialize(userId),SerializeUtil.serialize(sessionId), expire);
+					
 					return Boolean.TRUE;
 				}
 				//如果用户相同，Session不相同，处理
@@ -98,11 +104,13 @@ public class KickoutSessionFilter extends AccessControlFilter {
 				if(online_sessionId!=sessionId&&online_sessionId!=null){
 					Serializable oldSessionId =online_sessionId;
 					Session oldSession = shiroSessionRepository.getSession(oldSessionId);
-					System.out.println("oldSession:"+oldSession);
+					
+					//System.out.println("oldSession:"+oldSession);
 					if(null != oldSession){
 						//标记session已经踢出
 						oldSession.setAttribute(KICKOUT_STATUS, Boolean.TRUE);
 						shiroSessionRepository.saveSession(oldSession);//更新session
+						redisutil.hset(key, SerializeUtil.serialize(userId),SerializeUtil.serialize(sessionId), expire);
 						LoggerUtil.fmtDebug(getClass(), "kickout old session success,oldId[%s]",oldSessionId);
 					}else{
 						shiroSessionRepository.deleteSession(oldSessionId);

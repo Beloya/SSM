@@ -9,6 +9,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.MyBlog.Service.archivesService;
 import com.MyBlog.Service.blogService;
 import com.MyBlog.Service.typeService;
+import com.MyBlog.ServiceImpl.ShiroSession;
 import com.MyBlog.cache.SpringRedisCache;
 import com.MyBlog.entity.Blog;
 import com.MyBlog.entity.Flag;
@@ -47,9 +50,8 @@ public class IndexController {
 			pager.setPage(page);
 		pager.setSize(5);
 		PageHelper.startPage(pager.getPage(), pager.getSize());
-		
 	 List<archives> archives=aservice.FindArchives(0);
-	 
+
 	long archivescount= ((Page) archives).getTotal();
 	PageHelper.startPage(pager.getPage(), pager.getSize());
 	pager.setTotal((int)archivescount);
