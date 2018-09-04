@@ -23,9 +23,11 @@ public class ShiroSessionUtils {
 		threadLocal.set(sm);
 	}
 	public static  void clear() {
-		HashMap<Serializable, Session> sm=new HashMap<>();
-		sm.clear();
-		threadLocal.set(sm);
+	//	HashMap<Serializable, Session> sm=new HashMap<>();
+	//	sm.clear();
+	////	threadLocal.set(sm);
+		if(threadLocal!=null)
+		threadLocal.remove();
 	}
 	
 	

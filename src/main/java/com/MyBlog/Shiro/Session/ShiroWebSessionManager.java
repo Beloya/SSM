@@ -77,9 +77,11 @@ public class ShiroWebSessionManager  extends DefaultSessionManager implements We
 
     private void removeSessionIdCookie(HttpServletRequest request, HttpServletResponse response) {
         getSessionIdCookie().removeFrom(request, response);
+   
     }
     protected void delete(Session session) {
     	  ShiroSessionUtils.clear();
+
         super.delete(session);
     }
     private String getSessionIdCookieValue(ServletRequest request, ServletResponse response) {
@@ -340,12 +342,19 @@ public class ShiroWebSessionManager  extends DefaultSessionManager implements We
             HttpServletResponse response = WebUtils.getHttpResponse(key);
             log.debug("Session has been stopped (subject logout or explicit stop).  Removing session ID cookie.");
             removeSessionIdCookie(request, response);
+            ShiroSessionUtils.clear();
         } else {
             log.debug("SessionKey argument is not HTTP compatible or does not have an HTTP request/response "
                     + "pair. Session ID cookie will not be removed due to stopped session.");
         }
     }
-
+    @Override
+    protected void afterExpired(Session session) {
+        if (isDeleteInvalidSessions()) {
+            delete(session);
+            ShiroSessionUtils.clear();
+        }
+    }
     public boolean isServletContainerSessions() {
         return false;
     }

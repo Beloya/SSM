@@ -110,6 +110,7 @@ public class KickoutSessionFilter extends AccessControlFilter {
 						//标记session已经踢出
 						oldSession.setAttribute(KICKOUT_STATUS, Boolean.TRUE);
 						shiroSessionRepository.saveSession(oldSession);//更新session
+						shiroSessionRepository.deleteSession(oldSession.getId());
 						redisutil.hset(key, SerializeUtil.serialize(userId),SerializeUtil.serialize(sessionId), expire);
 						LoggerUtil.fmtDebug(getClass(), "kickout old session success,oldId[%s]",oldSessionId);
 					}else{

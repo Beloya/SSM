@@ -59,7 +59,11 @@
         <artifactId>spring-webmvc</artifactId>
         <version>5.0.0.RELEASE</version>
     </dependency>
-
+<dependency>
+    <groupId>com.google.guava</groupId>
+    <artifactId>guava</artifactId>
+    <version>23.5-jre</version> <!-- or 23.5-android for the Android flavor -->
+</dependency>
     <!-- 4.Spring test依赖：方便做单元测试和集成测试 -->
  <dependency>
         <groupId>org.springframework</groupId>
@@ -146,15 +150,10 @@
 </dependency>
 
 		<!-- 日志 -->
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
-		</dependency>
-		<dependency>
-    <groupId>org.slf4j</groupId>
-    <artifactId>slf4j-api</artifactId> 
-    <version>1.8.0-beta2</version>
+<dependency> 
+  <groupId>org.slf4j</groupId>
+  <artifactId>slf4j-log4j12</artifactId>
+  <version>1.8.0-alpha2</version>
 </dependency>
 
 		<dependency>

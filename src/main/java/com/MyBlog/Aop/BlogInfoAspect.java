@@ -3,6 +3,7 @@ package com.MyBlog.Aop;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -23,13 +24,15 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.MyBlog.Base.EmailUtil;
 import com.MyBlog.Base.EmailUtilFactory;
+import com.MyBlog.Service.SyslinkService;
 import com.MyBlog.Service.blogService;
-import com.MyBlog.ServiceImpl.ShiroSession;
+import com.MyBlog.Shiro.Session.ShiroSession;
 import com.MyBlog.Shiro.Session.redisSessionService;
 import com.MyBlog.entity.Archivescommit;
 import com.MyBlog.entity.Blog;
 import com.MyBlog.entity.Email;
 import com.MyBlog.entity.MessageBoard;
+import com.MyBlog.entity.Syslink;
 import com.MyBlog.utils.BlogInfoSignle;
 import com.MyBlog.utils.QQEmail;
 import com.MyBlog.utils.QQEmailUtilFactory;
@@ -39,7 +42,8 @@ import com.MyBlog.utils.QQEmailUtilFactory;
 public class BlogInfoAspect {
 	 @Autowired
 	private blogService blogService;
-	
+	@Autowired
+	private SyslinkService syslinkservice;
 
 	    //定义切入点，提供一个方法，这个方法的名字就是改切入点的id  
 	    @Pointcut("execution(* com.MyBlog.Controller.*.*(..))")  
@@ -48,16 +52,22 @@ public class BlogInfoAspect {
 	    @Before("execution(* com.MyBlog.Controller.*.*(..))")    
 	    public void before(JoinPoint call) {  
 	    	Blog blog=null;
+	    	List<Syslink> syslinks=null;
 	     	 HttpServletRequest request =null;
-	    	blog=BlogInfoSignle.blogInfoSignle.getblog();
-	  
-	    	 if(blog==null){
-	    		 System.out.println("初始化赋值....");
+	    			boolean	inited=false;
+	    			inited=BlogInfoSignle.blogInfoSignle.isInited();
+	    	 Calendar calendar=Calendar.getInstance();
+	
+	    	 if(!inited){
 	    		 request=((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 	    		 blog= blogService.FindByUserName("Beloya");
-	    		 BlogInfoSignle.blogInfoSignle.setBlog(blog);
-	    		 Calendar calendar=Calendar.getInstance();
+	    		 syslinks=syslinkservice.FindMenuBase();
+	    		 BlogInfoSignle.blogInfoSignle.init(blog, syslinks);
+	    		 
 	    		 request.getServletContext().setAttribute("BlogInfo", blog);
+	    		 request.getServletContext().setAttribute("MenuLink",  BlogInfoSignle.blogInfoSignle.getMenulink());
+	    		 request.getServletContext().setAttribute("CommunionLink",  BlogInfoSignle.blogInfoSignle.getCommunionlink());
+	    		 request.getServletContext().setAttribute("FoundLink",  BlogInfoSignle.blogInfoSignle.getFoundlink());
 	    		 request.getServletContext().setAttribute("Calendar",calendar);
 	    	 }
 	      /* String className = call.getTarget().getClass().getName();

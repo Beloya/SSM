@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.MyBlog.Dao.SyslinkMapper">
+    <cache blocking="false" eviction="LRU" readOnly="true" size="1024" type="com.MyBlog.cache.MybaitsRedisCache" />
+  <resultMap id="BaseResultMap" type="com.MyBlog.entity.Syslink">
+    <result column="MENU_ID"  property="menuId" />
+    <result column="PM_ID"   property="pmId" />
+    <result column="Type"   property="type" />
+    <result column="NAME"   property="name" />
+    <result column="LINK"   property="link" />
+    <result column="ORDER"   property="order" />
+    <result column="REMARKS"   property="remarks" />
+    <result column="REVISION"   property="revision" />
+    <result column="CREATED_BY"   property="createdBy" />
+    <result column="CREATED_TIME"   property="createdTime" />
+    <result column="UPDATED_BY"   property="updatedBy" />
+    <result column="UPDATED_TIME"   property="updatedTime" />
+      <result column="STATUS"   property="status" />
+    
+    <collection property="pmenu" select="getchild" ofType="com.MyBlog.entity.Syslink" column="MENU_ID">
+     <result column="MENU_ID"  property="menuId" />
+    <result column="PM_ID"   property="pmId" />
+    <result column="Type"   property="type" />
+    <result column="NAME"   property="name" />
+    <result column="LINK"   property="link" />
+    <result column="ORDER"   property="order" />
+    <result column="REMARKS"   property="remarks" />
+    <result column="REVISION"   property="revision" />
+    <result column="CREATED_BY"   property="createdBy" />
+    <result column="CREATED_TIME"   property="createdTime" />
+    <result column="UPDATED_BY"   property="updatedBy" />
+    <result column="UPDATED_TIME"   property="updatedTime" />
+     <result column="STATUS"   property="status" />
+    </collection>
+  </resultMap>
+ <select id="FindAll"  resultMap="BaseResultMap" >
+ select * from SysLink order by ORDER
+ </select>
+ <select id="FindMenuBase"  resultMap="BaseResultMap" >
+ select * from SysLink s where PM_ID=0  ORDER  by s.ORDER
+ </select>
+  <select id="getchild" parameterType="int" resultType="com.MyBlog.entity.Syslink">
+  select * from SysLink s1 where s1.PM_ID=#{menuId} 
+  </select>
+  <insert id="Addsyslink" parameterType="Syslink" >
+  insert into SysLink(NAME,LINK,PM_ID,Type,STATUS,ORDER,REMARKS,CREATED_BY) value(#{name},#{link},#{pmId},#{type},#{status},#{order},#{remarks},#{createdBy})
+  </insert>
+  <update id="Update" parameterType="Syslink">
+  update SysLink set NAME=#{name},LINK=#{link},PM_ID=#{PM_ID},Type=#{type},STATUS=#{status},ORDER=#{order},REMARKS=#{remarks},UPDATED_BY=#{updatedBy},UPDATED_TIME=#{updatedTime}
+  where MENU_ID=#{menuId}
+  </update>
+    <delete id="delete" parameterType="int">
+    delete from SysLink where MENU_ID=#{menuId}
+    </delete>        
+</mapper>

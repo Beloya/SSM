@@ -125,7 +125,8 @@ word-break:break-all;
 						<article class="post post-type-normal" itemscope=""
 							>
 						<div class="post-date">
-							<div class="post-month">${Calendar.get(Calendar_MONTH)+1}月</div>
+							<div class="post-month">${Calendar.get(Calendar_MONTH)+1}月  
+</div>
 							<div class="post-day">${Calendar.get(Calendar_DAY_OF_MONTH)}</div>
 						</div>
 						<div class="post-block">
@@ -401,7 +402,8 @@ word-break:break-all;
 		index:'home'
 	});
 */
-
+$(".layui-nav-item").removeClass("layui-this");
+$("#首页").addClass("layui-this");
 		
 		 
 	</script>

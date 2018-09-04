@@ -23,8 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.convert.RedisData;
 import org.springframework.stereotype.Service;
 
-import com.MyBlog.ServiceImpl.ShiroSession;
-
 import com.MyBlog.cache.RedisUtil;
 import com.MyBlog.cache.SpringRedisCache;
 import com.MyBlog.utils.SerializeUtil;

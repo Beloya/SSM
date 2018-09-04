@@ -46,6 +46,7 @@ public void deleteSession(Serializable id) {
     try {
     
     	redisUtil.del(DB_INDEX,SerializeUtil.serialize(buildRedisSessionKey(id)));
+   // 	redisUtil.hset(SerializeUtil.serialize(buildRedisSessionKey(id)),key, value,SESSION_VAL_TIME_SPAN);
     } catch (Exception e) {
     	LoggerUtil.fmtError(getClass(), e, "删除session出现异常，id:[%s]",id);
     }

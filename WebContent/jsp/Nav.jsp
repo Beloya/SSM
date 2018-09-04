@@ -54,8 +54,21 @@ if(subject.getSession()!=null&&subject.getSession().getAttribute("user")!=null){
 
 <ul class="layui-nav  MyNav">
 <div class="layui-row">
-
-  <li class="layui-nav-item layui-this" id="首页"><a href="<%=request.getContextPath()%>/">首页</a></li>
+<c:forEach items="${applicationScope.MenuLink}" var="menulink">
+<c:if test="${menulink.pmenu.size()!=0 }">
+ <li class="layui-nav-item" id="${menulink.name }"><a href="${menulink.link}">${menulink.name }</a>
+   <dl class="layui-nav-child">
+<c:forEach items="${menulink.pmenu }" var="chilmenu">
+  <dd><a href="${chilmenu.link}">${chilmenu.name }</a></dd>
+  </c:forEach>
+  </dl>
+  </li>
+  </c:if>
+ <c:if test="${menulink.pmenu.size()==0  }">
+  <li class="layui-nav-item" id="${menulink.name }"><a href="<%=request.getContextPath()%>${menulink.link}">${menulink.name }</a></li>
+ </c:if>
+  </c:forEach>
+  <!-- 
   <li class="layui-nav-item" id="归档"><a href="<%=request.getContextPath()%>/time_axis_1">归档</a></li>
   <li class="layui-nav-item" id="联系">
     <a href="javascript:;" >联系</a>
@@ -68,7 +81,7 @@ if(subject.getSession()!=null&&subject.getSession().getAttribute("user")!=null){
   <li class="layui-nav-item" id="留言板"><a href="<%=request.getContextPath()%>/hall/">留言板</a></li>
  <li class="layui-nav-item" id="实验室"><a href="<%=request.getContextPath()%>/test">实验室</a></li>
 
-
+-->
 
 <shiro:guest>
   <li class="layui-nav-item" lay-unselect="" style="opacity:1;right:15px; float:right;margin-right:10%;">

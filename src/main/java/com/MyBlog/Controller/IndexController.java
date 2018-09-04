@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.MyBlog.Service.archivesService;
 import com.MyBlog.Service.blogService;
 import com.MyBlog.Service.typeService;
-import com.MyBlog.ServiceImpl.ShiroSession;
+import com.MyBlog.Shiro.Session.ShiroSession;
 import com.MyBlog.cache.SpringRedisCache;
 import com.MyBlog.entity.Blog;
 import com.MyBlog.entity.Flag;

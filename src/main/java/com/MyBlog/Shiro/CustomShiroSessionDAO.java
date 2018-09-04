@@ -11,7 +11,7 @@ import org.apache.shiro.session.mgt.eis.AbstractSessionDAO;
 import org.apache.shiro.session.mgt.eis.CachingSessionDAO;
 import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
 import com.MyBlog.Logger.LoggerUtil;
-import com.MyBlog.ServiceImpl.ShiroSession;
+import com.MyBlog.Shiro.Session.ShiroSession;
 import com.MyBlog.Shiro.Session.ShiroSessionRepository;
 import com.MyBlog.utils.Servlets;
 
@@ -78,11 +78,10 @@ public class CustomShiroSessionDAO extends AbstractSessionDAO   {
 				if (Servlets.isStaticFile(uri)){
 		            if (s != null) {
 		                return (Session) s;
-		            }   
+		            } 
+		      
 				}
-				  if (s != null) {
-		                return (Session) s;
-		            }
+				 
 			}
 				session= getShiroSessionRepository().getSession(sessionId);  
 		if(request!=null){

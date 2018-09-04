@@ -1,4 +1,4 @@
-package com.MyBlog.ServiceImpl;
+package com.MyBlog.Shiro.Session;
 
 import java.io.Serializable;
 import java.util.Date;

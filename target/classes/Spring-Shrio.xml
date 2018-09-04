@@ -189,6 +189,7 @@
 /plugins/**=anon     
              /delCommit=perms[普通:评论:delete]  
                /Newarchives=perms[普通:文章:create]  
+                /Newarchives.do=perms[普通:文章:create]  
                /Createarchives=perms[普通:文章:create] 
            /deletearchives=perms[普通:文章:delete]
            /editarchives=perms[普通:文章:edit]

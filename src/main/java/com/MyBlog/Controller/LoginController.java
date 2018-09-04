@@ -50,10 +50,6 @@ public class LoginController {
 	    public Object  login(Users user,String RememberMe,HttpServletResponse response,HttpServletRequest request) throws JsonGenerationException, JsonMappingException, IOException{
 		  Map<String, String> LoginMsg=new HashMap();
 		  SavedRequest savedRequest=WebUtils.getSavedRequest(request);
-		  if(null!=savedRequest){
-			    System.out.println("登录之前的路径是"+savedRequest.getRequestUrl());
-			    LoginMsg.put("preUrl", savedRequest.getRequestUrl());
-			}
 		  LoginMsg=(Map<String, String>) userService.Login(user, RememberMe);
 		  
 	      return LoginMsg;

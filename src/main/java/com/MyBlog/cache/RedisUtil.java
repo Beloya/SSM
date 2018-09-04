@@ -499,9 +499,9 @@ public class RedisUtil {
 	    	 Jedis jedis = null;
 		        try {
 		        	jedis=getJedis(dbIndex);
-		        	 Long result = jedis.del(key);
+		        	 Long result = jedis.expire(key, 0);
 	            LoggerUtil.fmtDebug(getClass(), "删除Session结果：%s" , result);
-	            System.out.println("删除Session结果：%s"+result);
+	            System.out.println("删除Session结果："+result);
 	        } finally {
 	        	recycleJedis(jedis);
 	        }
