@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.MyBlog.Core.BlogInfoSignle;
 import com.MyBlog.Service.archivesService;
 import com.MyBlog.Service.blogService;
 import com.MyBlog.Service.typeService;
@@ -27,8 +28,6 @@ import com.MyBlog.entity.Pager;
 import com.MyBlog.entity.Users;
 import com.MyBlog.entity.archives;
 import com.MyBlog.entity.type;
-import com.MyBlog.utils.BlogInfoSignle;
-import com.MyBlog.utils.DateFormatutils;
 import com.github.pagehelper.ISelect;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;

@@ -52,6 +52,16 @@ public class LoggerUtil {
 		logger.error(message, e);
 	}
 	/**
+	 * Debug 输出
+	 * @param clazz  	目标.Class
+	 * @param message	输出信息
+	 */
+	public static void INFO(Class<? extends Object> clazz ,String message){
+	
+		Logger logger = Logger.getLogger(clazz);
+		logger.info(message);
+	}
+	/**
 	 * Error 输出
 	 * @param clazz  	目标.Class
 	 * @param message	输出信息

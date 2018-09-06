@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.MyBlog.Core.BlogInfoSignle;
 import com.MyBlog.Dao.archivesFlagMapper;
 import com.MyBlog.Dao.archivesMapper;
 import com.MyBlog.Service.archivesService;
@@ -22,7 +23,6 @@ import com.MyBlog.Service.blogService;
 import com.MyBlog.entity.Blog;
 import com.MyBlog.entity.archives;
 import com.MyBlog.entity.archivesFlag;
-import com.MyBlog.utils.BlogInfoSignle;
 
 @Service
 public class archivesServiceImpl implements archivesService{

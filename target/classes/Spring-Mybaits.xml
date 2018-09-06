@@ -140,7 +140,8 @@
         </property>
     </bean>
 
-
+	
+	
 <!-- 静态资源检查 -->
 <bean id="resourceUrlProvider" class="org.springframework.web.servlet.resource.ResourceUrlProvider"/>
 		<bean id="genericUtils"  class="com.MyBlog.utils.GenericUtils"/>

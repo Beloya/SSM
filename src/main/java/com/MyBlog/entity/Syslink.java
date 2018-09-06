@@ -21,7 +21,10 @@ public class Syslink implements Serializable,Cloneable{
     /** 更新时间 */
     private Date updatedTime ;
     /** 主键 */
-  
+    /** 是否本站链接;0-本站1-外链 */
+    private Integer isthis ;
+    /** 是否新页面打开;0-当前页面1-新页面 */
+    private Integer isblank ;
     private Integer menuId ;
     /** 名称 */
     private String name ;
@@ -145,6 +148,18 @@ public class Syslink implements Serializable,Cloneable{
 	}
 	public void setStatus(Integer status) {
 		this.status = status;
+	}
+	public Integer getIsthis() {
+		return isthis;
+	}
+	public void setIsthis(Integer isthis) {
+		this.isthis = isthis;
+	}
+	public Integer getIsblank() {
+		return isblank;
+	}
+	public void setIsblank(Integer isblank) {
+		this.isblank = isblank;
 	}
     
 }

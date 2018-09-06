@@ -1,7 +1,6 @@
-package com.MyBlog.utils;
+package com.MyBlog.Message;
 
-import com.MyBlog.Base.EmailUtil;
-import com.MyBlog.Base.EmailUtilFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class QQEmailUtilFactory implements EmailUtilFactory{
 

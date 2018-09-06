@@ -25,6 +25,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.MyBlog.Core.BlogInfoSignle;
+import com.MyBlog.Core.FormToken;
 import com.MyBlog.Service.ArchivesvisibilityService;
 import com.MyBlog.Service.FlagService;
 import com.MyBlog.Service.archivesFlagService;
@@ -41,8 +43,6 @@ import com.MyBlog.entity.Users;
 import com.MyBlog.entity.archives;
 import com.MyBlog.entity.archivesFlag;
 import com.MyBlog.entity.type;
-import com.MyBlog.utils.BlogInfoSignle;
-import com.MyBlog.utils.FormToken;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 
@@ -56,8 +56,7 @@ public class archivesController {
 	private FlagService flagService;
 	@Autowired
 	private ArchivesvisibilityService avService;
-	@Autowired
-	private archivesFlagService afService;
+
 	@Autowired
 	private archivescommitService acservice;
 	@Autowired
@@ -67,15 +66,14 @@ public class archivesController {
 	@ResponseBody
 	public Object Createarchives(int type,String Flag,String title,String context,Integer VID,String formToken,HttpServletRequest request,HttpServletResponse response){
 archives archives=new archives();
-Map<String, String> Msg=new HashMap();
-archivesFlag aFlag=new archivesFlag();
+Map<String, String> Msg=new HashMap<String, String>();
 	 Subject subject = SecurityUtils.getSubject(); 
 	 Object Principal=  subject.getPrincipal();
 	 if(!subject.isAuthenticated()){
 		 Msg.put("code","1");
 		 Msg.put("msg","请先登录");
 	 }
-	 String userName=Principal.toString();
+	 Users user=(Users) Principal;
 	
 	 int AID=-1;
 		String SessionformToken=null; 
@@ -100,9 +98,7 @@ return Msg;
 	 archives.setContext(context);
 	 archives.setType(type);
 	 archives.setVid(VID);
-	archives.setCreatedBy(userName);
-	TimeZone tz = TimeZone.getTimeZone("GMT+8");
-	TimeZone.setDefault(tz);
+	archives.setCreatedBy(user.getUserName());
 	archives.setCreatedTime(new Date());
 	archives.setStatus(0);
 		try {
@@ -124,11 +120,11 @@ return Msg;
 	@ResponseBody
 	public Object Updatearchives(Integer AID,Integer readcount,int type,String Flag,String title,String context,Integer VID,String formToken,HttpServletRequest request,HttpServletResponse response) {
 		archives archives=new archives();
-		archivesFlag aFlag=new archivesFlag();
+
 			 Subject subject = SecurityUtils.getSubject(); 
 			 Object Principal=  subject.getPrincipal();
-			 String userName=Principal.toString();
-			  Map<String, String> Msg=new HashMap();
+			 Users user=(Users) Principal;
+			  Map<String, String> Msg=new HashMap<String, String>();
 				String SessionformToken=null; 
 				
 				if(request.getSession().getAttribute("formToken")!=null) {
@@ -153,7 +149,7 @@ return Msg;
 		 archives.setType(type);
 		 archives.setVid(VID);
 		 archives.setReadcount(readcount);
-		archives.setUpdatedBy(userName);
+		archives.setUpdatedBy(user.getUserName());
 		TimeZone tz = TimeZone.getTimeZone("GMT+8");
 		TimeZone.setDefault(tz);
 		archives.setUpdatedTime(new Date());
@@ -221,7 +217,7 @@ return Msg;
 	@ResponseBody
 	public Object deletearchives(int AID,HttpServletRequest request,HttpServletResponse response) {
 		
-		Map<String, String> Msg=new HashMap();
+		Map<String, String> Msg=new HashMap<String, String>();
 		aservice.Intorecovery(AID);
 		 Msg.put("code","0");
 		 Msg.put("msg","200");
@@ -248,7 +244,7 @@ return Msg;
 	@RequestMapping("/CreatearchivesCommit")
 	@ResponseBody
 	public Object  NewarchivesCommit(Archivescommit archivescommit,String formToken,HttpServletRequest request,HttpServletResponse response){
-		 Map<String, String> Msg=new HashMap();
+		 Map<String, String> Msg=new HashMap<String, String>();
 		 TimeZone tz = TimeZone.getTimeZone("GMT+8");
 			TimeZone.setDefault(tz);
 		 Subject subject = SecurityUtils.getSubject(); 
@@ -273,8 +269,8 @@ return Msg;
 					 return Msg;
 				}
 		 if(archivescommit.getName()==null&&Principal!=null){
-			 String userName=Principal.toString();
-		 archivescommit.setCreatedBy(userName);
+			 Users user=(Users) Principal;
+		 archivescommit.setCreatedBy(user.getUserName());
 		 archivescommit.setCreatedTime(new Date());
 		 archivescommit.setType(0);
 		 archivescommit.setStatus(0);
@@ -312,13 +308,13 @@ return Msg;
 	@RequestMapping("delCommit")
 	@ResponseBody
 	public Object delCommit(int CID,HttpServletRequest request,HttpServletResponse response){
-		 Map<String, String> Msg=new HashMap();
+		 Map<String, String> Msg=new HashMap<String, String>();
 		
 		 Archivescommit archivescommit=acservice.FindByCId(CID);
 		 Subject subject = SecurityUtils.getSubject(); 
 		 Object Principal=  subject.getPrincipal();
-		 String userName=Principal.toString();
-		 if(userName.equals(archivescommit.getCreatedBy())||subject.hasRole("管理员")||subject.hasRole("博主")){
+		 Users user=(Users) Principal;
+		 if(user.getUserName().equals(archivescommit.getCreatedBy())||subject.hasRole("管理员")||subject.hasRole("博主")){
 		 acservice.delete(CID);
 		 Msg.put("code","0");
 		 Msg.put("msg","200");}
@@ -333,11 +329,11 @@ return Msg;
 	@RequestMapping("NewFlag")
 	@ResponseBody
 	public Object CreateFlag(Flag flag,HttpServletRequest request,HttpServletResponse response) {
-		 Map<String, String> Msg=new HashMap();
+		 Map<String, String> Msg=new HashMap<String, String>();
 		 Subject subject = SecurityUtils.getSubject(); 
 		 Object Principal=  subject.getPrincipal();
-		 String userName=Principal.toString();
-		 flag.setCreatedBy(userName);
+		 Users user=(Users) Principal;
+		 flag.setCreatedBy(user.getUserName());
 		 flag.setCreatedTime(new Date());
 		 flag.setStatus(0);
 		 flagService.AddFlag(flag);
@@ -349,11 +345,11 @@ return Msg;
 	@RequestMapping("NewType")
 	@ResponseBody
 	public Object CreateType(type type,HttpServletRequest request,HttpServletResponse response) {
-		 Map<String, String> Msg=new HashMap();
+		 Map<String, String> Msg=new HashMap<String, String>();
 		 Subject subject = SecurityUtils.getSubject(); 
 		 Object Principal=  subject.getPrincipal();
-		 String userName=Principal.toString();
-		 type.setCreatedBy(userName);
+		 Users user=(Users) Principal;
+		 type.setCreatedBy(user.getUserName());
 		 type.setCreatedTime(new Date());
 		 type.setStatus(0);
 		 tyservice.AddType(type);

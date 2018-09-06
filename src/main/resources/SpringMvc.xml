@@ -23,7 +23,7 @@
 	<mvc:interceptors>
 	<mvc:interceptor>
             <mvc:mapping path="/**"/>
-            <bean class="com.MyBlog.utils.FormTokenInterceptor"/>
+            <bean class="com.MyBlog.Filter.FormTokenInterceptor"/>
         </mvc:interceptor>
 	</mvc:interceptors>
 	<!--避免IE执行AJAX时，返回JSON出现下载文件 -->

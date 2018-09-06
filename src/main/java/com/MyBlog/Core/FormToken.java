@@ -1,4 +1,4 @@
-package com.MyBlog.utils;
+package com.MyBlog.Core;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

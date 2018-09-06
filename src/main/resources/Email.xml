@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 
-       <className>AngelBuilder</className>
+       <QQEmail>
+       <provider>QQ</provider>
+       <sendemail>468501955@qq.com</sendemail>
+       <password>bygjtnfrokbbbgdg</password>
+       <host>smtp.qq.com</host>
+       <port>465</port>
+       </QQEmail>
 
 </config>   

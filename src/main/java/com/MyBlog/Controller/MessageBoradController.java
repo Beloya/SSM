@@ -19,12 +19,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.MyBlog.Core.BlogInfoSignle;
 import com.MyBlog.Service.MessageBoardService;
 import com.MyBlog.entity.Archivescommit;
 import com.MyBlog.entity.Blog;
 import com.MyBlog.entity.MessageBoard;
 import com.MyBlog.entity.Pager;
-import com.MyBlog.utils.BlogInfoSignle;
+import com.MyBlog.entity.Users;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 
@@ -82,8 +83,8 @@ String formToken=UUID.randomUUID().toString();
 					 return Msg;
 				}
 		 if(messageborad.getName()==null&&Principal!=null){
-			 String userName=Principal.toString();
-			 messageborad.setCreatedBy(userName);
+			 Users user=(Users) Principal;
+			 messageborad.setCreatedBy(user.getUserName());
 			 messageborad.setCreatedTime(new Date());
 			 messageborad.setStatus(0);
 		 if(messageborad.getContext()!=null||!messageborad.getContext().equals("")){

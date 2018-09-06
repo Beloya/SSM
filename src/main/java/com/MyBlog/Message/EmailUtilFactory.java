@@ -1,4 +1,4 @@
-package com.MyBlog.Base;
+package com.MyBlog.Message;
 
 public interface EmailUtilFactory {
   public EmailUtil CreateEmail();

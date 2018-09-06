@@ -22,8 +22,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.MyBlog.Base.EmailUtil;
-import com.MyBlog.Base.EmailUtilFactory;
+import com.MyBlog.Core.BlogInfoSignle;
+import com.MyBlog.Message.EmailUtil;
+import com.MyBlog.Message.EmailUtilFactory;
+import com.MyBlog.Message.QQEmail;
+import com.MyBlog.Message.QQEmailUtilFactory;
 import com.MyBlog.Service.SyslinkService;
 import com.MyBlog.Service.blogService;
 import com.MyBlog.Shiro.Session.ShiroSession;
@@ -33,38 +36,22 @@ import com.MyBlog.entity.Blog;
 import com.MyBlog.entity.Email;
 import com.MyBlog.entity.MessageBoard;
 import com.MyBlog.entity.Syslink;
-import com.MyBlog.utils.BlogInfoSignle;
-import com.MyBlog.utils.QQEmail;
-import com.MyBlog.utils.QQEmailUtilFactory;
 
 @Aspect
 @Component
 public class BlogInfoAspect {
-	 @Autowired
-	private blogService blogService;
-	@Autowired
-	private SyslinkService syslinkservice;
-
 	    //定义切入点，提供一个方法，这个方法的名字就是改切入点的id  
 	    @Pointcut("execution(* com.MyBlog.Controller.*.*(..))")  
 	    private void allMethod(){}  
 	    //针对指定的切入点表达式选择的切入点应用前置通知  
 	    @Before("execution(* com.MyBlog.Controller.*.*(..))")    
 	    public void before(JoinPoint call) {  
-	    	Blog blog=null;
-	    	List<Syslink> syslinks=null;
 	     	 HttpServletRequest request =null;
-	    			boolean	inited=false;
-	    			inited=BlogInfoSignle.blogInfoSignle.isInited();
+	    			boolean	inited=BlogInfoSignle.blogInfoSignle.isInited();
 	    	 Calendar calendar=Calendar.getInstance();
-	
-	    	 if(!inited){
-	    		 request=((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-	    		 blog= blogService.FindByUserName("Beloya");
-	    		 syslinks=syslinkservice.FindMenuBase();
-	    		 BlogInfoSignle.blogInfoSignle.init(blog, syslinks);
-	    		 
-	    		 request.getServletContext().setAttribute("BlogInfo", blog);
+	    	 request=((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+	    	 if(inited&&request.getAttribute("BlogInfo")==null){
+	    		 request.getServletContext().setAttribute("BlogInfo", BlogInfoSignle.blogInfoSignle.getblog());
 	    		 request.getServletContext().setAttribute("MenuLink",  BlogInfoSignle.blogInfoSignle.getMenulink());
 	    		 request.getServletContext().setAttribute("CommunionLink",  BlogInfoSignle.blogInfoSignle.getCommunionlink());
 	    		 request.getServletContext().setAttribute("FoundLink",  BlogInfoSignle.blogInfoSignle.getFoundlink());
@@ -82,80 +69,44 @@ public class BlogInfoAspect {
 		   HttpServletRequest request1 = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 		   String className = call.getTarget().getClass().getName();
 	        String methodName = call.getSignature().getName();
-	        StringBuilder html = new StringBuilder();
 
-	      
-		   EmailUtilFactory eFactory=new QQEmailUtilFactory();
-		   Email email=new Email();
-		   email.setEmail("468501955@qq.com");
-		   email.setPassword("bygjtnfrokbbbgdg");
-		   email.setHost("smtp.qq.com");
-		   email.setPort(465);
-		   email.setSubject("博客有人类来啦");
-		  if(methodName.indexOf("archivesCommit")!=-1){
-			  html.append("<html>")
-		    	.append("<body>")
-		    	.append("<h2>有人在你的博客留言啦ლ(′◉❥◉｀ლ)</h2>")
-		    	.append("<p>想要了解更多点击下面链接</p>")
-		    	.append("<a href='"+request1+"'>"+request1.getRequestURL()+"</a>")
-		    	.append("<p>♪(^∇^*)</p>")
-			    .append("</body>")
-			    .append("</html>");
-		   email.setText(html.toString());
-		  }
-		  else{
-			  email.setText("有人在你的博客留下了印记");
-		  }
-		   email.setSenddate(new Date());
-		   email.setTomail("468501955@qq.com");
-		   
-		  EmailUtil emailUtil=eFactory.CreateEmail();
-		  
-		  emailUtil.SendAttMail(email);
-		  System.out.println("@Before：参数为：" + Arrays.toString(call.getArgs()));
-	        System.out.println(className+"."+methodName+"()方法正常执行结束...");
 	    }  
 	    //应用最终通知  
 	   @After("execution(* com.MyBlog.Controller.*.New*(..))")  
 	    public void after(JoinPoint call) {  
 			long start=System.currentTimeMillis();
 		
-		   HttpServletRequest request1 = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+		
 	        String className = call.getTarget().getClass().getName();
 	        String methodName = call.getSignature().getName();
 	        StringBuilder html = new StringBuilder();
 	  	  Archivescommit archivescommit = null;
 	  	MessageBoard messageboard=null;
-		   EmailUtilFactory eFactory=new QQEmailUtilFactory();
-		   Email email=new Email();
-		   email.setEmail("468501955@qq.com");
-		   email.setPassword("bygjtnfrokbbbgdg");
-		   email.setHost("smtp.qq.com");
-		   email.setPort(465);
+		   EmailUtilFactory eFactory=null;
+		   eFactory=new QQEmailUtilFactory();
+		   Email email=null;
+		   email=new Email();
 		   email.setSubject("博客有人类来啦");
 			  Object[] cObjects=call.getArgs();
 			if(methodName.equals("NewarchivesCommit")) {
 				archivescommit=  (Archivescommit) cObjects[0];
 				 html.append("有人给你评论了");
-				  html.append(request1.getHeader("Refer")+"/archives/"+archivescommit.getAid()+"_1'");
+				  html.append(archivescommit.getCreatedBy()+" 在编号为"+archivescommit.getAid()+"文章说了:"+archivescommit.getContext());
 			}
 			else if(methodName.equals("NewSay")) {
 				messageboard=  (MessageBoard) cObjects[0];
 				 html.append("有人给你留言了");
-				  html.append(request1.getHeader("Refer")+"/hall/");
+				  html.append(messageboard.getCreatedBy()+" 留言:"+messageboard.getContext());
 			}
 		  else{
 			  html.append("有人在你的博客留下了印记");
 			
 		  }
 			  email.setText(html.toString());
-		   email.setSenddate(new Date());
 		   email.setTomail("468501955@qq.com");
-		   
-		  EmailUtil emailUtil=eFactory.CreateEmail();
-		 
-		  emailUtil.SendAttMail(email);
-	        System.out.println(className+"."+methodName+"()最终执行步骤(finally)...");
+		   QQEmail qqEmail=null;
+		   qqEmail=(QQEmail) eFactory.CreateEmail();
+		   qqEmail.JoinEmailQueue(qqEmail,email); 
 	    	long end=System.currentTimeMillis();
 	    	
 	    }  
@@ -167,19 +118,19 @@ public class BlogInfoAspect {
 
 	        String methodName = call.getSignature().getName();
 	        StringBuilder html = new StringBuilder();
-			   EmailUtilFactory eFactory=new QQEmailUtilFactory();
-			   Email email=new Email();
-			   email.setEmail("468501955@qq.com");
-			   email.setPassword("bygjtnfrokbbbgdg");
-			   email.setHost("smtp.qq.com");
-			   email.setPort(465);
+			   EmailUtilFactory eFactory=null;
+			   eFactory=new QQEmailUtilFactory();
+			   Email email=null;
+			   email= new Email();
 			   email.setSubject("系统发生异常，请检查");
 					 html.append(className+"."+methodName+"()方法抛出了异常...");
 				  email.setText(html.toString());
 			   email.setSenddate(new Date());
 			   email.setTomail("468501955@qq.com");
-			  EmailUtil emailUtil=eFactory.CreateEmail();	  
-			  emailUtil.SendAttMail(email);
+			  QQEmail qqemail=null;
+			  qqemail=(QQEmail) eFactory.CreateEmail();	  
+			 // emailUtil.SendAttMail(email);
+			  qqemail.JoinEmailQueue(qqemail,email);
 	        System.out.println(className+"."+methodName+"()方法抛出了异常...");
 	    }  
 	    //应用周围通知  

@@ -1,4 +1,4 @@
-package com.MyBlog.utils;
+package com.MyBlog.Core;
 
 
 import java.util.ArrayList;
@@ -30,13 +30,11 @@ public void init(Blog blog,List<Syslink> syslinks) {
 		case 0:
 			menulink.add(syslink);
 			break;
-		case 1:
-			foundlink.put(syslink.getName(), syslink);
-			break;
 		case 3:
 			communionlink.add(syslink);
 			break;
 		}
+		foundlink.put(syslink.getName(), syslink);
 	}
 	this.inited=true;
 }

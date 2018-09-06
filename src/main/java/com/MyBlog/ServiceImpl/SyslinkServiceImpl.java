@@ -39,7 +39,7 @@ public class SyslinkServiceImpl implements SyslinkService{
 	}
 
 	@Override
-	public List<Syslink> FindMenuBase() {
+	public List<Syslink> FindBase() {
 		// TODO Auto-generated method stub
 		return syslinkmapper.FindMenuBase();
 	}

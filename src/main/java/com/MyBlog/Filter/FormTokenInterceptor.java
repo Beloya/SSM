@@ -1,6 +1,8 @@
-package com.MyBlog.utils;
+package com.MyBlog.Filter;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,12 +11,18 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import com.MyBlog.Core.FormToken;
+import com.MyBlog.Logger.LoggerUtil;
+import com.MyBlog.utils.JsonOutUtils;
+import com.MyBlog.utils.ShiroFilterUtils;
+
 public class FormTokenInterceptor extends HandlerInterceptorAdapter{
 	  @Override
 	    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 	        if (handler instanceof HandlerMethod) {
 	            HandlerMethod handlerMethod = (HandlerMethod) handler;
 	            Method method = handlerMethod.getMethod();
+	        	Map<String, String> resultMap = new HashMap<String, String>();
 	            FormToken annotation = method.getAnnotation(FormToken.class);
 	            if (annotation != null) {
 	                boolean needSaveSession = annotation.save();
@@ -26,6 +34,12 @@ public class FormTokenInterceptor extends HandlerInterceptorAdapter{
 	                boolean needRemoveSession = annotation.remove();
 	                if (needRemoveSession) {
 	                    if (isRepeatSubmit(request)) {
+	                    	if (ShiroFilterUtils.isAjax(request) ) {
+	            				LoggerUtil.debug(getClass(), "当前用户已经提交过，并且是Ajax请求！");
+	            				resultMap.put("code", "503");
+	            				resultMap.put("msg", "请不要重复提交！");
+	            				JsonOutUtils.out(response, resultMap);
+	            			}
 	                        return false;
 	                    }
 	                    request.getSession(true).removeAttribute("formToken");

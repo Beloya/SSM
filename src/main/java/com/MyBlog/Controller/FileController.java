@@ -30,7 +30,7 @@ public class FileController {
             //上传文件路径
             String path = request.getServletContext().getRealPath("/userTempImg/");
             //上传文件名
-            System.out.println(path);
+ 
             String filename =time+file.getOriginalFilename();
             File filepath = new File(path,filename);
             //判断路径是否存在，如果不存在就创建一个
@@ -43,7 +43,7 @@ public class FileController {
             Msg.put("errno", "0");
             Msg.put("data", "userTempImg/"+filename);
            // msg="{\"code\":0,\"msg\":\"userTempImg/"+filename+ "\",\"data\":{\"src\":\"userTempImg/"+filename+"\",\"title\":\""+filename+"\"}}";
-           System.out.println("完成");
+
         } else {
         	Msg.put("errno", "1");
         }

@@ -26,11 +26,18 @@
 <link rel="stylesheet"
 	href="<%=request.getContextPath() %>/css/Nav.css"
 	media="all" />
+	<link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 <style type="text/css">
 .Top{
 background-image: url("<%=request.getContextPath()%>/images/${applicationScope.BlogInfo.headerskin}");
 
 	z-index:10;
+}
+.layui-nav  .layui-nav-more{
+border-color:#333 transparent transparent
+}
+.layui-nav .layui-nav-mored, .layui-nav-itemed>a .layui-nav-more{
+border-color:transparent transparent #333;
 }
 </style>
 </head>
@@ -55,49 +62,43 @@ if(subject.getSession()!=null&&subject.getSession().getAttribute("user")!=null){
 <ul class="layui-nav  MyNav">
 <div class="layui-row">
 <c:forEach items="${applicationScope.MenuLink}" var="menulink">
+<c:if test="${menulink.pmId==0 }">
+
 <c:if test="${menulink.pmenu.size()!=0 }">
- <li class="layui-nav-item" id="${menulink.name }"><a href="${menulink.link}">${menulink.name }</a>
+ <li class="layui-nav-item" id="${menulink.name }">
+ <a href="${menulink.link}">${menulink.name }</a>
    <dl class="layui-nav-child">
 <c:forEach items="${menulink.pmenu }" var="chilmenu">
-  <dd><a href="${chilmenu.link}">${chilmenu.name }</a></dd>
+  <dd><a <c:if test="${chilmenu.isblank==1}"> target='_BLANK' </c:if>  href='<c:if test="${chilmenu.isthis==0 }"><%=request.getContextPath()%></c:if>${chilmenu.link}'>${chilmenu.name }</a></dd>
   </c:forEach>
   </dl>
   </li>
   </c:if>
  <c:if test="${menulink.pmenu.size()==0  }">
-  <li class="layui-nav-item" id="${menulink.name }"><a href="<%=request.getContextPath()%>${menulink.link}">${menulink.name }</a></li>
+  <li class="layui-nav-item" id="${menulink.name }">
+  <a <c:if test="${menulink.isblank==1}"> target='_BLANK' </c:if> href='<c:if test="${menulink.isthis==0 }"><%=request.getContextPath()%></c:if>${menulink.link}'>${menulink.name }</a>
+  </li>
+ </c:if>
+ 
  </c:if>
   </c:forEach>
-  <!-- 
-  <li class="layui-nav-item" id="归档"><a href="<%=request.getContextPath()%>/time_axis_1">归档</a></li>
-  <li class="layui-nav-item" id="联系">
-    <a href="javascript:;" >联系</a>
-    <dl class="layui-nav-child">
-      <dd><a href="mailto:468501955@qq.com?subject=加入后宫">申请友链</a></dd>
-      <dd><a href="">有${applicationScope.ActiveNum}朋至远方来</a></dd>
 
-    </dl>
-  </li>
-  <li class="layui-nav-item" id="留言板"><a href="<%=request.getContextPath()%>/hall/">留言板</a></li>
- <li class="layui-nav-item" id="实验室"><a href="<%=request.getContextPath()%>/test">实验室</a></li>
-
--->
 
 <shiro:guest>
   <li class="layui-nav-item" lay-unselect="" style="opacity:1;right:15px; float:right;margin-right:10%;">
-<a href="${pageContext.request.contextPath}/login" style="opacity:1;float:right;">登录</a>
+<a href="${pageContext.request.contextPath}${applicationScope.FoundLink['登录'].link }" style="opacity:1;float:right;">登录</a>
 </li>
 
   <li class="layui-nav-item" lay-unselect="" style=" float:right;">
      
-<a href="${pageContext.request.contextPath}/login#SignIn" style="opacity:1;float:right;" >注册</a>
+<a target="_BLANK" href="${pageContext.request.contextPath}${applicationScope.FoundLink['注册'].link }" style="opacity:1;float:right;" >注册</a>
 </li>
 
 </shiro:guest>&nbsp;
 <shiro:notAuthenticated>
 <shiro:user>       
   <li class="layui-nav-item" lay-unselect="" style="float:right;">
- <a href="javascript:;" >你好&nbsp; <shiro:principal property="userName"/></a>
+ <a href="javascript:;" ><img src="<%=request.getContextPath() %><shiro:principal property="userImg"/>" class="layui-nav-img"><shiro:principal property="userName"/></a>
  <dl class="layui-nav-child">
   <dd><a style="cursor:pointer;"  onclick="QuickLogin();">快速登录</a></dd>
       <dd><a style="cursor:pointer;"  onclick="userChange();">切换</a></dd>
@@ -143,7 +144,7 @@ layui.use('element', function(){
   
   //监听导航点击  
   element.on('nav(demo)', function(elem){
-    //console.log(elem)
+   
     layer.msg(elem.text());
   });
   

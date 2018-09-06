@@ -20,6 +20,7 @@ import com.MyBlog.Logger.LoggerUtil;
 import com.MyBlog.Shiro.Session.ShiroSessionRepository;
 import com.MyBlog.Shiro.Token.TokenManager;
 import com.MyBlog.cache.RedisUtil;
+import com.MyBlog.utils.JsonOutUtils;
 import com.MyBlog.utils.SerializeUtil;
 import com.MyBlog.utils.Servlets;
 import com.MyBlog.utils.ShiroFilterUtils;
@@ -73,7 +74,7 @@ public class KickoutSessionFilter extends AccessControlFilter {
 				LoggerUtil.debug(getClass(), "当前用户已经在其他地方登录，并且是Ajax请求！");
 				resultMap.put("code", "300");
 				resultMap.put("msg", "您已经在其他地方登录，请重新登录！");
-				out(response, resultMap);
+				JsonOutUtils.out(response, resultMap);
 			}
 			return  Boolean.FALSE;
 	}
@@ -91,7 +92,7 @@ public class KickoutSessionFilter extends AccessControlFilter {
 		 }
 		online_sessionId=(Serializable) SerializeUtil.unserialize(redisutil.hget(key,SerializeUtil.serialize(userId)));
 				//如果已经包含当前Session，且是同一个用户，跳过。
-				if(online_sessionId.equals(sessionId)){
+				if(sessionId.equals(online_sessionId)){
 					//更新存储到缓存（这个时间最好和session的有效期一致或者大于session的有效期）
 					
 					return Boolean.TRUE;
@@ -138,18 +139,7 @@ public class KickoutSessionFilter extends AccessControlFilter {
 				return false;
 	}
 
-	private void out(ServletResponse hresponse, Map<String, String> resultMap)
-			throws IOException {
-		try {
-			hresponse.setCharacterEncoding("UTF-8");
-			PrintWriter out = hresponse.getWriter();
-			out.println(JSONObject.toJSONString(resultMap).toString());
-			out.flush();
-			out.close();
-		} catch (Exception e) {
-			LoggerUtil.error(getClass(), "KickoutSessionFilter.class 输出JSON异常，可以忽略。");
-		}
-	}
+
 	public static String getKickoutUrl() {
 		return kickoutUrl;
 	}

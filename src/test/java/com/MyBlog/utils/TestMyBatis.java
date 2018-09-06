@@ -45,14 +45,15 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import com.MyBlog.Base.EmailUtil;
-import com.MyBlog.Base.EmailUtilFactory;
+import org.w3c.dom.NodeList;
 
 import com.MyBlog.Dao.BlogMapper;
 import com.MyBlog.Dao.MessageBoardMapper;
 import com.MyBlog.Dao.UsersMapper;
 import com.MyBlog.Dao.areaMapper;
+import com.MyBlog.Message.EmailUtil;
+import com.MyBlog.Message.EmailUtilFactory;
+import com.MyBlog.Service.SyslinkService;
 import com.MyBlog.Service.archivesService;
 import com.MyBlog.Service.blogService;
 import com.MyBlog.Service.typeService;
@@ -63,12 +64,21 @@ import com.MyBlog.entity.Email;
 import com.MyBlog.entity.JsonData;
 import com.MyBlog.entity.MessageBoard;
 import com.MyBlog.entity.Role_Permissions;
+import com.MyBlog.entity.Syslink;
 import com.MyBlog.entity.Users;
 import com.MyBlog.entity.archives;
 import com.MyBlog.entity.area;
 import com.MyBlog.entity.type;
+import com.MyBlog.learn.BeautifulGirl;
+import com.MyBlog.learn.ConcreteSubject;
+import com.MyBlog.learn.GuavaBeautifulGirl;
+import com.MyBlog.learn.GuavaHandSomeBoy;
+import com.MyBlog.learn.GuavaMyBlog;
+import com.MyBlog.learn.HandSomeBoy;
+import com.MyBlog.learn.Observer;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
+import com.google.common.eventbus.EventBus;
 import com.sun.mail.util.MailSSLSocketFactory;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -102,6 +112,8 @@ public class TestMyBatis {
 	private MessageBoardMapper mbmapper;
 	@Autowired
 	private typeService tservice;
+	@Autowired
+	private SyslinkService service;
 	//@Autowired
 	//SpringRedisCache re=new SpringRedisCache();
 	//@Test
@@ -121,27 +133,46 @@ public class TestMyBatis {
 		user.setCreateDate(new Date());
 		user.setDataLevel(0);
 		//uMapper.CreateUser(user);
-	List<Users> areas=userivce.FindAll();
-		//List<Blog> blogs=bserivce.FindAll();
-	for(Users a:areas) {
+	
+/*
+		List<Blog> blogs=bserivce.FindAll();
+	for(Syslink a:syslinks) {
 		//HashSet hs=new HashSet(a.getLRP());
 	//Iterator<Role_Permissions> it=hs.iterator();
-	System.out.println(a.getUserName()+"权限:");
+	System.out.println(a.getName()+"权限:");
+
+	if(a.getPmenu()!=null){
+		
+	}
 	/*	while(it.hasNext()) {
 			System.out.println(it.next().getPermission());
 		}*/
-		System.out.println("------------------------");
-	}
+		/*System.out.println("------------------------");
+	}*/
 }
-	@Test
-	public void MbTest() throws GeneralSecurityException, ParseException {
-		
-	//	LocalDate ldate = LocalDate.now();
-		Date date=new Date();
-		Calendar calendar=Calendar.getInstance();calendar.setTime(date);
-		DateFormatutils Dcalendar=(DateFormatutils) DateFormatutils.getInstance();
-		System.out.println(Dcalendar.get(calendar.MONTH));
+	//@Test
+	public void test() {
+		   //美女关注者
+		Observer beautifulgirl=new BeautifulGirl();
+		 //帅哥关注者
+		Observer handsomeboy=new HandSomeBoy();
+		//博客
+		ConcreteSubject MyBlog=new ConcreteSubject();
+		//增加一个关注者
+MyBlog.resisterObserver(handsomeboy);
+//增加一个关注者
+MyBlog.resisterObserver(beautifulgirl);
+//发一篇文章
+MyBlog.publishArticle("设计模式-观察者模式");
+	}
+@Test
+	public void GuavaTest() {
 
+	
+		 EventBus eventBus=new EventBus();
+		 eventBus.register(new GuavaHandSomeBoy());
+		// eventBus.register(new GuavaBeautifulGirl());
+		    eventBus.post(new GuavaMyBlog("设计")); //发布事件
 	}
 //	@Test
 	public void test2() {
@@ -149,6 +180,7 @@ public class TestMyBatis {
         ClassPathXmlApplicationContext appCtx = new ClassPathXmlApplicationContext(resource);  
         org.apache.shiro.mgt.SecurityManager securityManager =   
             (org.apache.shiro.mgt.SecurityManager)appCtx.getBean("securityManager");  
+        
         SecurityUtils.setSecurityManager(securityManager);  
 		 Subject subject = SecurityUtils.getSubject();  
 		 String str = "468501955";

@@ -16,7 +16,8 @@
     <result column="UPDATED_BY"   property="updatedBy" />
     <result column="UPDATED_TIME"   property="updatedTime" />
       <result column="STATUS"   property="status" />
-    
+    <result column="ISBLANK"   property="isblank" />
+        <result column="ISTHIS"   property="isthis" />
     <collection property="pmenu" select="getchild" ofType="com.MyBlog.entity.Syslink" column="MENU_ID">
      <result column="MENU_ID"  property="menuId" />
     <result column="PM_ID"   property="pmId" />
@@ -31,10 +32,12 @@
     <result column="UPDATED_BY"   property="updatedBy" />
     <result column="UPDATED_TIME"   property="updatedTime" />
      <result column="STATUS"   property="status" />
+        <result column="ISBLANK"   property="isblank" />
+        <result column="ISTHIS"   property="isthis" />
     </collection>
   </resultMap>
  <select id="FindAll"  resultMap="BaseResultMap" >
- select * from SysLink order by ORDER
+ select * from SysLink s order by s.ORDER
  </select>
  <select id="FindMenuBase"  resultMap="BaseResultMap" >
  select * from SysLink s where PM_ID=0  ORDER  by s.ORDER
