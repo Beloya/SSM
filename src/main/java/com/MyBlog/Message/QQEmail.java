@@ -29,7 +29,7 @@ public class QQEmail implements EmailUtil{
 	private String Text;
 	private Date senddate;
 	private String password="bygjtnfrokbbbgdg";
-	public static ArrayBlockingQueue<QQEmail> emailqueue=new ArrayBlockingQueue<>(50);
+	public static ArrayBlockingQueue<QQEmail> emailqueue=new ArrayBlockingQueue<QQEmail>(50);
 	private FileSystemResource file;
 	public QQEmail(){}
  

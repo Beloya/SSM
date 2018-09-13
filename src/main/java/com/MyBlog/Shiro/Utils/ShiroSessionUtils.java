@@ -18,7 +18,7 @@ public class ShiroSessionUtils {
 		return s;
 	}
 	public static  void setObj(Session s) {
-		HashMap<Serializable, Session> sm=new HashMap<>();
+		HashMap<Serializable, Session> sm=new HashMap<Serializable, Session>();
 		sm.put(s.getId(), s);
 		threadLocal.set(sm);
 	}

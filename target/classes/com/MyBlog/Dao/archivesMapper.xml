@@ -100,7 +100,7 @@
     </select>
 
     <update id="readCountUp" parameterType="archives"  flushCache="false">
-        Update archives set readcount=readcount+1 where AID=#{aid}
+        Update archives set readcount=readcount+#{readcount} where AID=#{aid}
     </update>
        <update id="Update" parameterType="archives">
         Update archives set readcount=#{readcount},Title=#{title},context=#{context},type=#{type},status=#{status},vid=#{vid},UPDATED_BY=#{updatedBy},UPDATED_TIME=#{updatedTime} where AID=#{aid}

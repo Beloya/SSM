@@ -1,4 +1,4 @@
-package com.MyBlog.ServiceImpl;
+package com.MyBlog.Core;
 
 import java.util.Calendar;
 import java.util.List;
@@ -12,7 +12,6 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
-import com.MyBlog.Core.BlogInfoSignle;
 import com.MyBlog.Logger.LoggerUtil;
 import com.MyBlog.Service.SyslinkService;
 import com.MyBlog.Service.blogService;
@@ -27,7 +26,7 @@ public class BlogInfoLoad  implements ApplicationListener<ContextRefreshedEvent>
 	@Autowired
 	private SyslinkService syslinkservice;
 
-	private void BlogInfoInit() {
+	public  void BlogInfoInit() {
 		Blog blog=null;
 		List<Syslink> syslinks=null;
    			boolean	inited=false;
@@ -39,8 +38,23 @@ public class BlogInfoLoad  implements ApplicationListener<ContextRefreshedEvent>
    		 BlogInfoSignle.blogInfoSignle.init(blog, syslinks); 	
    	 }
 	}
-
-	@Override
+	public  void BlogInfoInit( HttpServletRequest request ) {
+		Blog blog=null;
+		List<Syslink> syslinks=null;
+   			boolean	inited=false;
+   			inited=BlogInfoSignle.blogInfoSignle.isInited();
+   	 if(!inited){
+   		 LoggerUtil.INFO(BlogInfoLoad.class, "初始化信息完成");
+   		 blog= blogService.FindByUserName("Beloya");
+   		 syslinks=syslinkservice.FindBase();
+   		 BlogInfoSignle.blogInfoSignle.init(blog, syslinks); 
+   		 request.getServletContext().setAttribute("BlogInfo", BlogInfoSignle.blogInfoSignle.getblog());
+		 request.getServletContext().setAttribute("MenuLink",  BlogInfoSignle.blogInfoSignle.getMenulink());
+		 request.getServletContext().setAttribute("CommunionLink",  BlogInfoSignle.blogInfoSignle.getCommunionlink());
+		 request.getServletContext().setAttribute("FoundLink",  BlogInfoSignle.blogInfoSignle.getFoundlink());
+	
+   	 }
+	}
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 		BlogInfoInit();
 	}

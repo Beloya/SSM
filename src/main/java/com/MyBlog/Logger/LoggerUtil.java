@@ -1,5 +1,7 @@
 package com.MyBlog.Logger;
 
+import java.time.LocalDate;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
@@ -57,9 +59,9 @@ public class LoggerUtil {
 	 * @param message	输出信息
 	 */
 	public static void INFO(Class<? extends Object> clazz ,String message){
-	
+	LocalDate date=LocalDate.now();
 		Logger logger = Logger.getLogger(clazz);
-		logger.info(message);
+		logger.info(LocalDate.now()+message);
 	}
 	/**
 	 * Error 输出

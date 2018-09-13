@@ -87,7 +87,8 @@ public class archivesServiceImpl implements archivesService{
 	
 	public archives SeeArchives(int AID) {
 		archives a=amapper.FindById(AID);
-		amapper.readCountUp(a);
+		BlogInfoSignle.blogInfoSignle.incrementReadCount(a);
+	
 		return a;
 	}
 

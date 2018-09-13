@@ -22,6 +22,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.MyBlog.Core.BlogInfoLoad;
 import com.MyBlog.Core.BlogInfoSignle;
 import com.MyBlog.Message.EmailUtil;
 import com.MyBlog.Message.EmailUtilFactory;
@@ -40,6 +41,8 @@ import com.MyBlog.entity.Syslink;
 @Aspect
 @Component
 public class BlogInfoAspect {
+	@Autowired
+	private BlogInfoLoad bl;
 	    //定义切入点，提供一个方法，这个方法的名字就是改切入点的id  
 	    @Pointcut("execution(* com.MyBlog.Controller.*.*(..))")  
 	    private void allMethod(){}  
@@ -55,6 +58,10 @@ public class BlogInfoAspect {
 	    		 request.getServletContext().setAttribute("MenuLink",  BlogInfoSignle.blogInfoSignle.getMenulink());
 	    		 request.getServletContext().setAttribute("CommunionLink",  BlogInfoSignle.blogInfoSignle.getCommunionlink());
 	    		 request.getServletContext().setAttribute("FoundLink",  BlogInfoSignle.blogInfoSignle.getFoundlink());
+	    		 request.getServletContext().setAttribute("Calendar",calendar);
+	    	 }
+	    	 if(!inited) {
+	    		 bl.BlogInfoInit(request);
 	    		 request.getServletContext().setAttribute("Calendar",calendar);
 	    	 }
 	      /* String className = call.getTarget().getClass().getName();

@@ -4,10 +4,11 @@ package com.MyBlog.Core;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.MyBlog.entity.Blog;
 import com.MyBlog.entity.Syslink;
+import com.MyBlog.entity.archives;
 
 public enum  BlogInfoSignle {
 blogInfoSignle;
@@ -16,15 +17,16 @@ private  Syslink syslink=null;
 private  List<Syslink> menulink=null;
 private  List<Syslink> communionlink=null;
 private  HashMap<String,Syslink> foundlink=null;
+private  ConcurrentHashMap<Integer, Integer> readcountmap=new ConcurrentHashMap<Integer, Integer>();
 private  boolean inited=false;
 private BlogInfoSignle(){
 
 }
 public void init(Blog blog,List<Syslink> syslinks) {
 	this.blog=blog;
-	menulink=new ArrayList<>();
-	foundlink=new HashMap<>();
-	communionlink=new ArrayList<>();
+	menulink=new ArrayList<Syslink>();
+	foundlink=new HashMap<String, Syslink>();
+	communionlink=new ArrayList<Syslink>();
 	for (Syslink syslink : syslinks) {
 		switch (syslink.getType()) {
 		case 0:
@@ -81,6 +83,19 @@ public  boolean isInited() {
 }
 public  void setInited(boolean inited) {
 	this.inited = inited;
+}
+public ConcurrentHashMap<Integer, Integer> getReadcountmap() {
+	return readcountmap;
+}
+public void incrementReadCount(archives a) {
+	int incr=0;
+	if(readcountmap.containsKey(a.getAid())){
+		incr=readcountmap.get(a.getAid())+1;
+		readcountmap.put(a.getAid(), incr);
+	}
+	else{
+		readcountmap.put(a.getAid(), 0);
+	}
 }
 
 

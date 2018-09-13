@@ -495,6 +495,17 @@ public class RedisUtil {
 	        }
 	        return keys;
 	    }
+	    public Set<byte[]> keys(byte[] key) {
+	        Set<byte[]> keys = null;
+	        Jedis jedis = null;
+	        try {
+	        	jedis=getJedis();
+	            keys = jedis.keys(key);
+	        } finally {
+	        	recycleJedis(jedis);
+	        }
+	        return keys;
+	    }
 	    public void del(int dbIndex, byte[] key) {
 	    	 Jedis jedis = null;
 		        try {
@@ -527,15 +538,18 @@ public class RedisUtil {
 	        Set<Session> sessions = new HashSet<Session>();
 			try {
 	            jedis = getJedis(dbIndex);           
-	            Set<byte[]> byteKeys = jedis.keys((JedisShiroSessionRepository.REDIS_SHIRO_ALL).getBytes());  
+	            Set<byte[]> byteKeys = keys(SerializeUtil.serialize((JedisShiroSessionRepository.REDIS_SHIRO_ALL)));  
 	            if (byteKeys != null && byteKeys.size() > 0) {  
 	                for (byte[] bs : byteKeys) {  
 	                	//String bsstr=bs.toString();
    	
-	                	Session obj = null;
-	                	obj=SerializeUtil.deserialize(jedis.hget(bs,SerializeUtil.serialize(bs)),Session.class);  
-	                     if(obj instanceof Session){
-	                    	 sessions.add(obj);  
+	                	List<byte[]> byt = null;
+	                	byt=jedis.hvals(bs);  
+	                	Session session=null;
+	                	if(byt!=null)
+	                	session=SerializeUtil.deserialize(byt.get(0), Session.class);
+	                     if(session instanceof Session){
+	                    	 sessions.add(session);  
 	                     }
 	                }  
 	            }  

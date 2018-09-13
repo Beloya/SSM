@@ -14,31 +14,26 @@ public class SyslinkServiceImpl implements SyslinkService{
 
 	@Resource
 	private SyslinkMapper syslinkmapper;
-	@Override
 	public List<Syslink> FindAll() {
 		// TODO Auto-generated method stub
 		return syslinkmapper.FindAll();
 	}
 
-	@Override
 	public void Addsyslink(Syslink syslink) {
 		// TODO Auto-generated method stub
 		syslinkmapper.Addsyslink(syslink);
 	}
 
-	@Override
 	public void Update(Syslink syslink) {
 		// TODO Auto-generated method stub
 		syslinkmapper.Update(syslink);
 	}
 
-	@Override
 	public void delete(int MENU_ID) {
 		// TODO Auto-generated method stub
 		syslinkmapper.delete(MENU_ID);
 	}
 
-	@Override
 	public List<Syslink> FindBase() {
 		// TODO Auto-generated method stub
 		return syslinkmapper.FindMenuBase();
