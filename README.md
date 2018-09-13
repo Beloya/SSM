@@ -29,7 +29,7 @@
 * Nginx: 反向代理服务器
 * Eclipse：开发IDE
 ### 开发环境：
-* Jdk-8
+* Jdk-1.8
 * Mysql-5.6
 * Redis-4
 * Maven-3.2.2
