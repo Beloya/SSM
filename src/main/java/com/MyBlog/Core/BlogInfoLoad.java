@@ -2,30 +2,39 @@ package com.MyBlog.Core;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
+import com.MyBlog.Dao.archivesMapper;
 import com.MyBlog.Logger.LoggerUtil;
 import com.MyBlog.Service.SyslinkService;
+import com.MyBlog.Service.archivesService;
 import com.MyBlog.Service.blogService;
 import com.MyBlog.entity.Blog;
 import com.MyBlog.entity.Syslink;
+import com.MyBlog.entity.archives;
+import com.MyBlog.quartz.ReadCountTask;
 
 @Component
-public class BlogInfoLoad  implements ApplicationListener<ContextRefreshedEvent>{
+public class BlogInfoLoad  implements ApplicationListener<ContextRefreshedEvent>,DisposableBean{
 
 	 @Autowired
 	private blogService blogService;
 	@Autowired
 	private SyslinkService syslinkservice;
-
+	@Autowired
+	private archivesService as;
 	public  void BlogInfoInit() {
 		Blog blog=null;
 		List<Syslink> syslinks=null;
@@ -38,6 +47,8 @@ public class BlogInfoLoad  implements ApplicationListener<ContextRefreshedEvent>
    		 BlogInfoSignle.blogInfoSignle.init(blog, syslinks); 	
    	 }
 	}
+
+	
 	public  void BlogInfoInit( HttpServletRequest request ) {
 		Blog blog=null;
 		List<Syslink> syslinks=null;
@@ -57,6 +68,10 @@ public class BlogInfoLoad  implements ApplicationListener<ContextRefreshedEvent>
 	}
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 		BlogInfoInit();
+	}
+	public void destroy() throws Exception {
+		as.UpdateReadCount();
+		
 	}
 
 	

@@ -94,7 +94,7 @@ public void incrementReadCount(archives a) {
 		readcountmap.put(a.getAid(), incr);
 	}
 	else{
-		readcountmap.put(a.getAid(), 0);
+		readcountmap.put(a.getAid(), 1);
 	}
 }
 

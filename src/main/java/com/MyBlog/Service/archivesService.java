@@ -10,6 +10,7 @@ public interface archivesService {
 	public List<archives> FindArchives(int Status);
 	public archives FindById(int AID);
 	public List<archives> FindcategoriesList(archives a);
+	public void UpdateReadCount();
 	public int Addarchives(archives a,String Flag);
 	public archives SeeArchives(int AID);
 	public void Update(archives a);

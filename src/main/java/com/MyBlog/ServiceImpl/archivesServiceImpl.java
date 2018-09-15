@@ -1,6 +1,7 @@
 package com.MyBlog.ServiceImpl;
 
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +19,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import com.MyBlog.Core.BlogInfoSignle;
 import com.MyBlog.Dao.archivesFlagMapper;
 import com.MyBlog.Dao.archivesMapper;
+import com.MyBlog.Logger.LoggerUtil;
 import com.MyBlog.Service.archivesService;
 import com.MyBlog.Service.blogService;
 import com.MyBlog.entity.Blog;
@@ -91,7 +93,18 @@ public class archivesServiceImpl implements archivesService{
 	
 		return a;
 	}
-
+	public void UpdateReadCount() {
+		archives a=null;
+		a=new archives();
+		ConcurrentHashMap<Integer, Integer> readcountmap=BlogInfoSignle.blogInfoSignle.getReadcountmap();
+		for (java.util.Map.Entry<Integer, Integer> e: readcountmap.entrySet()) {
+			a.setAid(e.getKey());
+			a.setReadcount(e.getValue());
+			amapper.readCountUp(a);
+			BlogInfoSignle.blogInfoSignle.getReadcountmap().remove(e.getKey());
+			LoggerUtil.INFO(getClass(), "更新阅读数：+"+a.getReadcount());
+		}
+	}
 
 	public void Intorecovery(int AID) {
 		archives a= amapper.FindById(AID);

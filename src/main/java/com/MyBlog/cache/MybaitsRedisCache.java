@@ -107,8 +107,8 @@ public class MybaitsRedisCache implements Cache{
 	        	jedis =getJedis();
 	         //   connection.select(DB_Index);
 	            
-	            RedisSerializer<Object> serializer = new JdkSerializationRedisSerializer();
-	            result = serializer.deserialize(jedis.hget(serializer.serialize(MybaitsKey),serializer.serialize(key)));
+	           
+	            result = SerializeUtil.deserialize(jedis.hget(SerializeUtil.serialize(MybaitsKey),SerializeUtil.serialize(key)));
 	        }
 	        catch (JedisConnectionException e)
 	        {

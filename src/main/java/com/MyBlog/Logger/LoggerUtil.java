@@ -61,7 +61,7 @@ public class LoggerUtil {
 	public static void INFO(Class<? extends Object> clazz ,String message){
 	LocalDate date=LocalDate.now();
 		Logger logger = Logger.getLogger(clazz);
-		logger.info(LocalDate.now()+message);
+		logger.info(LocalDate.now()+"   "+message);
 	}
 	/**
 	 * Error 输出
