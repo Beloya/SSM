@@ -29,7 +29,7 @@
 * Nginx: 反向代理服务器
 * Eclipse：开发IDE
 ### 开发环境：
-* Jdk-8
+* Jdk-1.8
 * Mysql-5.6
 * Redis-4
 * Maven-3.2.2
@@ -39,4 +39,4 @@
 * 2、克隆源代码到本地并打开，推荐使用Eclipse，本地编译并安装到本地maven仓库
 * 3、导入项目目录下的SQL
 ## 编译流程
-maven编译安装zheng/pom.xml文件即可
+maven编译安装pom.xml文件即可
