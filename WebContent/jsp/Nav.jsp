@@ -27,6 +27,7 @@
 	href="<%=request.getContextPath() %>/css/Nav.css"
 	media="all" />
 	<link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://libs.cdnjs.net/fakeLoader.js/1.1.0/fakeLoader.css">
 <style type="text/css">
 .Top{
 background-image: url("<%=request.getContextPath()%>/images/${applicationScope.BlogInfo.headerskin}");
@@ -39,13 +40,14 @@ border-color:#333 transparent transparent
 .layui-nav .layui-nav-mored, .layui-nav-itemed>a .layui-nav-more{
 border-color:transparent transparent #333;
 }
+
 </style>
 </head>
 <body>
 <% 
 
 Subject subject = SecurityUtils.getSubject();
-Users users=new Users();
+Users users=null;
 if(subject.getSession()!=null&&subject.getSession().getAttribute("user")!=null){
 	users=(Users)subject.getSession().getAttribute("user");
 }
@@ -122,17 +124,30 @@ if(subject.getSession()!=null&&subject.getSession().getAttribute("user")!=null){
 </shiro:authenticated>
 
 </div>
-</ul> 
+</ul>  
 
 <div class="sidebar"></div>
-
+<div class="fakeloader" style=" ">
+</div>
 <script
 			src="<%=request.getContextPath() %>/plugins/jQuery/jquery-2.2.3.min.js"></script>
 				<script
 			src="<%=request.getContextPath() %>/plugins/bootstrap/js/bootstrap.min.js"></script>
 <script src="<%=request.getContextPath() %>/plugins/layui/layui.js"></script>
 <script src="<%=request.getContextPath() %>/js/jquery.bootstrap-autohidingnavbar.min.js"></script>
+<script src="https://libs.cdnjs.net/fakeLoader.js/1.1.0/fakeLoader.min.js"></script>
+<script type="text/javascript">
+
+$(".fakeloader").fakeLoader({
+	//加载效果的持续时间
+	  zIndex:"999",//
+	  spinner:"spinner1",//可选值 'spinner1', 'spinner2', 'spinner3', 'spinner4', 'spinner5', 'spinner6', 'spinner7' 对应有7种效果
+	  bgColor:"#3385ff" ,//加载时的背景颜色
+	 
+	});
+</script>
 <script  type="text/javascript">
+
 $(document).ready(function(){
 	$("head").append("<link rel='icon' href='<%=request.getContextPath() %>/img/favicon.ico' type='image/x-icon' /> <link rel='shortcut icon' href='<%=request.getContextPath() %>/img/favicon.ico' type='image/x-icon'/> <link rel='bookmark' href='<%=request.getContextPath() %>/img/favicon.ico' type='image/x-icon' />");
 });

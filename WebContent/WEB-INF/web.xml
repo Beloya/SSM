@@ -121,7 +121,7 @@
     </init-param>
   <init-param>
   		<param-name>principalSessionName</param-name>
-  		<param-value>user_userName</param-value>
+  		<param-value>LoginName</param-value>
   	</init-param>
   	<init-param>
     <param-name>profileEnable</param-name>

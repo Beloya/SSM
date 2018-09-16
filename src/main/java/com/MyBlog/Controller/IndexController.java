@@ -48,28 +48,23 @@ public class IndexController {
 		if(page!=null)
 			pager.setPage(page);
 		pager.setSize(5);
-		PageHelper.startPage(pager.getPage(), pager.getSize());
-	 List<archives> archives=aservice.FindArchives(0);
-
-	long archivescount= ((Page) archives).getTotal();
-	PageHelper.startPage(pager.getPage(), pager.getSize());
-	pager.setTotal((int)archivescount);
+	 List<archives> archives=aservice.FindArchives(0,pager);
 		model.addAttribute("archives", archives);
-    
 		model.addAttribute("pager", pager);
 		return "/jsp/index";
 	}
 	
 	@RequestMapping("/categories")
 	public String categories(HttpServletRequest request,Model model){
-		PageHelper.startPage(1, 2);
-	 List<archives> archives=aservice.FindArchives(0);
-	long archivescount= ((Page) archives).getTotal();
+		Pager pager=new Pager();
+		pager.setPage(1);
+		pager.setSize(2);
+	 List<archives> archives=aservice.FindArchives(0,pager);
 	PageHelper.startPage(1, 10);
 	List<type> types=tservice.FindAll();
 	long typecount= ((Page) types).getTotal();
 
-		model.addAttribute("archivescount", archivescount);
+		model.addAttribute("archivescount", pager.getTotal());
 		model.addAttribute("types", types);
 		model.addAttribute("typecount", typecount);
 

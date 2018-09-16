@@ -1,5 +1,6 @@
 package com.MyBlog.ServiceImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -23,8 +24,12 @@ import com.MyBlog.Logger.LoggerUtil;
 import com.MyBlog.Service.archivesService;
 import com.MyBlog.Service.blogService;
 import com.MyBlog.entity.Blog;
+import com.MyBlog.entity.Pager;
 import com.MyBlog.entity.archives;
 import com.MyBlog.entity.archivesFlag;
+import com.MyBlog.utils.StringUtils;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 
 @Service
 public class archivesServiceImpl implements archivesService{
@@ -120,11 +125,33 @@ public class archivesServiceImpl implements archivesService{
 	}
 
 
-	public List<archives> FindArchives(int Status) {
-		// TODO Auto-generated method stub
-		return amapper.FindByStatus(Status);
+	public List<archives> FindArchives(int Status,Pager pager) {
+		List<archives> archives=null,results=null;
+		results=new ArrayList<archives>();
+		PageHelper.startPage(pager.getPage(), pager.getSize());
+		archives=amapper.FindByStatus(Status);
+		long archivescount= ((Page) archives).getTotal();
+		PageHelper.startPage(pager.getPage(), pager.getSize());
+		pager.setTotal((int)archivescount);
+		for (archives archive : archives) {
+			archive.setContext(StringUtils.subStringHTML(archive.getContext(),600));
+			results.add(archive);
+		}
+		return archives;
 	}
+	public List<archives> FindArchives(int Status) {
+		List<archives> archives=null;
+		
+		
+		archives=amapper.FindByStatus(Status);
 
+		archives=new ArrayList<archives>();
+		for (archives archive : archives) {
+			archive.setContext(StringUtils.subStringHTML(archive.getContext(),500));
+		
+		}
+		return archives;
+	}
 
 	public List<archives> FindcategoriesList(archives a) {
 		

@@ -345,7 +345,7 @@ word-break:break-all;
 							</nav> 
 							
 							<c:if test="${empty  archives}">
-				<canvas id="canvas" width="900" height="500"></canvas>
+				
 						</c:if>	
 						</section>
 

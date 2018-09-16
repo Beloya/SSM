@@ -2,11 +2,13 @@ package com.MyBlog.Service;
 
 import java.util.List;
 
+import com.MyBlog.entity.Pager;
 import com.MyBlog.entity.archives;
 import com.MyBlog.entity.archivesFlag;
 
 public interface archivesService {
 	public List<archives> FindAll();
+	public List<archives> FindArchives(int Status,Pager pager);
 	public List<archives> FindArchives(int Status);
 	public archives FindById(int AID);
 	public List<archives> FindcategoriesList(archives a);

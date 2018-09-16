@@ -50,7 +50,7 @@ import com.MyBlog.entity.Users;
 
 public class WebRealm extends AuthorizingRealm implements Realm{
 	 private static final transient Logger log = LoggerFactory.getLogger(WebRealm.class);
-	  public static final String SESSION_USER_KEY = "Login";  
+	  public static final String SESSION_USER_KEY = "LoginName";  
 		@Autowired
 	  private UserServiceImpl userService;  
 	private CustomShiroSessionDAO customshirosessionDAO;
@@ -101,7 +101,7 @@ public class WebRealm extends AuthorizingRealm implements Realm{
 		Session session =  subject.getSession();
 		
 	
-		 session.setAttribute(WebRealm.SESSION_USER_KEY, ui);
+		 session.setAttribute(WebRealm.SESSION_USER_KEY, ui.getUserName());
 		  session.setAttribute("user", ui);
 	        String realmName = this.getName();  
 

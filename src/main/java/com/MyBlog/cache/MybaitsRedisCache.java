@@ -13,6 +13,7 @@ import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
+import com.MyBlog.Logger.LoggerUtil;
 import com.MyBlog.utils.SerializeUtil;
 
 import redis.clients.jedis.Jedis;
@@ -97,7 +98,8 @@ public class MybaitsRedisCache implements Cache{
 	        return this.id;
 	    }
 
-	    public Object getObject(Object key)
+	    @SuppressWarnings("unchecked")
+		public Object getObject(Object key)
 	    {
 	        Object result = null;
 	        JedisConnection connection = null;
