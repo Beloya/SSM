@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.MyBlog.entity.Blog;
 import com.MyBlog.entity.Syslink;
-import com.MyBlog.entity.archives;
+import com.MyBlog.entity.Archives;
 
 public enum  BlogInfoSignle {
 blogInfoSignle;
@@ -87,7 +87,7 @@ public  void setInited(boolean inited) {
 public ConcurrentHashMap<Integer, Integer> getReadcountmap() {
 	return readcountmap;
 }
-public void incrementReadCount(archives a) {
+public void incrementReadCount(Archives a) {
 	int incr=0;
 	if(readcountmap.containsKey(a.getAid())){
 		incr=readcountmap.get(a.getAid())+1;

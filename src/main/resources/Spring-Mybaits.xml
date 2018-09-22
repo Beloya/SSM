@@ -47,8 +47,9 @@
 		<property name="minIdle" value="${minIdle}"></property>
 		<!-- 获取连接最大等待时间 -->
 		<property name="maxWait" value="${maxWait}"></property>
-		<property name="timeBetweenEvictionRunsMillis" value="4800" />  
-		<property name="minEvictableIdleTimeMillis" value="2000" /> 
+		<property name="removeAbandonedTimeout" value="300" />
+		<property name="timeBetweenEvictionRunsMillis" value="300000" />  
+		<property name="minEvictableIdleTimeMillis" value="320000" /> 
 	
 		<!-- 验证数据库连接的有效性 -->
 		     <property name="validationQuery" value="SELECT 1" />

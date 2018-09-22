@@ -20,6 +20,7 @@
 	<meta name="referrer" content="never">
 	
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <link rel="stylesheet"
 	href="<%=request.getContextPath() %>/plugins/layui/css/layui.css"
 	media="all" />
@@ -41,6 +42,167 @@ border-color:#333 transparent transparent
 border-color:transparent transparent #333;
 }
 
+
+#SearchForm{
+  position: absolute;
+  margin: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 300px;
+  height: 100px;
+}
+
+
+
+.search_container {
+  position: absolute;
+  margin: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 300px;
+  height: 100px;
+}
+.search_container .search {
+  position: absolute;
+  margin: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width:40px;
+  height:40px;
+  background: white;
+  opacity:0.3;
+  border-radius: 50%;
+  transition: all 1s;
+  z-index: 4;
+
+  box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.2);
+  	-webkit-animation-timing-function:ease-in-out;
+	-webkit-animation-name:search;
+	-webkit-animation-duration:3600ms;
+	-webkit-animation-iteration-count:infinite;
+	-webkit-animation-direction:alternate;
+}
+@-webkit-keyframes search {
+	0% {
+	opacity:.8;
+	box-shadow:0 1px 2px rgba(255,255,255,0.1);
+}
+100% {
+	opacity:1;
+	box-shadow:0 1px 15px rgba(0,0,0,0.6);
+}
+}
+.search_container .search:hover {
+  cursor: pointer;
+    background: white;
+  opacity:1;
+}
+.search_container .search::before {
+  content: "";
+  position: absolute;
+  margin: auto;
+  top: 16px;
+  right: 0;
+  bottom: 0;
+  left: 16px;
+  width: 12px;
+  height: 2px;
+  background: skyblue;
+  transform: rotate(45deg);
+  transition: all .5s;
+}
+
+.search_container .search::after {
+  content: "";
+  position: absolute;
+  margin: auto;
+  top: -5px;
+  right: 0;
+  bottom: 0;
+  left: -5px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 2px solid skyblue;
+  transition: all .5s;
+}
+.search_container input {
+  font-family: 'Inconsolata', monospace;
+  position: absolute;
+  margin: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 20px;
+  height: 50px;
+  outline: none;
+  border: none;
+  background: white;
+  color: #333;
+  text-shadow: 0 0 10px white;
+  padding: 0 80px 0 20px;
+  border-radius: 30px;
+  box-shadow: 0 0 25px 0 white, 0 20px 25px 0 rgba(0, 0, 0, 0.2);
+  transition: all 1s;
+  opacity: 0;
+  z-index: 5;
+  font-weight: bolder;
+  letter-spacing: 0.1em;
+}
+.search_container input:hover {
+  cursor: pointer;
+}
+.search_container input:focus {
+  width: 200px;
+  opacity: 1;
+  cursor: text;
+}
+.search_container input:hover ~ .search{
+ opacity:1;
+}
+.search_container input:hover ~ .search::before {
+  background: skyblue;
+}
+.search_container input:hover ~ .search::after  {
+  border: 2px solid skyblue;
+}
+.search_container input:focus ~ .search {
+  right: -250px;
+  background: white;
+   opacity:1;
+  z-index: 6;
+
+}
+.search_container input:focus ~ .search::before {
+  top: 0;
+  left: 0;
+     opacity:1;
+  width: 25px;
+  
+}
+.search_container input:focus ~ .search::after {
+  top: 0;
+  left: 0;
+  width: 25px;
+  height: 2px;
+  border: none;
+  background: skyblue;
+  border-radius: 0%;
+  transform: rotate(-45deg);
+}
+.search_container input::placeholder {
+  color: white;
+  opacity: 0.5;
+  font-weight: bolder;
+}
+
 </style>
 </head>
 <body>
@@ -48,8 +210,8 @@ border-color:transparent transparent #333;
 
 Subject subject = SecurityUtils.getSubject();
 Users users=null;
-if(subject.getSession()!=null&&subject.getSession().getAttribute("user")!=null){
-	users=(Users)subject.getSession().getAttribute("user");
+if(request.getSession()!=null&&request.getSession().getAttribute("user")!=null){
+	users=(Users)request.getSession().getAttribute("user");
 }
 %>
 <c:set var="Calendar" value="${applicationScope.Calendar}"></c:set>
@@ -84,8 +246,14 @@ if(subject.getSession()!=null&&subject.getSession().getAttribute("user")!=null){
  
  </c:if>
   </c:forEach>
-
-
+  <form id="SearchForm" action="http://www.google.com/search" method="get" target="_blank">  
+<div class="search_container">
+  <input id="Search_In" name="q" type="text" placeholder="搜索">
+    <input name="ie" value="UTF-8" type="hidden" />  
+    <input name="sitesearch" value="iyouju.club" type="hidden" />  
+  <div class="search"></div>
+</div>
+</form>  
 <shiro:guest>
   <li class="layui-nav-item" lay-unselect="" style="opacity:1;right:15px; float:right;margin-right:10%;">
 <a href="${pageContext.request.contextPath}${applicationScope.FoundLink['登录'].link }" style="opacity:1;float:right;">登录</a>
@@ -124,6 +292,7 @@ if(subject.getSession()!=null&&subject.getSession().getAttribute("user")!=null){
 </shiro:authenticated>
 
 </div>
+
 </ul>  
 
 <div class="sidebar"></div>
@@ -154,15 +323,31 @@ $(document).ready(function(){
 $(".MyNav").autoHidingNavbar({
 
 });
-layui.use('element', function(){
+layui.use(['element','layer'], function(){
   var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
-  
+  var layer = layui.layer;
   //监听导航点击  
   element.on('nav(demo)', function(elem){
-   
-    layer.msg(elem.text());
+
   });
   
+
+
+//搜索窗口
+$("#Search_In").keypress(function(e){
+    if(e.which == 13) {  
+    	$("#SearchForm").submit(function(e){
+    	 
+    	  });
+    	/*var index = layer.open({
+    		  type: 2,
+    		  content: 'http://layim.layui.com',
+    		  area: ['320px', '195px'],
+    		  maxmin: true
+    		});*/
+    	
+    }
+});
 });
 function LogOut(){
 	$.ajax({

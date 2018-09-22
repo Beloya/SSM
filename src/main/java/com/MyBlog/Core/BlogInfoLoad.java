@@ -23,7 +23,7 @@ import com.MyBlog.Service.archivesService;
 import com.MyBlog.Service.blogService;
 import com.MyBlog.entity.Blog;
 import com.MyBlog.entity.Syslink;
-import com.MyBlog.entity.archives;
+import com.MyBlog.entity.Archives;
 import com.MyBlog.quartz.ReadCountTask;
 
 @Component

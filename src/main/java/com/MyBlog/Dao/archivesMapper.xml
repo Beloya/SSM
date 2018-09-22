@@ -4,7 +4,7 @@
 <mapper namespace="com.MyBlog.Dao.archivesMapper">
     <cache type="com.MyBlog.cache.MybaitsRedisCache" blocking="false"   flushInterval="7200000"
             readOnly="true" size="1024" eviction="LRU"/>
-    <resultMap type="com.MyBlog.entity.archives" id="archivesFILED">
+    <resultMap type="com.MyBlog.entity.Archives" id="archivesFILED">
         <id property="aid" column="AID" />
         <result property="title" column="Title"/>
         <result property="context" column="context"/>
@@ -99,13 +99,13 @@
     select * from flag f where f.fid=#{fid}
     </select>
 
-    <update id="readCountUp" parameterType="archives"  flushCache="false">
+    <update id="readCountUp" parameterType="Archives"  flushCache="false">
         Update archives set readcount=readcount+#{readcount} where AID=#{aid}
     </update>
-       <update id="Update" parameterType="archives">
+       <update id="Update" parameterType="Archives">
         Update archives set readcount=#{readcount},Title=#{title},context=#{context},type=#{type},status=#{status},vid=#{vid},UPDATED_BY=#{updatedBy},UPDATED_TIME=#{updatedTime} where AID=#{aid}
     </update>
-    <insert id="Addarchives" parameterType="archives" >
+    <insert id="Addarchives" parameterType="Archives" >
             <selectKey resultType="int" order="AFTER" keyProperty="aid">  
                 SELECT LAST_INSERT_ID() 
      </selectKey>  

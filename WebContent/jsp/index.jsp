@@ -5,6 +5,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<meta name="google-site-verification" content="boEI4kBPt4qGUiDtsabiffW1zJ0KZewWQQFb9fWvWK4" />
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Hello</title>
 <link rel="stylesheet" href="<%=request.getContextPath()%>/css/main.css"

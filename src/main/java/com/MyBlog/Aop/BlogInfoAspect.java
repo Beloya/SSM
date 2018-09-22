@@ -31,7 +31,6 @@ import com.MyBlog.Message.QQEmailUtilFactory;
 import com.MyBlog.Service.SyslinkService;
 import com.MyBlog.Service.blogService;
 import com.MyBlog.Shiro.Session.ShiroSession;
-import com.MyBlog.Shiro.Session.redisSessionService;
 import com.MyBlog.entity.Archivescommit;
 import com.MyBlog.entity.Blog;
 import com.MyBlog.entity.Email;

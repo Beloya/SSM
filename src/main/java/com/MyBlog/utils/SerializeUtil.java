@@ -8,6 +8,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import com.MyBlog.Logger.LoggerUtil;
+
+import io.protostuff.LinkedBuffer;
+import io.protostuff.ProtobufIOUtil;
+import io.protostuff.ProtostuffIOUtil;
+import io.protostuff.Schema;
+import io.protostuff.runtime.RuntimeSchema;
 public class SerializeUtil {
 	 static final Class<?> CLAZZ = SerializeUtil.class;
 	 public static byte[] serialize(Object object) {
@@ -66,4 +72,27 @@ public class SerializeUtil {
 	            	 LoggerUtil.fmtError(CLAZZ, "close stream error");
 	            }
 	    }
+	    public static <T> byte[]  ProtostuffSerializer(Object o){
+	    	  Schema schema = RuntimeSchema.getSchema(o.getClass());
+	    	  byte[] b=null;
+	    	  b=ProtobufIOUtil.toByteArray(o, schema, LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE));
+	    	  System.out.println("序列化结果:"+b);
+	          return b;
+	    }
+	    public static <T> T Protostuffdeserializer(byte[] bytes, Class<T> clazz) {
+	    	 
+	        T obj = null;
+	        try {
+	            obj = clazz.newInstance();
+	            Schema schema = RuntimeSchema.getSchema(obj.getClass());
+	            ProtostuffIOUtil.mergeFrom(bytes, obj, schema);
+	        } catch (InstantiationException e) {
+	            e.printStackTrace();
+	        } catch (IllegalAccessException e) {
+	            e.printStackTrace();
+	        }
+	 
+	        return obj;
+	    }
+
 }

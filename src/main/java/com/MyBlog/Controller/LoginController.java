@@ -47,7 +47,7 @@ public class LoginController {
 	  
 	  @RequestMapping("/SignOut")
 	  @ResponseBody
-	    public Object  login(Users user,String RememberMe,HttpServletResponse response,HttpServletRequest request) throws JsonGenerationException, JsonMappingException, IOException{
+	    public Object  Dologin(Users user,String RememberMe,HttpServletResponse response,HttpServletRequest request) throws JsonGenerationException, JsonMappingException, IOException{
 		  Map<String, String> LoginMsg=new HashMap();
 		  SavedRequest savedRequest=WebUtils.getSavedRequest(request);
 		  LoginMsg=(Map<String, String>) userService.Login(user, RememberMe);
@@ -55,7 +55,11 @@ public class LoginController {
 	      return LoginMsg;
 	     
 	    }
-	  
+	  @RequestMapping("/login")
+	    public String  login(Users user,String RememberMe,HttpServletResponse response,HttpServletRequest request) throws JsonGenerationException, JsonMappingException, IOException{
+		  
+	      return "/jsp/login";
+	    }
 	  @RequestMapping("/LogOut")
 	  @ResponseBody
 	  public Object LoginOut() {

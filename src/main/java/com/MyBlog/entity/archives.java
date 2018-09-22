@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class archives implements Serializable {
+public class Archives implements Serializable,Comparable<Archives> {
 
 	/**
 	 * 
@@ -33,7 +33,6 @@ public class archives implements Serializable {
 	    private Integer flag ;
 	    /** 可见性;外键 */
 	    private Integer vid ;
-        
 	    private List<Flag> flags;
 	    private List<archivesFlag> archivesflags;
 	    private Archivesvisibility archivesvisibility;
@@ -161,6 +160,12 @@ public class archives implements Serializable {
 		}
 		public void setEtype(type etype) {
 			this.etype = etype;
+		}
+		@Override
+		public int compareTo(Archives o) {
+			// TODO Auto-generated method stub
+
+			return this.readcount - o.readcount;
 		}
 	 
 

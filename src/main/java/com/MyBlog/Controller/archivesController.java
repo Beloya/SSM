@@ -40,7 +40,7 @@ import com.MyBlog.entity.Blog;
 import com.MyBlog.entity.Flag;
 import com.MyBlog.entity.Pager;
 import com.MyBlog.entity.Users;
-import com.MyBlog.entity.archives;
+import com.MyBlog.entity.Archives;
 import com.MyBlog.entity.archivesFlag;
 import com.MyBlog.entity.type;
 import com.github.pagehelper.Page;
@@ -65,7 +65,7 @@ public class archivesController {
 	@RequestMapping("Createarchives")
 	@ResponseBody
 	public Object Createarchives(int type,String Flag,String title,String context,Integer VID,String formToken,HttpServletRequest request,HttpServletResponse response){
-archives archives=new archives();
+Archives archives=new Archives();
 Map<String, String> Msg=new HashMap<String, String>();
 	 Subject subject = SecurityUtils.getSubject(); 
 	 Object Principal=  subject.getPrincipal();
@@ -119,7 +119,7 @@ return Msg;
 	@RequestMapping("Updatearchives")
 	@ResponseBody
 	public Object Updatearchives(Integer AID,Integer readcount,int type,String Flag,String title,String context,Integer VID,String formToken,HttpServletRequest request,HttpServletResponse response) {
-		archives archives=new archives();
+		Archives archives=new Archives();
 
 			 Subject subject = SecurityUtils.getSubject(); 
 			 Object Principal=  subject.getPrincipal();
@@ -187,7 +187,7 @@ return Msg;
 	@RequestMapping("/archives")
 	public String archives(Integer AID,Integer page,HttpServletRequest request,HttpServletResponse response,Model model){
 		
-		archives archives=aservice.SeeArchives(AID);
+		Archives archives=aservice.SeeArchives(AID);
 		Pager pager=new Pager();
 		if(page!=null)
 			pager.setPage(page);
@@ -225,7 +225,7 @@ return Msg;
 	}
 	@RequestMapping("editarchives")
 	public String editarchives(int AID,HttpServletRequest request,HttpServletResponse response,Model model) {
-		archives archives=aservice.SeeArchives(AID);
+		Archives archives=aservice.SeeArchives(AID);
 		  List<Flag> flags=flagService.FindAll();
 		  List<type> types=tyservice.FindAll();
 			List<Archivesvisibility> archivesvisibilities=avService.FindAll(); 

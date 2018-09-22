@@ -1,20 +1,19 @@
 package com.MyBlog.cache;
 
-import java.util.concurrent.Callable;
+
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.apache.ibatis.cache.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.data.redis.connection.jedis.JedisConnection;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
-
-import com.MyBlog.Logger.LoggerUtil;
 import com.MyBlog.utils.SerializeUtil;
+
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.exceptions.JedisConnectionException;
@@ -28,7 +27,6 @@ public class MybaitsRedisCache implements Cache{
        JedisConnection connection = null;
 
 		private final String id;
-        private int DB_Index=0;
 	    /**
 	     * The {@code ReadWriteLock}.
 	     */
@@ -74,7 +72,7 @@ public class MybaitsRedisCache implements Cache{
 	    }
 	    public void clear()
 	    {
-	        JedisConnection connection = null;
+	  
 	        Jedis jedis = null;
 	        try
 	        {
@@ -100,17 +98,18 @@ public class MybaitsRedisCache implements Cache{
 
 	    @SuppressWarnings("unchecked")
 		public Object getObject(Object key)
-	    {
+		{
 	        Object result = null;
-	        JedisConnection connection = null;
 	        Jedis jedis = null;
 	        try
 	        {
 	        	jedis =getJedis();
 	         //   connection.select(DB_Index);
-	            
-	           
-	            result = SerializeUtil.deserialize(jedis.hget(SerializeUtil.serialize(MybaitsKey),SerializeUtil.serialize(key)));
+	        	byte[] b=jedis.hget(SerializeUtil.serialize(MybaitsKey),SerializeUtil.serialize(key));
+	        	if(b==null)
+	        		return result;
+	            result = SerializeUtil.unserialize(b);
+	  
 	        }
 	        catch (JedisConnectionException e)
 	        {
@@ -131,7 +130,6 @@ public class MybaitsRedisCache implements Cache{
 	    public int getSize()
 	    {
 	        int result = 0;
-	        JedisConnection connection = null;
 	        Jedis jedis = null;
 	        try
 	        {
@@ -152,14 +150,12 @@ public class MybaitsRedisCache implements Cache{
 
 	    public void putObject(Object key, Object value)
 	    {
-	        JedisConnection connection = null;
+
 	        Jedis jedis = null;
 	        try
 	        {
 	        	jedis = getJedis();
-	          //  connection.select(DB_Index);
-	            RedisSerializer<Object> serializer = new JdkSerializationRedisSerializer();
-	            jedis.hset(SerializeUtil.serialize(MybaitsKey),serializer.serialize(key), serializer.serialize(value));
+	            jedis.hset(SerializeUtil.serialize(MybaitsKey),SerializeUtil.serialize(key), SerializeUtil.serialize(value));
 	        }
 	        catch (JedisConnectionException e)
 	        {
@@ -173,7 +169,7 @@ public class MybaitsRedisCache implements Cache{
 
 	    public Object removeObject(Object key)
 	    {
-	        JedisConnection connection = null;
+
 	        Object result = null;
 	        Jedis jedis = null;
 	        try

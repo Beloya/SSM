@@ -247,7 +247,18 @@
     <version>2.0.5.RELEASE</version>
 </dependency-->
     
-
+<dependency>
+    <groupId>io.protostuff</groupId>
+    <artifactId>protostuff-core</artifactId>
+    <version>1.6.0</version>
+    <scope>test</scope>
+</dependency>
+<!-- https://mvnrepository.com/artifact/io.protostuff/protostuff-runtime -->
+<dependency>
+    <groupId>io.protostuff</groupId>
+    <artifactId>protostuff-runtime</artifactId>
+    <version>1.6.0</version>
+</dependency>
 </dependencies>
 
 </project>

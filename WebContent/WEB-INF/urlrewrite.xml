@@ -3,14 +3,6 @@
         "http://tuckey.org/res/dtds/urlrewrite3.2.dtd">
 
 <urlrewrite>
-
-<rule>
-
-        <from>/login</from>
-
-        <to>/jsp/login.jsp</to>
-		
-</rule>
 <rule>
 
         <from>/404</from>

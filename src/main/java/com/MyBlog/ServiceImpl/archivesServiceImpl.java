@@ -25,7 +25,7 @@ import com.MyBlog.Service.archivesService;
 import com.MyBlog.Service.blogService;
 import com.MyBlog.entity.Blog;
 import com.MyBlog.entity.Pager;
-import com.MyBlog.entity.archives;
+import com.MyBlog.entity.Archives;
 import com.MyBlog.entity.archivesFlag;
 import com.MyBlog.utils.StringUtils;
 import com.github.pagehelper.Page;
@@ -40,17 +40,17 @@ public class archivesServiceImpl implements archivesService{
 	private archivesFlagMapper afmapper;
 	 @Resource
 		private blogService blogService;
-	public List<archives> FindAll() {	
+	public List<Archives> FindAll() {	
 		return amapper.FindAll();
 	}
 
 	
-	public archives FindById(int AID) {	
+	public Archives FindById(int AID) {	
 	return amapper.FindById(AID);
 	}
 
 	
-	public int Addarchives(archives a,String Flag) {
+	public int Addarchives(Archives a,String Flag) {
 		 HttpServletRequest request = null;
 		archivesFlag aFlag=new archivesFlag();
 		Subject subject=SecurityUtils.getSubject();
@@ -92,15 +92,15 @@ public class archivesServiceImpl implements archivesService{
 	}
 
 	
-	public archives SeeArchives(int AID) {
-		archives a=amapper.FindById(AID);
+	public Archives SeeArchives(int AID) {
+		Archives a=amapper.FindById(AID);
 		BlogInfoSignle.blogInfoSignle.incrementReadCount(a);
 	
 		return a;
 	}
 	public void UpdateReadCount() {
-		archives a=null;
-		a=new archives();
+		Archives a=null;
+		a=new Archives();
 		ConcurrentHashMap<Integer, Integer> readcountmap=BlogInfoSignle.blogInfoSignle.getReadcountmap();
 		for (java.util.Map.Entry<Integer, Integer> e: readcountmap.entrySet()) {
 			a.setAid(e.getKey());
@@ -112,48 +112,48 @@ public class archivesServiceImpl implements archivesService{
 	}
 
 	public void Intorecovery(int AID) {
-		archives a= amapper.FindById(AID);
+		Archives a= amapper.FindById(AID);
 		a.setStatus(-1);
 		amapper.Update(a);
 		
 	}
 
 
-	public void Update(archives a) {
+	public void Update(Archives a) {
 		// TODO Auto-generated method stub
 		amapper.Update(a);
 	}
 
 
-	public List<archives> FindArchives(int Status,Pager pager) {
-		List<archives> archives=null,results=null;
-		results=new ArrayList<archives>();
+	public List<Archives> FindArchives(int Status,Pager pager) {
+		List<Archives> archives=null,results=null;
+		results=new ArrayList<Archives>();
 		PageHelper.startPage(pager.getPage(), pager.getSize());
 		archives=amapper.FindByStatus(Status);
 		long archivescount= ((Page) archives).getTotal();
 		PageHelper.startPage(pager.getPage(), pager.getSize());
 		pager.setTotal((int)archivescount);
-		for (archives archive : archives) {
+		for (Archives archive : archives) {
 			archive.setContext(StringUtils.subStringHTML(archive.getContext(),600));
 			results.add(archive);
 		}
 		return archives;
 	}
-	public List<archives> FindArchives(int Status) {
-		List<archives> archives=null;
+	public List<Archives> FindArchives(int Status) {
+		List<Archives> archives=null;
 		
 		
 		archives=amapper.FindByStatus(Status);
 
-		archives=new ArrayList<archives>();
-		for (archives archive : archives) {
+		archives=new ArrayList<Archives>();
+		for (Archives archive : archives) {
 			archive.setContext(StringUtils.subStringHTML(archive.getContext(),500));
 		
 		}
 		return archives;
 	}
 
-	public List<archives> FindcategoriesList(archives a) {
+	public List<Archives> FindcategoriesList(Archives a) {
 		
 		return amapper.FindByParam(a);
 	}
