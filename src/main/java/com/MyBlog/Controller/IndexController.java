@@ -47,8 +47,6 @@ public class IndexController {
 
 	@RequestMapping("/index")
 	public String IndexSee(Integer page,HttpServletRequest request,Model model){
-		long start=0,end=0;
-		start=System.currentTimeMillis();
 		Pager pager=null;
 		pager=new Pager();
 		pager.setPage(1);
@@ -56,8 +54,7 @@ public class IndexController {
 			pager.setPage(page);
 		pager.setSize(5);
 	 List<Archives> archives=aservice.FindArchives(0,pager);
-		end=System.currentTimeMillis();
-		System.out.println("当前耗费时间:"+(end-start));
+
 		model.addAttribute("archives", archives);
 		model.addAttribute("pager", pager);
 		return "/jsp/index";

@@ -3,6 +3,7 @@ package com.MyBlog.ServiceImpl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -70,9 +71,6 @@ public class archivesServiceImpl implements archivesService{
 			}
 		}
 		 request=((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-		Blog blog= blogService.FindByUserName("Beloya");
-		BlogInfoSignle.blogInfoSignle.setBlog(blog);
-		 request.getServletContext().setAttribute("BlogInfo", blog);
 			} catch (UnauthorizedException e) {
 				throw new UnauthorizedException();
 			
@@ -87,7 +85,7 @@ public class archivesServiceImpl implements archivesService{
 
 	
 	public void delete(int AID) {
-		// TODO Auto-generated method stub
+	
 		amapper.delete(AID);
 	}
 
@@ -120,23 +118,22 @@ public class archivesServiceImpl implements archivesService{
 
 
 	public void Update(Archives a) {
-		// TODO Auto-generated method stub
 		amapper.Update(a);
 	}
 
 
 	public List<Archives> FindArchives(int Status,Pager pager) {
-		List<Archives> archives=null,results=null;
-		results=new ArrayList<Archives>();
+		List<Archives> archives=null;
+
 		PageHelper.startPage(pager.getPage(), pager.getSize());
 		archives=amapper.FindByStatus(Status);
 		long archivescount= ((Page) archives).getTotal();
 		PageHelper.startPage(pager.getPage(), pager.getSize());
 		pager.setTotal((int)archivescount);
-		for (Archives archive : archives) {
-			archive.setContext(StringUtils.subStringHTML(archive.getContext(),600));
-			results.add(archive);
-		}
+	archives.parallelStream().peek(archive->{
+	archive.setContext(StringUtils.subStringHTML(archive.getContext(),600));
+}).collect(Collectors.toList());
+
 		return archives;
 	}
 	public List<Archives> FindArchives(int Status) {
@@ -145,11 +142,9 @@ public class archivesServiceImpl implements archivesService{
 		
 		archives=amapper.FindByStatus(Status);
 
-		archives=new ArrayList<Archives>();
-		for (Archives archive : archives) {
-			archive.setContext(StringUtils.subStringHTML(archive.getContext(),500));
-		
-		}
+		archives=archives.parallelStream().peek(archive->{
+			archive.setContext(StringUtils.subStringHTML(archive.getContext(),600));
+		}).collect(Collectors.toList());
 		return archives;
 	}
 

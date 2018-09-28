@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.MyBlog.Dao.archivesMapper">
     <cache type="com.MyBlog.cache.MybaitsRedisCache" blocking="false"   flushInterval="7200000"
-            readOnly="true" size="1024" eviction="LRU"/>
+            readOnly="true" size="2048" eviction="LRU"/>
     <resultMap type="com.MyBlog.entity.Archives" id="archivesFILED">
         <id property="aid" column="AID" />
         <result property="title" column="Title"/>
