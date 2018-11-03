@@ -1,7 +1,7 @@
 package com.MyBlog.ServiceImpl;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -12,9 +12,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.subject.Subject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -26,7 +24,9 @@ import com.MyBlog.Service.archivesService;
 import com.MyBlog.Service.blogService;
 import com.MyBlog.entity.Blog;
 import com.MyBlog.entity.Pager;
+import com.MyBlog.entity.Users;
 import com.MyBlog.entity.Archives;
+import com.MyBlog.entity.Archivesvisibility;
 import com.MyBlog.entity.archivesFlag;
 import com.MyBlog.utils.StringUtils;
 import com.github.pagehelper.Page;
@@ -122,19 +122,30 @@ public class archivesServiceImpl implements archivesService{
 	}
 
 
-	public List<Archives> FindArchives(int Status,Pager pager) {
-		List<Archives> archives=null;
-
+	public List<Archives> IndexShow(int Status,Pager pager) {
+		List<Archives> archivelist=null;
+		Archives archives=null;
+		Integer vis=null;
+		archives=new Archives();
+		
+		Users user=(Users) SecurityUtils.getSubject().getPrincipal();
+		Blog blog=BlogInfoSignle.blogInfoSignle.getBlog();
+		if(user!=null) {
+	 vis=user.getUserName()==Optional.ofNullable(blog.getCreatedBy()).orElse("notfoundblog")?null:Archivesvisibility.pub;
+		}
+		archives.setStatus(Status);
+		archives.setVid(vis);
+		
 		PageHelper.startPage(pager.getPage(), pager.getSize());
-		archives=amapper.FindByStatus(Status);
-		long archivescount= ((Page) archives).getTotal();
+		archivelist=amapper.FindByParam(archives);
+		long archivescount= ((Page) archivelist).getTotal();
 		PageHelper.startPage(pager.getPage(), pager.getSize());
 		pager.setTotal((int)archivescount);
-	archives.parallelStream().peek(archive->{
+		archivelist.parallelStream().peek(archive->{
 	archive.setContext(StringUtils.subStringHTML(archive.getContext(),600));
 }).collect(Collectors.toList());
 
-		return archives;
+		return archivelist;
 	}
 	public List<Archives> FindArchives(int Status) {
 		List<Archives> archives=null;

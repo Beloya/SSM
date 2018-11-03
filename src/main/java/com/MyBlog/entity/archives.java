@@ -16,7 +16,7 @@ public class Archives implements Serializable,Comparable<Archives> {
 	    /** 内容 */
 	    private String context ;
 	    /** 类型  */
-	    private int type ;
+	    private Integer type ;
 	    /** 创建人 */
 	    private String createdBy ;
 	    /** 创建时间 */
@@ -62,7 +62,7 @@ public class Archives implements Serializable,Comparable<Archives> {
 	        this.context = context;
 	    }
 	    /** 类型 */
-	    public int getType(){
+	    public Integer getType(){
 	        return this.type;
 	    }
 	    /** 类型 */

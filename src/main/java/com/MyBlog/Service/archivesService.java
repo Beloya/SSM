@@ -8,7 +8,7 @@ import com.MyBlog.entity.archivesFlag;
 
 public interface archivesService {
 	public List<Archives> FindAll();
-	public List<Archives> FindArchives(int Status,Pager pager);
+	public List<Archives> IndexShow(int Status,Pager pager);
 	public List<Archives> FindArchives(int Status);
 	public Archives FindById(int AID);
 	public List<Archives> FindcategoriesList(Archives a);

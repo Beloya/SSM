@@ -12,6 +12,8 @@ import org.springframework.data.redis.connection.jedis.JedisConnection;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
+
+import com.MyBlog.Logger.LoggerUtil;
 import com.MyBlog.utils.SerializeUtil;
 
 
@@ -25,7 +27,8 @@ public class MybaitsRedisCache implements Cache{
 	    public static JedisConnectionFactory jedisConnectionFactory;
        private static String MybaitsKey;
        JedisConnection connection = null;
-
+       private static double readcachecount=0;
+       private static double succescache=0;
 		private final String id;
 	    /**
 	     * The {@code ReadWriteLock}.
@@ -101,15 +104,22 @@ public class MybaitsRedisCache implements Cache{
 		{
 	        Object result = null;
 	        Jedis jedis = null;
+	        long start = 0,end=0;
 	        try
 	        {
+	        	start=System.currentTimeMillis();
 	        	jedis =getJedis();
 	         //   connection.select(DB_Index);
 	        	byte[] b=jedis.hget(SerializeUtil.serialize(MybaitsKey),SerializeUtil.serialize(key));
-	        	if(b==null)
+	        	if(b==null) {
+	        		LoggerUtil.INFO(getClass(), "缓存未命中,当前命中率为:"+(succescache/readcachecount));
+	        		
 	        		return result;
+	        	}
 	            result = SerializeUtil.unserialize(b);
-	  
+	  succescache+=1;
+
+	  LoggerUtil.INFO(getClass(), "缓存命中,当前命中率为:"+(succescache/readcachecount));
 	        }
 	        catch (JedisConnectionException e)
 	        {
@@ -117,6 +127,9 @@ public class MybaitsRedisCache implements Cache{
 	        }
 	        finally
 	        {
+	        	end=System.currentTimeMillis();
+	        	  LoggerUtil.INFO(getClass(), "读取缓存耗费时间:"+(end-start));
+	        	readcachecount+=1;
 	        	recycleJedis(jedis);
 	        }
 	        return result;

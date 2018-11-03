@@ -48,7 +48,7 @@ public class LoginController {
 	  @RequestMapping("/SignOut")
 	  @ResponseBody
 	    public Object  Dologin(Users user,String RememberMe,HttpServletResponse response,HttpServletRequest request) throws JsonGenerationException, JsonMappingException, IOException{
-		  Map<String, String> LoginMsg=new HashMap();
+		  Map<String, String> LoginMsg=new HashMap<String, String>();
 		  SavedRequest savedRequest=WebUtils.getSavedRequest(request);
 		  LoginMsg=(Map<String, String>) userService.Login(user, RememberMe);
 		  
@@ -63,8 +63,7 @@ public class LoginController {
 	  @RequestMapping("/LogOut")
 	  @ResponseBody
 	  public Object LoginOut() {
-		  ObjectMapper mapper = new ObjectMapper();
-		  Map<String, String> LoginOutMsg=new HashMap();
+		  Map<String, String> LoginOutMsg=new HashMap<String, String>();
 		  Subject subject = SecurityUtils.getSubject(); 
 		  subject.logout();
 		  LoginOutMsg.put("code", "0");
@@ -75,8 +74,7 @@ public class LoginController {
 	  @RequestMapping("QuickLogin")
 	  @ResponseBody
 	  public Object QuickLogin(HttpServletRequest request) {
-			 ObjectMapper mapper = new ObjectMapper();
-			  Map<String, String> QuickLoginMsg=new HashMap();
+			 Map<String, String> QuickLoginMsg=new HashMap<String, String>();
 			  Subject subject = SecurityUtils.getSubject(); 
 			  HttpSession session=request.getSession();
 			  if(subject.isRemembered()&&!subject.isAuthenticated()&&session.getAttribute("user")==null){

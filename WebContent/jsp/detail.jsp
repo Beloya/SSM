@@ -7,7 +7,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">           
 <title>${archives.title}</title>
-<link rel="stylesheet" href="<%=request.getContextPath()%>/css/main.css"
+<link rel="stylesheet" href="https://tuxiang-1251384861.cos.ap-guangzhou.myqcloud.com/css/main.css"
 	media="all" />
 <link rel="stylesheet"
 	href="<%=request.getContextPath()%>/css/SigmarOne.woff2"
@@ -657,7 +657,7 @@ ${Calendar.get(Calendar_Year)}年${Calendar.get(Calendar_MONTH)+1}月${Calendar.
 		    	type:'POST',
 		    	data:"CID="+CID,
                    success: function(result){
-       if(result.code=="1"){
+       if(result.code!="0"){
       	 layer.msg(result.msg, {
       		  icon: 5,
       		  time: 2000 //2秒关闭（如果不配置，默认是3秒）
@@ -745,7 +745,7 @@ ${Calendar.get(Calendar_Year)}年${Calendar.get(Calendar_MONTH)+1}月${Calendar.
 							    	type:'POST',
 							    	data:data.field,
 					                     success: function(result){
-					         if(result.code=="1"){
+					         if(result.code!="0"){
 					        	 layer.msg(result.msg, {
 					        		  icon: 5,
 					        		  time: 2000 //2秒关闭（如果不配置，默认是3秒）

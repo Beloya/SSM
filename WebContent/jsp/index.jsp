@@ -8,11 +8,11 @@
 <meta name="google-site-verification" content="boEI4kBPt4qGUiDtsabiffW1zJ0KZewWQQFb9fWvWK4" />
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Hello</title>
-<link rel="stylesheet" href="<%=request.getContextPath()%>/css/main.css"
+<link rel="stylesheet" href="https://tuxiang-1251384861.cos.ap-guangzhou.myqcloud.com/css/main.css"
 	media="all" />
 <link rel="stylesheet"
 	href="<%=request.getContextPath()%>/css/SigmarOne.woff2"
-	type="text/css">
+	type="font/woff2">
 	<style type="text/css">
 	#canvas {
 /*   position: absolute;
@@ -231,7 +231,7 @@ word-break:break-all;
 						<nav class="pagination">
 		
 						<c:if test="${pager.page!=1 }">
-						<a class="extend prev" rel="prev" href="/${pager.prePage}">
+						<a class="extend prev " rel="prev" href="/${pager.prePage}">
 						<i class="layui-icon">&#xe603;</i></a>
 						</c:if>
 					<c:if test="${pager.pages<=5}">
@@ -367,9 +367,9 @@ word-break:break-all;
 
 	</div>
 		<script src="js/q.js"></script>
-	<script src='js/CSSPlugin.min.js'></script>
+	<script src='https://tuxiang-1251384861.cos.ap-guangzhou.myqcloud.com/js/CSSPlugin.min.js'></script>
 	<script src='js/EasePack.min.js'></script>
-	<script src='js/TweenLite.min.js'></script>
+	<script src='https://tuxiang-1251384861.cos.ap-guangzhou.myqcloud.com/js/TweenLite.min.js'></script>
 	<script src="js/index.js"></script>
 
 	<script type="text/javascript">

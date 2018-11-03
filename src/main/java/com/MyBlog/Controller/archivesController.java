@@ -202,7 +202,7 @@ return Msg;
 	
 		pager.setTotal((int)commitCount);
 		String formToken=UUID.randomUUID().toString();		
-		request.getSession().setAttribute("formToken", formToken);
+		SecurityUtils.getSubject().getSession().setAttribute("formToken", formToken);
 		model.addAttribute("formToken", formToken);
 	
 		model.addAttribute("archivescommits", archivescommits);

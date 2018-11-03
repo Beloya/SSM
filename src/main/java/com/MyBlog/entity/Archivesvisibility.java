@@ -29,7 +29,14 @@ public class Archivesvisibility implements Serializable,Cloneable{
     private Date updatedTime ;
     /** 状态;1审核||0正常||-1失效 */
     private Integer status ;
-
+    /**
+     * 公开
+     */
+public final static Integer pub=1;
+/**
+ * 私有
+ */
+public final static Integer pri=2;
     /** 主键 */
     public Integer getId(){
         return this.id;

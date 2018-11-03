@@ -16,9 +16,9 @@ private   Blog blog=null;
 private  Syslink syslink=null;
 private  List<Syslink> menulink=null;
 private  List<Syslink> communionlink=null;
-private  HashMap<String,Syslink> foundlink=null;
-private  ConcurrentHashMap<Integer, Integer> readcountmap=new ConcurrentHashMap<Integer, Integer>();
-private  boolean inited=false;
+private   HashMap<String,Syslink> foundlink=null;
+private   ConcurrentHashMap<Integer, Integer> readcountmap=new ConcurrentHashMap<Integer, Integer>();
+private   boolean inited=false;
 private BlogInfoSignle(){
 
 }
@@ -40,10 +40,7 @@ public void init(Blog blog,List<Syslink> syslinks) {
 	}
 	this.inited=true;
 }
-public Blog getblog(){
 
-	return blog;
-}
 public Blog getBlog() {
 	return blog;
 }

@@ -1,5 +1,4 @@
 .Top{
-background-image: url("../images/headerlogo.jpg");
 	height:400px;
 	background-repeat: no-repeat;
 	background-size:cover;
@@ -8,16 +7,7 @@ background-image: url("../images/headerlogo.jpg");
 	z-index:10;
 }
 
- .post:before{
-	content:'';
-	position:absolute;
-	right:10px;
-	top:10px;
-	width:60px;
-	height:64px;
-	background:url(../images/darling-xx.png);
-	background-size:contain;
-}
+
 
 svg {
   width: 100%;

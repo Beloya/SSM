@@ -10,7 +10,10 @@ public class JsonData {
 	private int errocode;
 	private String erromsg;
 	private List<HashMap<String,Object>> data;
-	
+	//成功返回码
+	public static final int successcode=0;
+	//系统错误返回码
+	public static final int systemerrcode=500;
 	public int getCode() {
 		return code;
 	}

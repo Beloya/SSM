@@ -52,8 +52,7 @@
           <filter-name>shiroFilter</filter-name>  
      
           <url-pattern>*.do</url-pattern>  
-                <url-pattern>*.json</url-pattern>  
-              <url-pattern>*.html</url-pattern>  
+                <url-pattern>/druid/*</url-pattern>  
              <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
       </filter-mapping>  

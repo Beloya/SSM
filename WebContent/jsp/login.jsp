@@ -173,7 +173,7 @@ layui.use(['form', 'layedit', 'laydate'], function(){
 		    	data:'UserName='+data.field.username+'&PassWord='+data.field.passWord+'&RememberMe='+data.field.RememberMe,
                      success: function(result){
                     	 
-         if(result.code=="1"){
+         if(result.code!="0"){
         	 layer.msg(result.Msg, {
        		  icon: 5,
        		  time: 2000 //2秒关闭（如果不配置，默认是3秒）
@@ -219,7 +219,7 @@ layui.use(['form', 'layedit', 'laydate'], function(){
 			    	type:'POST',
 			    	data:data.field,
 	                     success: function(result){
-	         if(result.code=="1"){
+	         if(result.code!="0"){
 	        	 layer.msg(result.Msg, {
 	       		  icon: 5,
 	       		  time: 2000 //2秒关闭（如果不配置，默认是3秒）
@@ -257,7 +257,7 @@ function QuickLogin(){
     	url: "<%=request.getContextPath()%>/QuickLogin", 
     	type:'POST',
     	 success: function(result){
-    		 if(result.code=="1"){
+    		 if(result.code!="0"){
     			 layer.Msg(result.msg, {
 	        		  icon: 5,
 	        		  time: 2000 //2秒关闭（如果不配置，默认是3秒）

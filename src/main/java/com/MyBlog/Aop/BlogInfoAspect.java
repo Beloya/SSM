@@ -53,7 +53,7 @@ public class BlogInfoAspect {
 	    	 Calendar calendar=Calendar.getInstance();
 	    	 request=((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 	    	 if(inited&&request.getAttribute("BlogInfo")==null){
-	    		 request.getServletContext().setAttribute("BlogInfo", BlogInfoSignle.blogInfoSignle.getblog());
+	    		 request.getServletContext().setAttribute("BlogInfo", BlogInfoSignle.blogInfoSignle.getBlog());
 	    		 request.getServletContext().setAttribute("MenuLink",  BlogInfoSignle.blogInfoSignle.getMenulink());
 	    		 request.getServletContext().setAttribute("CommunionLink",  BlogInfoSignle.blogInfoSignle.getCommunionlink());
 	    		 request.getServletContext().setAttribute("FoundLink",  BlogInfoSignle.blogInfoSignle.getFoundlink());

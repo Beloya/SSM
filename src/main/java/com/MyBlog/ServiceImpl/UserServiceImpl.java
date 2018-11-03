@@ -50,19 +50,19 @@ public class UserServiceImpl implements userService{
 	}
 	
 	public Object Login(Users user, String RememberMe) {
-		 ObjectMapper mapper = new ObjectMapper();
-		  Map<String, String> LoginMsg=new HashMap();
-	        Subject subject = SecurityUtils.getSubject();   
-	        Session session = subject.getSession();       
-	   	 String passWordmd5 = new Md5Hash(user.getPassWord()).toString();//加密
-	        UsernamePasswordToken usernamePasswordToken = new 
-	        		
-	                UsernamePasswordToken(user.getUserName(),passWordmd5);
+		 Map<String, String> LoginMsg=null;
+		  Subject subject = null;
+		  String passWordmd5=null;
+		    UsernamePasswordToken usernamePasswordToken=null;
 	        try {
+	        	  LoginMsg=new HashMap<String, String>();
+	   	     subject = SecurityUtils.getSubject();   
+     
+	   	   	 passWordmd5 = new Md5Hash(user.getPassWord()).toString();//加密
+	   	      usernamePasswordToken = new     UsernamePasswordToken(user.getUserName(),passWordmd5);
 	        	if(RememberMe.equals("on")) {
 	        	usernamePasswordToken.setRememberMe(true);
 	        	}
-	       
 	            subject.login(usernamePasswordToken);
 	            LoginMsg.put("code","0");
 	            LoginMsg.put("msg","登陆成功");
@@ -85,7 +85,6 @@ public class UserServiceImpl implements userService{
 	        catch (Exception e) {
 	         
 	            e.printStackTrace();
-	            System.out.println("登陆异常");
 	            LoginMsg.put("code","1");
 	            LoginMsg.put("msg","系统错误");
 	
@@ -94,7 +93,11 @@ public class UserServiceImpl implements userService{
 	}
 	
 	public Object CreateUser(Users user) {
-		  Map<String, String> Msg=new HashMap();
+		  Map<String, String> Msg=null;
+		try {
+			
+		
+		   Msg=new HashMap<String, String>();
 			TimeZone tz = TimeZone.getTimeZone("GMT+8");
 			TimeZone.setDefault(tz);
 		 String passWordmd5 = new Md5Hash(user.getPassWord()).toString();
@@ -116,6 +119,11 @@ public class UserServiceImpl implements userService{
          subject.login(usernamePasswordToken);
          
          Login(user, "off");
+		} catch (Exception e) {
+			e.printStackTrace();
+			Msg.put("code","1");
+			Msg.put("msg","系统错误");
+		}
 		 return Msg;
 	}
 

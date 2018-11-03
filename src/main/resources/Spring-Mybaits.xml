@@ -47,9 +47,9 @@
 		<property name="minIdle" value="${minIdle}"></property>
 		<!-- 获取连接最大等待时间 -->
 		<property name="maxWait" value="${maxWait}"></property>
-		<property name="removeAbandonedTimeout" value="300" />
-		<property name="timeBetweenEvictionRunsMillis" value="300000" />  
-		<property name="minEvictableIdleTimeMillis" value="320000" /> 
+		<property name="removeAbandonedTimeout" value="240" />
+		<property name="timeBetweenEvictionRunsMillis" value="240000" />  
+		<property name="minEvictableIdleTimeMillis" value="1800000" /> 
 	
 		<!-- 验证数据库连接的有效性 -->
 		     <property name="validationQuery" value="SELECT 1" />
@@ -119,7 +119,7 @@
 	    <bean id="jedisConnectionFactory"
           class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" >
         <constructor-arg name="sentinelConfig" ref="redisSentinelConfiguration"></constructor-arg>
-        <constructor-arg name="poolConfig" ref="poolConfig"></constructor-arg>
+        <constructor-arg name="poolConfig" ref="poolConfig"></constructor-arg> 
         <property name="password" value="${redis.pass}"></property>
     </bean>
 

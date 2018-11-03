@@ -47,14 +47,18 @@ public class IndexController {
 
 	@RequestMapping("/index")
 	public String IndexSee(Integer page,HttpServletRequest request,Model model){
+		long start,end=0;
+		start=System.currentTimeMillis();
+		
 		Pager pager=null;
 		pager=new Pager();
 		pager.setPage(1);
 		if(page!=null)
 			pager.setPage(page);
 		pager.setSize(5);
-	 List<Archives> archives=aservice.FindArchives(0,pager);
-
+	 List<Archives> archives=aservice.IndexShow(0,pager);
+end=System.currentTimeMillis();
+System.out.println("耗费时间:"+(end-start));
 		model.addAttribute("archives", archives);
 		model.addAttribute("pager", pager);
 		return "/jsp/index";
@@ -65,7 +69,7 @@ public class IndexController {
 		Pager pager=new Pager();
 		pager.setPage(1);
 		pager.setSize(2);
-	 List<Archives> archives=aservice.FindArchives(0,pager);
+	 List<Archives> archives=aservice.IndexShow(0,pager);
 	PageHelper.startPage(1, 10);
 	List<type> types=tservice.FindAll();
 	long typecount= ((Page) types).getTotal();
@@ -116,7 +120,7 @@ public class IndexController {
 		if(page!=null)
 			pager.setPage(page);
 		pager.setSize(12);
-		 List<Archives> archives=aservice.FindArchives(0,pager);
+		 List<Archives> archives=aservice.IndexShow(0,pager);
 	long archivescount= pager.getTotal();
 	PageHelper.startPage(pager.getPage(), pager.getSize());
 	List<type> types=tservice.FindAll();

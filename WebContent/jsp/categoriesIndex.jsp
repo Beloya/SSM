@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" href="<%=request.getContextPath()%>/css/main.css"
+<link rel="stylesheet" href="https://tuxiang-1251384861.cos.ap-guangzhou.myqcloud.com/css/main.css"
 	media="all" />
 <link rel="stylesheet"
 	href="<%=request.getContextPath()%>/css/SigmarOne.woff2"
@@ -214,10 +214,10 @@ line-height:3;
 		</div>
 	
 			<script src="js/q.js"></script>
-	<script src='js/CSSPlugin.min.js'></script>
-	<script src='js/EasePack.min.js'></script>
-	<script src='js/TweenLite.min.js'></script>
-	<script src="js/index.js"></script>
+	<script src='<%=request.getContextPath() %>/js/CSSPlugin.min.js'></script>
+	<script src='<%=request.getContextPath() %>/js/EasePack.min.js'></script>
+	<script src='<%=request.getContextPath() %>/js/TweenLite.min.js'></script>
+	<script src="<%=request.getContextPath() %>/js/index.js"></script>
 		
 		<script type="text/javascript">
 		$(".layui-nav-item").removeClass("layui-this");

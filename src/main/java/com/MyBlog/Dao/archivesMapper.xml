@@ -74,7 +74,7 @@
      <select id="FindById" parameterType="int" resultMap="archivesFILED">
          select * from archives a left join type t on t.TID=a.type  left join archivesvisibility av on a.VID=av.ID where a.AID=#{AID} and a.Status=0
     </select>
-         <select id="FindByParam" parameterType="archives" resultMap="archivesFILED">
+         <select id="FindByParam" parameterType="Archives" resultMap="archivesFILED">
          select * from archives a left join type t on t.TID=a.type  left join archivesvisibility av on a.VID=av.ID 
         <where> 
          <if test="type!=null">
@@ -89,7 +89,12 @@
          <if test="status!=null">
           and a.Status=#{status}
          </if>
+             <if test="vid!=null">
+          and av.ID=#{vid}
+         </if>
+         
          </where>
+         order by a.CREATED_TIME desc
     </select>
     
     <select id="getaflag" parameterType="int" resultType="archivesFlag">

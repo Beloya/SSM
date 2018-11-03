@@ -20,19 +20,19 @@
 	<meta name="referrer" content="never">
 	
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<link rel="stylesheet" href="http://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
 <link rel="stylesheet"
 	href="<%=request.getContextPath() %>/plugins/layui/css/layui.css"
 	media="all" />
 <link rel="stylesheet"
 	href="<%=request.getContextPath() %>/css/Nav.css"
 	media="all" />
-	<link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-	<link rel="stylesheet" href="https://libs.cdnjs.net/fakeLoader.js/1.1.0/fakeLoader.css">
+
+	<link rel="stylesheet" href="http://cdn.staticfile.org/fakeLoader.js/1.1.0/fakeLoader.css">
 <style type="text/css">
 .Top{
-background-image: url("<%=request.getContextPath()%>/images/${applicationScope.BlogInfo.headerskin}");
-
+background-image: url("${applicationScope.BlogInfo.headerskin}");                       
+  
 	z-index:10;
 }
 .layui-nav  .layui-nav-more{
@@ -250,7 +250,7 @@ if(request.getSession()!=null&&request.getSession().getAttribute("user")!=null){
 <div class="search_container">
   <input id="Search_In" name="q" type="text" placeholder="搜索">
     <input name="ie" value="UTF-8" type="hidden" />  
-    <input name="sitesearch" value="iyouju.club" type="hidden" />  
+    <input name="sitesearch" value="iyo.red" type="hidden" />  
   <div class="search"></div>
 </div>
 </form>  
@@ -299,12 +299,12 @@ if(request.getSession()!=null&&request.getSession().getAttribute("user")!=null){
 <div class="fakeloader" style=" ">
 </div>
 <script
-			src="<%=request.getContextPath() %>/plugins/jQuery/jquery-2.2.3.min.js"></script>
+			src="https://cdn.staticfile.org/jquery/2.2.3/jquery.min.js"></script>
 				<script
-			src="<%=request.getContextPath() %>/plugins/bootstrap/js/bootstrap.min.js"></script>
+			src="https://cdn.staticfile.org/twitter-bootstrap/4.1.3/js/bootstrap.min.js"></script>
 <script src="<%=request.getContextPath() %>/plugins/layui/layui.js"></script>
-<script src="<%=request.getContextPath() %>/js/jquery.bootstrap-autohidingnavbar.min.js"></script>
-<script src="https://libs.cdnjs.net/fakeLoader.js/1.1.0/fakeLoader.min.js"></script>
+<script src="http://cdn.staticfile.org/bootstrap-autohidingnavbar/4.0.0/jquery.bootstrap-autohidingnavbar.min.js"></script>
+<script src="http://cdn.staticfile.org/fakeLoader.js/1.1.0/fakeLoader.min.js"></script>
 <script type="text/javascript">
 
 $(".fakeloader").fakeLoader({
@@ -358,7 +358,9 @@ function LogOut(){
 				location.reload();
 			}
 			else{
-				console.log("错误");
+				 layer.alert(JSON.stringify(result), {
+	       		      title: '返回信息'
+	       		    });
 			}
 		}
 		
@@ -373,7 +375,9 @@ function userChange(){
 				location.href="<%=request.getContextPath()%>/login";
 			}
 			else{
-				console.log("错误");
+				 layer.alert(JSON.stringify(result), {
+	       		      title: '返回信息'
+	       		    });
 			}
 		}
 		
@@ -386,7 +390,7 @@ function QuickLogin(){
     	url: "<%=request.getContextPath()%>/QuickLogin", 
     	type:'POST',
     	 success: function(result){
-    		 if(result.code=="1"){
+    		 if(result.code!="0"){
             	 layer.alert(JSON.stringify(result), {
        		      title: '返回信息'
        		    });
