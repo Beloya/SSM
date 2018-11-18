@@ -102,7 +102,7 @@ line-height:3;
 												<c:choose>
 
 													<c:when test="${pager.page<=3}">
-														<c:forEach var="i" begin="1" end="3">
+														<c:forEach var="i" begin="1" end="${pager.pages-1 }">
 															<c:set var="page" value="${page+1 }"></c:set>
 															<c:if test="${page==pager.page }">
 														<a class="page-number current" href="<%=request.getContextPath() %>/time_axis_${page }">${page}</a>
@@ -117,8 +117,7 @@ line-height:3;
 																<a class="page-numbers"
 																	href="<%=request.getContextPath() %>/time_axis_${pager.pages}">
 																	${pager.pages }</a>
-																<a class="page-numbers"
-																	href="<%=request.getContextPath() %>/time_axis_${pager.pages}">尾页</a>
+															
 															</c:if>
 														</c:forEach>
 

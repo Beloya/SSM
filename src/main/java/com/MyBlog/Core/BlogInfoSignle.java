@@ -5,12 +5,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import javax.transaction.Synchronization;
 
 import com.MyBlog.entity.Blog;
 import com.MyBlog.entity.Syslink;
+import com.MyBlog.Socket.ChatServic;
 import com.MyBlog.entity.Archives;
+/**
+ * 
+ * @author Beloya
+ * 博客初始数据内容
+ */
 
 public enum  BlogInfoSignle {
+	//博客静态实例
 blogInfoSignle;
 private   Blog blog=null;
 private  Syslink syslink=null;
@@ -19,6 +29,7 @@ private  List<Syslink> communionlink=null;
 private   HashMap<String,Syslink> foundlink=null;
 private   ConcurrentHashMap<Integer, Integer> readcountmap=new ConcurrentHashMap<Integer, Integer>();
 private   boolean inited=false;
+
 private BlogInfoSignle(){
 
 }
@@ -35,6 +46,8 @@ public void init(Blog blog,List<Syslink> syslinks) {
 		case 3:
 			communionlink.add(syslink);
 			break;
+			default:
+				break;
 		}
 		foundlink.put(syslink.getName(), syslink);
 	}

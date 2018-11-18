@@ -251,7 +251,7 @@ word-break:break-all;
 												<c:choose>
 
 													<c:when test="${pager.page<=3}">
-														<c:forEach var="i" begin="1" end="3">
+														<c:forEach var="i" begin="1" end="${pager.pages-1 }">
 															<c:set var="page" value="${page+1 }"></c:set>
 															<c:if test="${page==pager.page }">
 														<a class="page-number current" href="/${page }">${page}</a>
@@ -266,8 +266,7 @@ word-break:break-all;
 																<a class="page-numbers"
 																	href="<%=request.getContextPath() %>/${pager.pages}">
 																	${pager.pages }</a>
-																<a class="page-numbers"
-																	href="<%=request.getContextPath() %>/${pager.pages}">尾页</a>
+												
 															</c:if>
 														</c:forEach>
 

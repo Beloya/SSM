@@ -63,6 +63,22 @@ public class StringUtils extends org.apache.commons.lang.StringUtils{
 		return val.toLowerCase();
 	}
 	/**
+	 * 判断字符是否含有非法字符
+	 * @param str 字符内容
+	 * @return if has IllegalCharacter is true
+	 */
+	
+	
+	public static boolean isIllegalCharacter(String str) {
+		String[] SqlStr2 = {"*","'","-",";","or","+","//","/","%","#","=","?","<",">","{","}","\\"};//特殊字符
+		   for (int i = 0; i < SqlStr2.length; i++) {
+		         if (str.indexOf(SqlStr2[i]) >= 0) {
+		            return true;
+		         }
+		     }
+		   return false;
+	}
+	/**
 	 * 一次性判断多个或单个对象不为空。
 	 * @param objects
      * @author zhou-baicheng
@@ -457,7 +473,8 @@ public class StringUtils extends org.apache.commons.lang.StringUtils{
                         temp.delete(0, temp.length()); // 清空temp  
                     }else { // 标签的前部分，如<div>  
                         last = current;  
-                        while(i < str.length() && current != ' ' && current != ' ' && current != '>') {  
+                        //&& current != ' ' 
+                        while(i < str.length() && current != ' ' && current != '>') {  
                             temp.append(current);  
                             last = current;  
                             current = str.charAt(i++);  
@@ -504,6 +521,7 @@ public class StringUtils extends org.apache.commons.lang.StringUtils{
 		}
 		return list;
 	}
+	
 	/**
 	 * 把数组转换成set
 	 * @param array

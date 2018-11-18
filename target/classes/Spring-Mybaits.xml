@@ -5,6 +5,7 @@
 	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:cache="http://www.springframework.org/schema/cache"
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans  
 		http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
 		http://www.springframework.org/schema/context
@@ -14,11 +15,16 @@
 		 http://www.springframework.org/schema/cache
         http://www.springframework.org/schema/cache/spring-cache.xsd
          http://www.springframework.org/schema/aop
-                     http://www.springframework.org/schema/aop/spring-aop.xsd ">
+                     http://www.springframework.org/schema/aop/spring-aop.xsd 
+                     http://www.springframework.org/schema/websocket  
+       http://www.springframework.org/schema/websocket/spring-websocket-4.0.xsd">
 
 	<context:component-scan base-package="com.MyBlog.Service" />
 	 <context:component-scan base-package="com.MyBlog.ServiceImpl"/> 
 	  <context:component-scan base-package="com.MyBlog.Core"/> 
+
+	  <context:component-scan base-package="com.MyBlog.Socket" />
+
 	<!-- 数据配置 -->
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">

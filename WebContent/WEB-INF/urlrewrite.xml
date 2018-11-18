@@ -17,6 +17,9 @@
         <to>/jsp/500.jsp</to>
 		
 </rule>
+
+
+
 <rule>
 
         <from>/3DMusic</from>
@@ -55,13 +58,16 @@
     <to>/AllSay.do?page=$1</to>  
 </rule>  
 	<rule>
+	
 		<note>
 			将所有.do文件映射为无后缀
 		</note>
-		<from>^/([_a-zA-Z]+[_0-9a-zA-Z-/]*[_0-9a-zA-Z]+)$</from>
+	
+		<from>^/(?!websocket)([_a-zA-Z]+[_0-9a-zA-Z-/]*[_0-9a-zA-Z]+)$</from>
 		<to type="forward">/$1.do</to>
 
 	</rule>
+
 	<!-- rule>
 		<note>
 			将所有.html文件映射为.shtml

@@ -25,6 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.MyBlog.Dao.UsersMapper;
 import com.MyBlog.Service.userService;
 import com.MyBlog.entity.Users;
+import com.MyBlog.utils.StringUtils;
+import com.github.pagehelper.util.StringUtil;
 
 @Service
 public class UserServiceImpl implements userService{
@@ -95,7 +97,11 @@ public class UserServiceImpl implements userService{
 	public Object CreateUser(Users user) {
 		  Map<String, String> Msg=null;
 		try {
-			
+			if(StringUtils.isIllegalCharacter(user.getUserName())) {
+				 Msg.put("code","500");
+		         Msg.put("msg","用户名含有非法字符");
+		         return Msg;
+			}
 		
 		   Msg=new HashMap<String, String>();
 			TimeZone tz = TimeZone.getTimeZone("GMT+8");

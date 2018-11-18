@@ -52,7 +52,7 @@ public class BlogInfoAspect {
 	    			boolean	inited=BlogInfoSignle.blogInfoSignle.isInited();
 	    	 Calendar calendar=Calendar.getInstance();
 	    	 request=((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-	    	 if(inited&&request.getAttribute("BlogInfo")==null){
+	    	 if(request!=null&&inited&&request.getAttribute("BlogInfo")==null){
 	    		 request.getServletContext().setAttribute("BlogInfo", BlogInfoSignle.blogInfoSignle.getBlog());
 	    		 request.getServletContext().setAttribute("MenuLink",  BlogInfoSignle.blogInfoSignle.getMenulink());
 	    		 request.getServletContext().setAttribute("CommunionLink",  BlogInfoSignle.blogInfoSignle.getCommunionlink());
@@ -70,11 +70,11 @@ public class BlogInfoAspect {
 	    //访问命名切入点来应用后置通知  
 	 //  @AfterReturning("execution(* com.MyBlog.Controller.*.New*(..))")  
 	    public void afterReturn(JoinPoint call) {  
-	    
+	    /*
 	    	
 		   HttpServletRequest request1 = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 		   String className = call.getTarget().getClass().getName();
-	        String methodName = call.getSignature().getName();
+	        String methodName = call.getSignature().getName();*/
 
 	    }  
 	    //应用最终通知  

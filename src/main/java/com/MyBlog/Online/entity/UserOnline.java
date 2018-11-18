@@ -22,7 +22,7 @@ public class UserOnline  extends Users implements Serializable{
 		//Session timeout
 		private long timeout;
 		//最后一次交互时间
-				private Date lastlogintime;
+		private Date lasttime;
 		//session 是否踢出
 		private boolean sessionStatus = Boolean.TRUE;
 		
@@ -68,13 +68,15 @@ public class UserOnline  extends Users implements Serializable{
 			this.sessionStatus = sessionStatus;
 		}
 
-		public Date getLastlogintime() {
-			return lastlogintime;
+		public Date getLasttime() {
+			return lasttime;
 		}
 
-		public void setLastlogintime(Date lastlogintime) {
-			this.lastlogintime = lastlogintime;
+		public void setLasttime(Date lasttime) {
+			this.lasttime = lasttime;
 		}
+
+	
 	
 	
 }
