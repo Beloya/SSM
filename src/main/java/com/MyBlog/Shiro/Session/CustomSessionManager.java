@@ -11,7 +11,7 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.support.DefaultSubjectContext;
 
-import com.MyBlog.Logger.MyLogger;
+import com.MyBlog.Logger.LoggerUtil;
 import com.MyBlog.Online.entity.UserOnline;
 import com.MyBlog.Shiro.CustomShiroSessionDAO;
 import com.MyBlog.entity.Users;
@@ -160,7 +160,7 @@ public class CustomSessionManager {
 			map.put("sessionStatusText", status?"踢出":"激活");
 			map.put("sessionStatusTextTd", status?"有效":"已踢出");
 		} catch (Exception e) {
-			MyLogger.fmtError(getClass(), e, "改变Session状态错误，sessionId[%s]", sessionIds);
+			LoggerUtil.fmtError(getClass(), e, "改变Session状态错误，sessionId[%s]", sessionIds);
 			map.put("status", 500);
 			map.put("message", "改变失败，有可能Session不存在，请刷新再试！");
 		}

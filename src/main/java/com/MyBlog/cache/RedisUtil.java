@@ -15,7 +15,7 @@ import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.jedis.JedisConnection;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 
-import com.MyBlog.Logger.MyLogger;
+import com.MyBlog.Logger.LoggerUtil;
 import com.MyBlog.Shiro.Session.JedisShiroSessionRepository;
 import com.MyBlog.utils.SerializeUtil;
 
@@ -31,7 +31,7 @@ public class RedisUtil {
 	
 	    // 计数器的过期时间默认2天
 	    private  int countExpireTime = 1*24*3600; 
-	 //   private  Logger logger = Logger.getLogger(RedisUtil.class);
+	    private  Logger logger = Logger.getLogger(RedisUtil.class);
 		private int expire;
 	    public static  JedisConnection connection = null;
 	    public static JedisConnectionFactory jedisConnectionFactory;
@@ -48,7 +48,7 @@ public class RedisUtil {
 		        
 		         
 	        } catch(Exception e){
-	        	MyLogger.error(this.getClass(),"获取自定义连接池异常",e);
+	        	logger.error(e);
 	        	recycleJedis(jedis);
 	        }
 	        
@@ -66,7 +66,7 @@ public class RedisUtil {
 		        
 		         
 	        } catch(Exception e){
-	        	MyLogger.error(this.getClass(),"获取选择缓存库连接异常",e);
+	        	logger.error(e);
 	        	recycleJedis(jedis);
 	        }
 	        
@@ -80,7 +80,7 @@ public class RedisUtil {
 	                jedis.close();
 	               // connection.close();
 	            } catch(Exception e){
-	            	MyLogger.error(this.getClass(),"关闭连接异常",e);
+	            	logger.error(e);
 	            
 	            	//jedis.close();
 	            	
@@ -101,7 +101,7 @@ public class RedisUtil {
 	        jedis.zadd(key, score, value);
 	        }
 	        catch (Exception e) {
-	        	MyLogger.error(getClass(), "", e);
+			logger.error(e);
 			}
 	        finally {
 	        	recycleJedis(jedis);
@@ -122,7 +122,7 @@ public class RedisUtil {
 	        return set;
 	        }
 	        catch (Exception e) {
-	        	MyLogger.error(getClass(), "", e);
+	        	logger.error(e);
 			}
 	        finally {
 	        	recycleJedis(jedis);
@@ -146,7 +146,7 @@ public class RedisUtil {
 	        return set;
 	        }
 	        catch (Exception e) {
-	        	MyLogger.error(getClass(), "", e);
+	        	logger.error(e);
 			}
 	        finally {
 	        	recycleJedis(jedis);
@@ -170,7 +170,7 @@ public class RedisUtil {
 	        return s;
 	        }
 	        catch (Exception e) {
-	        	MyLogger.error(getClass(), "", e);
+	         	logger.error(e);
 			}
 	        finally {
 	        	recycleJedis(jedis);
@@ -193,7 +193,7 @@ public class RedisUtil {
 	        return s;
 	        }
 	        catch (Exception e) {
-	        	MyLogger.error(getClass(), "", e);
+	         	logger.error(e);
 			}
 	        finally {
 	        	System.out.println("RedisDel:key="+SerializeUtil.deserialize(key)+" value="+SerializeUtil.deserialize(fields));
@@ -225,7 +225,7 @@ public class RedisUtil {
 	        return s;
 	        }
 	        catch (Exception e) {
-	        	MyLogger.error(getClass(), "", e);
+	         	logger.error(e);
 			}
 	        finally {
 	        	
@@ -250,7 +250,7 @@ public class RedisUtil {
 	        return s;
 	        }
 	        catch (Exception e) {
-	        	MyLogger.error(getClass(), "", e);
+	         	logger.error(e);
 			}
 	        finally {
 	        	recycleJedis(jedis);
@@ -266,7 +266,7 @@ public class RedisUtil {
 	        return s;
 	        }
 	        catch (Exception e) {
-	        	MyLogger.error(getClass(), "", e);
+	         	logger.error(e);
 			}
 	        finally {
 	        
@@ -284,7 +284,7 @@ public class RedisUtil {
 	        return s;
 	        }
 	        catch (Exception e) {
-	        	MyLogger.error(getClass(), "", e);
+	         	logger.error(e);
 			}
 	        finally {
 	        	recycleJedis(jedis);
@@ -308,7 +308,7 @@ public class RedisUtil {
 	        return count;
 	        }
 	        catch (Exception e) {
-	        	MyLogger.error(getClass(), "", e);
+	        	logger.error(e);
 			}
 	        finally {
 	        	recycleJedis(jedis);
@@ -326,11 +326,11 @@ public class RedisUtil {
 	        try {
 	        	jedis=getJedis(dbIndex);
 	        long s = jedis.del(key);
-	        MyLogger.fmtDebug(getClass(), "删除Session结果：%s" , s);
+	        LoggerUtil.fmtDebug(getClass(), "删除Session结果：%s" , s);
 	        return s;
 	        }
 	        catch (Exception e) {
-	        	MyLogger.error(getClass(), "", e);
+	        	logger.error(e);
 			}
 	        finally {
 	        	recycleJedis(jedis);
@@ -511,7 +511,7 @@ public class RedisUtil {
 		        try {
 		        	jedis=getJedis(dbIndex);
 		        	 Long result = jedis.expire(key, 0);
-	            MyLogger.fmtDebug(getClass(), "删除Session结果：%s" , result);
+	            LoggerUtil.fmtDebug(getClass(), "删除Session结果：%s" , result);
 	            System.out.println("删除Session结果："+result);
 	        } finally {
 	        	recycleJedis(jedis);

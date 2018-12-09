@@ -8,7 +8,7 @@ import javax.servlet.ServletResponse;
 
 import org.apache.shiro.web.filter.AccessControlFilter;
 
-import com.MyBlog.Logger.MyLogger;
+import com.MyBlog.Logger.LoggerUtil;
 import com.MyBlog.Shiro.Token.TokenManager;
 import com.MyBlog.entity.Users;
 import com.MyBlog.utils.ShiroFilterUtils;
@@ -31,7 +31,7 @@ Users token = TokenManager.getToken();
         } 
 		if (ShiroFilterUtils.isAjax(request)) {// ajax请求
 			Map<String,String> resultMap = new HashMap<String, String>();
-			MyLogger.debug(getClass(), "当前用户没有登录，并且是Ajax请求！");
+			LoggerUtil.debug(getClass(), "当前用户没有登录，并且是Ajax请求！");
 			resultMap.put("code", "300");
 			resultMap.put("msg", "\u5F53\u524D\u7528\u6237\u6CA1\u6709\u767B\u5F55\uFF01");//当前用户没有登录！
 			ShiroFilterUtils.out(response, resultMap);

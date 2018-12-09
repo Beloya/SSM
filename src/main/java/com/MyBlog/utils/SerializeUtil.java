@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import com.MyBlog.Logger.MyLogger;
+import com.MyBlog.Logger.LoggerUtil;
 
 import io.protostuff.LinkedBuffer;
 import io.protostuff.ProtobufIOUtil;
@@ -56,7 +56,7 @@ public class SerializeUtil {
 	                rv = is.readObject();
 	            }
 	        } catch (Exception e) {
-	        	 MyLogger.fmtError(CLAZZ,e, "serialize error %s", in);
+	        	 LoggerUtil.fmtError(CLAZZ,e, "serialize error %s", in);
 	        } finally {
 	            close(is);
 	            close(bis);
@@ -69,7 +69,7 @@ public class SerializeUtil {
 	            try {
 	                closeable.close();
 	            } catch (IOException e) {
-	            	 MyLogger.fmtError(CLAZZ, "close stream error");
+	            	 LoggerUtil.fmtError(CLAZZ, "close stream error");
 	            }
 	    }
 	    public static <T> byte[]  ProtostuffSerializer(Object o){

@@ -19,7 +19,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import com.MyBlog.Core.BlogInfoSignle;
 import com.MyBlog.Dao.archivesFlagMapper;
 import com.MyBlog.Dao.archivesMapper;
-import com.MyBlog.Logger.MyLogger;
+import com.MyBlog.Logger.LoggerUtil;
 import com.MyBlog.Service.archivesService;
 import com.MyBlog.Service.blogService;
 import com.MyBlog.entity.Blog;
@@ -105,7 +105,7 @@ public class archivesServiceImpl implements archivesService{
 			a.setReadcount(e.getValue());
 			amapper.readCountUp(a);
 			BlogInfoSignle.blogInfoSignle.getReadcountmap().remove(e.getKey());
-			MyLogger.INFO(getClass(), "更新阅读数：+"+a.getReadcount());
+			LoggerUtil.INFO(getClass(), "更新阅读数：+"+a.getReadcount());
 		}
 	}
 

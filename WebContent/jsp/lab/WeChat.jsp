@@ -98,7 +98,7 @@ else{
 			</div>
 			<div class="office_text">
 				<ul id="user_list" class="user_list">
-					<li name="LOL" class="user_active">
+					<li class="user_active">
 						<div class="user_head"><img src="images/head/9.jpg"/></div>
 						<div class="user_text">
 							<p class="user_name">杀猪群</p>
@@ -338,18 +338,16 @@ var SYS_PEPOLENUM_CODE="#SPC#";
 var SYS_ERR_CODE="#SEC#";
 userName='<%=userName%>'.trim();
 userImg='<%=userImg %>'.trim();
-var MsgTo='';
 
 
 userImg=window.btoa(userImg);
 userSession=window.btoa('<%=request.getSession().getId()%>');
 var websocket = null;
 if ('WebSocket' in window) { 
-    websocket = new WebSocket("ws://127.0.0.1:8080/<%=request.getContextPath()%>/websocket/"+userName.trim()+"/"+userSession+"/"+userImg);
+    websocket = new WebSocket("ws://127.0.0.1:8080/MyBlog1/websocket/"+userName.trim()+"/"+userSession+"/"+userImg);
 } 
 else {
-	 layer.alert('对不起！你的浏览器不支持webSocket', {icon: 1});
-  
+    alert("对不起！你的浏览器不支持webSocket");
 }
 websocket.onerror = function () {
 
@@ -375,7 +373,7 @@ websocket.onmessage = function (event) {
 			if(userName.trim()!=myUserName){
 			var myUserImg=$("#"+myUserName).attr("head");
 			var mycontext=result.substring(index+1);
-$("#chatbox").append('<li class="other"><img src="<%=request.getContextPath()%>'+myUserImg+'" title="'+myUserName+'"><span>'+mycontext+'</span></li>');
+$("#chatbox").append('<li class="other"><img src="<%=request.getContextPath()%>/'+myUserImg+'" title="'+myUserName+'"><span>'+mycontext+'</span></li>');
 			}
 	
 		break;
@@ -386,7 +384,7 @@ $("#chatbox").append('<li class="other"><img src="<%=request.getContextPath()%>'
 			var user=users[i].split("=");
 			var myUserName=user[0]; 
 			var myUserImg=user[1];
-$("#user_list").append('<li id="'+myUserName.trim()+'" name="users" head="'+myUserImg+'"><div class="user_head"><img src="<%=request.getContextPath()%>'+myUserImg+'"/></div><div class="user_text"><p class="user_name">'+myUserName+'</p><p class="user_message">[恭喜发财]</p></div><div class="user_time"></div></li>');
+$("#user_list").append('<li id="'+myUserName.trim()+'" head="'+myUserImg+'"><div class="user_head"><img src="<%=request.getContextPath()%>'+myUserImg+'"/></div><div class="user_text"><p class="user_name">'+myUserName+'</p><p class="user_message">[恭喜发财]</p></div><div class="user_time"></div></li>');
 			console.log(myUserName);
 			}
 
@@ -398,7 +396,7 @@ $("#user_list").append('<li id="'+myUserName.trim()+'" name="users" head="'+myUs
 			var user=users[i].split("=");
 			var myUserName=user[0]; 
 			var myUserImg=user[1];
-$("#user_list").append('<li id="'+myUserName.trim()+'" name="users" head="'+myUserImg+'"><div class="user_head"><img src="<%=request.getContextPath()%>'+myUserImg+'"/></div><div class="user_text"><p class="user_name">'+myUserName+'</p><p class="user_message">[恭喜发财]</p></div><div class="user_time"></div></li>');
+$("#user_list").append('<li id="'+myUserName.trim()+'" head="'+myUserImg+'"><div class="user_head"><img src="<%=request.getContextPath()%>'+myUserImg+'"/></div><div class="user_text"><p class="user_name">'+myUserName+'</p><p class="user_message">[恭喜发财]</p></div><div class="user_time"></div></li>');
 			
 			}
 		break;
@@ -490,7 +488,7 @@ window.onload=function(){
 				alert('不能发送空消息');
 			}else{
 				send(MSG_CODE+text.value);
-				chat.innerHTML += '<li class="me"><img src="<%=request.getContextPath()%><%=userImg %>"><span>'+text.value+'</span></li>';
+				chat.innerHTML += '<li class="me"><img src="<%=request.getContextPath()%>/<%=userImg %>"><span>'+text.value+'</span></li>';
 				text.value = '';
 				chat.scrollTop=chat.scrollHeight;
 				talk.style.background="#fff";

@@ -17,7 +17,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import com.MyBlog.Dao.archivesMapper;
-import com.MyBlog.Logger.MyLogger;
+import com.MyBlog.Logger.LoggerUtil;
 import com.MyBlog.Service.SyslinkService;
 import com.MyBlog.Service.archivesService;
 import com.MyBlog.Service.blogService;
@@ -45,7 +45,7 @@ public class BlogInfoLoad  implements ApplicationListener<ContextRefreshedEvent>
    		 blog= blogService.FindByUserName("Beloya");
    		 syslinks=syslinkservice.FindBase();
    		 BlogInfoSignle.blogInfoSignle.init(blog, syslinks); 	
-   		 MyLogger.INFO(BlogInfoLoad.class, "初始化信息完成");
+   		 LoggerUtil.INFO(BlogInfoLoad.class, "初始化信息完成");
    	 }
 	}
 
@@ -56,7 +56,7 @@ public class BlogInfoLoad  implements ApplicationListener<ContextRefreshedEvent>
    			boolean	inited=false;
    			inited=BlogInfoSignle.blogInfoSignle.isInited();
    	 if(!inited){
-   		 MyLogger.INFO(BlogInfoLoad.class, "初始化信息完成");
+   		 LoggerUtil.INFO(BlogInfoLoad.class, "初始化信息完成");
    		 blog= blogService.FindByUserName("Beloya");
    		 syslinks=syslinkservice.FindBase();
    		 BlogInfoSignle.blogInfoSignle.init(blog, syslinks); 

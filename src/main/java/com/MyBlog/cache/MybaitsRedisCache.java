@@ -13,7 +13,7 @@ import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
-import com.MyBlog.Logger.MyLogger;
+import com.MyBlog.Logger.LoggerUtil;
 import com.MyBlog.utils.SerializeUtil;
 
 
@@ -23,7 +23,7 @@ import redis.clients.jedis.exceptions.JedisConnectionException;
 
 public class MybaitsRedisCache implements Cache{
 
-	//   private static final Logger logger = LoggerFactory.getLogger(MybaitsRedisCache.class);
+	   private static final Logger logger = LoggerFactory.getLogger(MybaitsRedisCache.class);
 	    public static JedisConnectionFactory jedisConnectionFactory;
        private static String MybaitsKey;
        JedisConnection connection = null;
@@ -38,7 +38,7 @@ public class MybaitsRedisCache implements Cache{
 	        if (id == null) {
 	            throw new IllegalArgumentException("Cache instances require an ID");
 	        }
-	        MyLogger.debug(getClass(),("MybatisRedisCache:id=" + id));
+	        logger.debug("MybatisRedisCache:id=" + id);
 	        this.id = id;
 	    }
 	    // 从连接池获取redis连接
@@ -54,7 +54,6 @@ public class MybaitsRedisCache implements Cache{
 	        } catch(Exception e){
 	       
 	        	recycleJedis(jedis);
-	      
 	        }
 	        
 	        return jedis;
@@ -113,14 +112,14 @@ public class MybaitsRedisCache implements Cache{
 	         //   connection.select(DB_Index);
 	        	byte[] b=jedis.hget(SerializeUtil.serialize(MybaitsKey),SerializeUtil.serialize(key));
 	        	if(b==null) {
-	        		MyLogger.INFO(getClass(), "缓存未命中,当前命中率为:"+(succescache/++readcachecount));
+	        		LoggerUtil.INFO(getClass(), "缓存未命中,当前命中率为:"+(succescache/readcachecount));
 	        		
 	        		return result;
 	        	}
 	            result = SerializeUtil.unserialize(b);
-	
+	  succescache+=1;
 
-	  MyLogger.INFO(getClass(), "缓存命中,当前命中率为:"+(++succescache/++readcachecount));
+	  LoggerUtil.INFO(getClass(), "缓存命中,当前命中率为:"+(succescache/readcachecount));
 	        }
 	        catch (JedisConnectionException e)
 	        {
@@ -129,7 +128,8 @@ public class MybaitsRedisCache implements Cache{
 	        finally
 	        {
 	        	end=System.currentTimeMillis();
-	        	  MyLogger.INFO(getClass(), "读取缓存耗费时间:"+(end-start));
+	        	  LoggerUtil.INFO(getClass(), "读取缓存耗费时间:"+(end-start));
+	        	readcachecount+=1;
 	        	recycleJedis(jedis);
 	        }
 	        return result;

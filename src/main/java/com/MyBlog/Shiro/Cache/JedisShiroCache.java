@@ -7,7 +7,7 @@ import java.util.Set;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
 
-import com.MyBlog.Logger.MyLogger;
+import com.MyBlog.Logger.LoggerUtil;
 import com.MyBlog.cache.RedisUtil;
 import com.MyBlog.utils.SerializeUtil;
 @SuppressWarnings("unchecked")
@@ -46,7 +46,7 @@ public class JedisShiroCache <K, V> implements Cache<K, V> {
 		//System.out.println("JedisShiroGetCache:"+byteValue);
 	        }
 	        catch (Exception e) {
-	        	MyLogger.error(SELF, e.getMessage());
+	        	LoggerUtil.error(SELF, e.getMessage());
 			}
 		return (V) SerializeUtil.deserialize(byteValue);
 	}
@@ -63,7 +63,7 @@ try {
 	redisutil.hset(SerializeUtil.serialize(REDIS_SHIRO_CACHE),SerializeUtil.serialize(key), SerializeUtil.serialize(value),expire);
 	
 }catch (Exception e) {
-	MyLogger.error(SELF, e.getMessage());
+	LoggerUtil.error(SELF, e.getMessage());
 }
 		return previos;
 	}
@@ -73,7 +73,7 @@ try {
 		 try {
 			 redisutil.hdel(SerializeUtil.serialize(REDIS_SHIRO_CACHE), SerializeUtil.serialize(key));
 		} catch (Exception e) {
-			MyLogger.error(SELF, e.getMessage());
+			LoggerUtil.error(SELF, e.getMessage());
 		}
 		return previos;
 	}

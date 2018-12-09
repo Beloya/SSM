@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.apache.shiro.session.mgt.SimpleSession;
 
-import com.MyBlog.Logger.MyLogger;
+import com.MyBlog.Logger.LoggerUtil;
 
 public class ShiroSession extends SimpleSession implements Serializable {
 
@@ -19,13 +19,13 @@ public class ShiroSession extends SimpleSession implements Serializable {
     public ShiroSession() {
         super();
         this.setChanged(true);
-        MyLogger.INFO(getClass(), "无参构造");
+        LoggerUtil.INFO(getClass(), "无参构造");
     }
 
     public ShiroSession(String host) {
         super(host);
         this.setChanged(true);
-        MyLogger.INFO(getClass(), "有参构造");
+        LoggerUtil.INFO(getClass(), "有参构造");
     }
 
 
@@ -33,28 +33,28 @@ public class ShiroSession extends SimpleSession implements Serializable {
     public void setId(Serializable id) {
         super.setId(id);
         this.setChanged(true);
-        MyLogger.INFO(getClass(), "更新Id");
+        LoggerUtil.INFO(getClass(), "更新Id");
     }
 
     @Override
     public void setStopTimestamp(Date stopTimestamp) {
         super.setStopTimestamp(stopTimestamp);
         this.setChanged(true);
-        MyLogger.INFO(getClass(), "更新Timestamp");
+        LoggerUtil.INFO(getClass(), "更新Timestamp");
     }
 
     @Override
     public void setExpired(boolean expired) {
         super.setExpired(expired);
         this.setChanged(true);
-        MyLogger.INFO(getClass(), "更新Expired");
+        LoggerUtil.INFO(getClass(), "更新Expired");
     }
 
     @Override
     public void setTimeout(long timeout) {
         super.setTimeout(timeout);
         this.setChanged(true);
-        MyLogger.INFO(getClass(), "更新Timeout");
+        LoggerUtil.INFO(getClass(), "更新Timeout");
     }
 
     @Override

@@ -75,7 +75,7 @@ public class ChatServic {
 	   init(userName.trim(), Base64.decodeToString(userImg), Base64.decodeToString(sessionId));
             }
             else {
-            	myErroClose(userName.trim());
+            	myErroClose(userName);
             }
          //在线数加1
 	       addOnlineCount();  
@@ -141,7 +141,7 @@ public class ChatServic {
 		  try {
 			  infomap.put(SYS_ERR_CODE, "连接失败");
 			  sendMessage(SYS_ERR_CODE+infomap);
-				WeChatController.websocktPostion.remove(userName.trim());
+				WeChatController.websocktPostion.remove(userName);
 			//  chatWebSocketQueSub(this.userName); 
 			this.session.close();
 		} catch (IOException e) {

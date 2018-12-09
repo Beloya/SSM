@@ -8,7 +8,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
-import com.MyBlog.Logger.MyLogger;
+import com.MyBlog.Logger.LoggerUtil;
 import com.alibaba.fastjson.JSONObject;
 
 
@@ -45,7 +45,7 @@ public class ShiroFilterUtils {
 			out.println(JSONObject.toJSON(resultMap).toString());
 			System.out.println(JSONObject.toJSON(resultMap).toString());
 		} catch (Exception e) {
-			MyLogger.fmtError(CLAZZ, e, "输出JSON报错。");
+			LoggerUtil.fmtError(CLAZZ, e, "输出JSON报错。");
 		}finally{
 			if(null != out){
 				out.flush();
