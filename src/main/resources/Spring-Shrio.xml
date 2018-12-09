@@ -196,6 +196,7 @@
             /admin/**=perms[系统:管理:view],kickout
        /druid/**=perms[系统:监控:view],kickout
       /druidWeb/**=perms[系统:监控:view],kickout
+      /trainquery.do=authc
       /**=simple
             </value>
               </property>

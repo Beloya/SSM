@@ -25,3 +25,4 @@ target/classes/jdbc.properties
 target/classes/redis.properties
 *.properties
 *.properties
+*.properties

@@ -11,7 +11,7 @@ import org.apache.shiro.web.servlet.AbstractShiroFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 
-import com.MyBlog.Logger.LoggerUtil;
+import com.MyBlog.Logger.MyLogger;
 import com.MyBlog.Shiro.Service.ShiroManager;
 
 
@@ -60,7 +60,7 @@ public class ShiroManagerImpl implements ShiroManager{
 			try {
 				shiroFilter = (AbstractShiroFilter) shiroFilterFactoryBean.getObject();
 			} catch (Exception e) {
-				LoggerUtil.error(getClass(),"getShiroFilter from shiroFilterFactoryBean error!", e);
+				MyLogger.error(getClass(),"getShiroFilter from shiroFilterFactoryBean error!", e);
 				throw new RuntimeException("get ShiroFilter from shiroFilterFactoryBean error!");
 			}
 

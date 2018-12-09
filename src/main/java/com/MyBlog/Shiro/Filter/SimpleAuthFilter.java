@@ -14,7 +14,7 @@ import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.util.WebUtils;
 
-import com.MyBlog.Logger.LoggerUtil;
+import com.MyBlog.Logger.MyLogger;
 import com.MyBlog.Shiro.CustomShiroSessionDAO;
 import com.MyBlog.Shiro.Realm.WebRealm;
 import com.MyBlog.Shiro.Session.CustomSessionManager;
@@ -62,7 +62,7 @@ public class SimpleAuthFilter extends AccessControlFilter{
 		if (null != sessionStatus && !sessionStatus.isOnlineStatus()) {
 			//判断是不是Ajax请求
 			if (ShiroFilterUtils.isAjax(request) ) {
-				LoggerUtil.debug(getClass(), "当前用户已经被踢出，并且是Ajax请求！");
+				MyLogger.debug(getClass(), "当前用户已经被踢出，并且是Ajax请求！");
 				resultMap.put("code", "300");
 				resultMap.put("msg", "您已经被踢出，请重新登录！");
 				out(response, resultMap);
