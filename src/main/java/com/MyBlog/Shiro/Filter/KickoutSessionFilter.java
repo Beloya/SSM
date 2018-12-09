@@ -16,11 +16,11 @@ import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.util.WebUtils;
 
-import com.MyBlog.Logger.LoggerUtil;
+import com.MyBlog.Logger.MyLogger;
 import com.MyBlog.Shiro.Session.ShiroSessionRepository;
 import com.MyBlog.Shiro.Token.TokenManager;
 import com.MyBlog.cache.RedisUtil;
-import com.MyBlog.utils.JsonOutUtils;
+import com.MyBlog.utils.JsonUtils;
 import com.MyBlog.utils.SerializeUtil;
 import com.MyBlog.utils.Servlets;
 import com.MyBlog.utils.ShiroFilterUtils;
@@ -71,10 +71,10 @@ public class KickoutSessionFilter extends AccessControlFilter {
 			Map<String, String> resultMap = new HashMap<String, String>();
 			//判断是不是Ajax请求
 			if (ShiroFilterUtils.isAjax(request) ) {
-				LoggerUtil.debug(getClass(), "当前用户已经在其他地方登录，并且是Ajax请求！");
+				MyLogger.debug(getClass(), "当前用户已经在其他地方登录，并且是Ajax请求！");
 				resultMap.put("code", "300");
 				resultMap.put("msg", "您已经在其他地方登录，请重新登录！");
-				JsonOutUtils.out(response, resultMap);
+				JsonUtils.out(response, resultMap);
 			}
 			return  Boolean.FALSE;
 	}
@@ -113,7 +113,7 @@ public class KickoutSessionFilter extends AccessControlFilter {
 						shiroSessionRepository.saveSession(oldSession);//更新session
 						shiroSessionRepository.deleteSession(oldSession.getId());
 						redisutil.hset(key, SerializeUtil.serialize(userId),SerializeUtil.serialize(sessionId), expire);
-						LoggerUtil.fmtDebug(getClass(), "kickout old session success,oldId[%s]",oldSessionId);
+						MyLogger.fmtDebug(getClass(), "kickout old session success,oldId[%s]",oldSessionId);
 					}else{
 						shiroSessionRepository.deleteSession(oldSessionId);
 						//infoMap.remove(userId);

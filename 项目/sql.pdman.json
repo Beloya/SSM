@@ -1,0 +1,1478 @@
+{
+  "modules": [
+    {
+      "name": "MyBlog",
+      "entities": [
+        {
+          "title": "archives",
+          "fields": [
+            {
+              "name": "AID",
+              "type": "Integer",
+              "remark": "自增",
+              "chnname": "主键",
+              "pk": true,
+              "notNull": true
+            },
+            {
+              "name": "Title",
+              "type": "MiddleString",
+              "remark": "",
+              "chnname": "标题",
+              "notNull": true
+            },
+            {
+              "name": "context",
+              "type": "LongText",
+              "remark": "",
+              "chnname": "内容",
+              "notNull": true
+            },
+            {
+              "name": "Type",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "类型",
+              "notNull": true
+            },
+            {
+              "name": "CREATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "创建人",
+              "notNull": true
+            },
+            {
+              "name": "CREATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间",
+              "notNull": true
+            },
+            {
+              "name": "UPDATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "更新人"
+            },
+            {
+              "name": "UPDATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            },
+            {
+              "name": "Status",
+              "type": "Integer",
+              "remark": "1审核||0正常||-1失效",
+              "chnname": "状态",
+              "notNull": true
+            },
+            {
+              "name": "ReadCount",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "阅读数",
+              "notNull": true
+            },
+            {
+              "name": "Flag",
+              "type": "Integer",
+              "remark": "外键",
+              "chnname": "标签"
+            },
+            {
+              "name": "VID",
+              "type": "Integer",
+              "remark": "外键",
+              "chnname": "可见性",
+              "notNull": true
+            }
+          ],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "文章",
+          "nameTemplate": "{code}[{name}]"
+        },
+        {
+          "title": "Flag",
+          "fields": [
+            {
+              "name": "FID",
+              "type": "Integer",
+              "remark": "自增",
+              "chnname": "主键",
+              "pk": true,
+              "notNull": true
+            },
+            {
+              "name": "Fdescribe",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "描述",
+              "pk": false,
+              "notNull": true
+            },
+            {
+              "name": "REVISION",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "乐观锁"
+            },
+            {
+              "name": "CREATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "创建人",
+              "notNull": true
+            },
+            {
+              "name": "CREATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间",
+              "notNull": true
+            },
+            {
+              "name": "UPDATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "更新人"
+            },
+            {
+              "name": "UPDATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            },
+            {
+              "name": "Status",
+              "type": "DefaultString",
+              "remark": "1审核||0正常||-1失效",
+              "chnname": "状态",
+              "notNull": true
+            }
+          ],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "文章标签"
+        },
+        {
+          "title": "archivesCommit",
+          "fields": [
+            {
+              "name": "CID",
+              "type": "DefaultString",
+              "remark": "自增",
+              "chnname": "主键",
+              "notNull": true,
+              "pk": true
+            },
+            {
+              "name": "Context",
+              "type": "LongString",
+              "remark": "评论内容",
+              "chnname": "内容",
+              "notNull": true
+            },
+            {
+              "name": "PID",
+              "type": "Integer",
+              "remark": "父评论",
+              "chnname": "父主键"
+            },
+            {
+              "name": "REVISION",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "乐观锁"
+            },
+            {
+              "name": "CREATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "创建人",
+              "notNull": true
+            },
+            {
+              "name": "CREATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间",
+              "notNull": true
+            },
+            {
+              "name": "UPDATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "更新人",
+              "notNull": false
+            },
+            {
+              "name": "UPDATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间",
+              "notNull": false
+            },
+            {
+              "name": "Status",
+              "type": "Integer",
+              "remark": "1审核||0正常||-1失效",
+              "chnname": "状态",
+              "notNull": true
+            },
+            {
+              "name": "AID",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "文章ID"
+            },
+            {
+              "name": "TYPE",
+              "type": "Integer",
+              "remark": "1游客||0普通",
+              "chnname": "类型"
+            },
+            {
+              "name": "Name",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "游客名"
+            }
+          ],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "文章评论"
+        },
+        {
+          "title": "message_board",
+          "fields": [
+            {
+              "name": "MBID",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "主键",
+              "pk": true,
+              "notNull": true
+            },
+            {
+              "name": "Context",
+              "type": "LongString",
+              "remark": "",
+              "chnname": "内容",
+              "notNull": true
+            },
+            {
+              "name": "REVISION",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "乐观锁"
+            },
+            {
+              "name": "CREATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "创建人",
+              "notNull": true
+            },
+            {
+              "name": "CREATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间",
+              "notNull": true
+            },
+            {
+              "name": "UPDATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "更新人"
+            },
+            {
+              "name": "UPDATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            },
+            {
+              "name": "Status",
+              "type": "Integer",
+              "remark": "1审核||0正常||-1失效",
+              "chnname": "状态",
+              "notNull": true
+            }
+          ],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "留言板"
+        },
+        {
+          "title": "message",
+          "fields": [
+            {
+              "name": "ID",
+              "type": "Integer",
+              "remark": "自增",
+              "chnname": "主键",
+              "pk": true,
+              "notNull": true
+            },
+            {
+              "name": "Context",
+              "type": "LongText",
+              "remark": "",
+              "chnname": "内容"
+            },
+            {
+              "name": "Link",
+              "type": "LongString",
+              "remark": "",
+              "chnname": "链接",
+              "notNull": true
+            },
+            {
+              "name": "REVISION",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "乐观锁"
+            },
+            {
+              "name": "CREATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "创建人",
+              "notNull": true
+            },
+            {
+              "name": "CREATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间",
+              "notNull": true
+            },
+            {
+              "name": "UPDATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "更新人"
+            },
+            {
+              "name": "UPDATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            },
+            {
+              "name": "Status",
+              "type": "Integer",
+              "remark": "1审核||0正常||-1失效",
+              "chnname": "状态",
+              "notNull": true
+            }
+          ],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "消息通知"
+        },
+        {
+          "title": "archivesVisibility",
+          "fields": [
+            {
+              "name": "ID",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "主键",
+              "pk": true,
+              "notNull": true,
+              "relationNoShow": true
+            },
+            {
+              "name": "Vdescribe",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "描述",
+              "notNull": true
+            },
+            {
+              "name": "REVISION",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "乐观锁"
+            },
+            {
+              "name": "CREATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "创建人",
+              "notNull": true
+            },
+            {
+              "name": "CREATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间",
+              "notNull": true
+            },
+            {
+              "name": "UPDATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "更新人"
+            },
+            {
+              "name": "UPDATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            },
+            {
+              "name": "Status",
+              "type": "Integer",
+              "remark": "1审核||0正常||-1失效",
+              "chnname": "状态",
+              "notNull": true
+            }
+          ],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "文章可见性",
+          "indexs": []
+        },
+        {
+          "title": "Blog",
+          "fields": [
+            {
+              "name": "ID",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "主键",
+              "pk": true,
+              "notNull": true
+            },
+            {
+              "name": "BlogName",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "博客名",
+              "notNull": true
+            },
+            {
+              "name": "REVISION",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "乐观锁"
+            },
+            {
+              "name": "CREATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "创建人",
+              "notNull": true
+            },
+            {
+              "name": "CREATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间",
+              "notNull": true
+            },
+            {
+              "name": "UPDATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "更新人"
+            },
+            {
+              "name": "UPDATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            },
+            {
+              "name": "Title",
+              "type": "LongString",
+              "remark": "",
+              "chnname": "标题",
+              "notNull": true
+            }
+          ],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "博客信息",
+          "indexs": []
+        },
+        {
+          "title": "archiveflag",
+          "fields": [
+            {
+              "name": "REVISION",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "乐观锁"
+            },
+            {
+              "name": "CREATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "创建人"
+            },
+            {
+              "name": "CREATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间"
+            },
+            {
+              "name": "UPDATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "更新人"
+            },
+            {
+              "name": "UPDATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            }
+          ],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "文章标签关联",
+          "indexs": []
+        },
+        {
+          "title": "SysLink",
+          "fields": [
+            {
+              "name": "REVISION",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "乐观锁"
+            },
+            {
+              "name": "CREATED_BY",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "创建人"
+            },
+            {
+              "name": "CREATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间"
+            },
+            {
+              "name": "UPDATED_BY",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "更新人"
+            },
+            {
+              "name": "UPDATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            },
+            {
+              "name": "MENU_ID",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "主键",
+              "pk": true,
+              "notNull": true,
+              "autoIncrement": true
+            },
+            {
+              "name": "NAME",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "名称"
+            },
+            {
+              "name": "LINK",
+              "type": "LongString",
+              "remark": "",
+              "chnname": "链接"
+            },
+            {
+              "name": "REMARKS",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "备注"
+            },
+            {
+              "name": "ORDERNUM",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "排序"
+            },
+            {
+              "name": "PM_ID",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "父级",
+              "notNull": true,
+              "defaultValue": "0"
+            },
+            {
+              "name": "Type",
+              "type": "Integer",
+              "remark": "类别;0-菜单2-后台管理3-个人站点",
+              "chnname": "类别",
+              "notNull": true
+            },
+            {
+              "name": "ISBLANK",
+              "type": "Integer",
+              "remark": "0-当前页面1-新页面",
+              "chnname": "是否新页面打开",
+              "notNull": true
+            },
+            {
+              "name": "Status",
+              "type": "Integer",
+              "remark": "1审核||0正常||-1失效",
+              "chnname": "状态",
+              "notNull": true,
+              "defaultValue": "0"
+            },
+            {
+              "name": "ISTHIS",
+              "type": "Integer",
+              "remark": "0-本站1-外链",
+              "chnname": "是否本站链接",
+              "notNull": true,
+              "defaultValue": "0"
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "菜单"
+        }
+      ],
+      "graphCanvas": {
+        "nodes": [
+          {
+            "shape": "table",
+            "title": "Flag",
+            "x": 550,
+            "y": 160,
+            "id": "58a73d35"
+          },
+          {
+            "shape": "table",
+            "title": "archives",
+            "x": 130,
+            "y": 90,
+            "id": "7c76d965"
+          }
+        ],
+        "edges": [
+          {
+            "shape": "polyLineFlow",
+            "source": "7c76d965",
+            "target": "58a73d35",
+            "id": "9a8fd75b",
+            "controlPoints": [
+              {
+                "x": 268.6552734375,
+                "y": 212.9537037037037
+              },
+              {
+                "x": 411.3447265625,
+                "y": 102.19736842105263
+              }
+            ],
+            "sourceAnchor": 23,
+            "targetAnchor": 0
+          }
+        ]
+      },
+      "associations": [
+        {
+          "relation": "",
+          "from": {
+            "entity": "archives",
+            "field": "VID"
+          },
+          "to": {
+            "entity": "Flag",
+            "field": "FID"
+          }
+        }
+      ]
+    }
+  ],
+  "dataTypeDomains": {
+    "datatype": [
+      {
+        "name": "默认字串",
+        "code": "DefaultString",
+        "apply": {
+          "Java": {
+            "type": "String"
+          },
+          "Oracle": {
+            "type": "NVARCHAR2(32)"
+          },
+          "MYSQL": {
+            "type": "VARCHAR(32)"
+          },
+          "ORACLE": {
+            "type": "NVARCHAR2(32)"
+          },
+          "JAVA": {
+            "type": "String"
+          },
+          "MySQL": {
+            "type": "varchar(50)"
+          }
+        }
+      },
+      {
+        "name": "标识号",
+        "code": "IdOrKey",
+        "apply": {
+          "Java": {
+            "type": "String"
+          },
+          "Oracle": {
+            "type": "VARCHAR2(32)"
+          },
+          "MYSQL": {
+            "type": "VARCHAR(32)"
+          },
+          "ORACLE": {
+            "type": "VARCHAR2(32)"
+          },
+          "JAVA": {
+            "type": "String"
+          }
+        }
+      },
+      {
+        "name": "名称",
+        "code": "Name",
+        "apply": {
+          "Java": {
+            "type": "String"
+          },
+          "Oracle": {
+            "type": "NVARCHAR2(128)"
+          },
+          "MYSQL": {
+            "type": "VARCHAR(128)"
+          },
+          "ORACLE": {
+            "type": "NVARCHAR2(128)"
+          },
+          "JAVA": {
+            "type": "String"
+          }
+        }
+      },
+      {
+        "name": "备注说明",
+        "code": "Intro",
+        "apply": {
+          "Java": {
+            "type": "String"
+          },
+          "Oracle": {
+            "type": "NVARCHAR2(512)"
+          },
+          "MYSQL": {
+            "type": "VARCHAR(512)"
+          },
+          "ORACLE": {
+            "type": "NVARCHAR2(512)"
+          },
+          "JAVA": {
+            "type": "String"
+          }
+        }
+      },
+      {
+        "name": "字串-短",
+        "code": "ShortString",
+        "apply": {
+          "Java": {
+            "type": "String"
+          },
+          "Oracle": {
+            "type": "NVARCHAR2(128)"
+          },
+          "MYSQL": {
+            "type": "VARCHAR(128)"
+          },
+          "ORACLE": {
+            "type": "NVARCHAR2(128)"
+          },
+          "JAVA": {
+            "type": "String"
+          }
+        }
+      },
+      {
+        "name": "字串-中",
+        "code": "MiddleString",
+        "apply": {
+          "Java": {
+            "type": "String"
+          },
+          "Oracle": {
+            "type": "NVARCHAR2(1024)"
+          },
+          "MYSQL": {
+            "type": "VARCHAR(1024)"
+          },
+          "ORACLE": {
+            "type": "NVARCHAR2(1024)"
+          },
+          "JAVA": {
+            "type": "String"
+          }
+        }
+      },
+      {
+        "name": "字串-长",
+        "code": "LongString",
+        "apply": {
+          "Java": {
+            "type": "String"
+          },
+          "Oracle": {
+            "type": "NVARCHAR2(3120)"
+          },
+          "MYSQL": {
+            "type": "VARCHAR(3120)"
+          },
+          "ORACLE": {
+            "type": "NVARCHAR2(3120)"
+          },
+          "JAVA": {
+            "type": "String"
+          },
+          "MySQL": {
+            "type": "varchar(255)"
+          }
+        }
+      },
+      {
+        "name": "大文本",
+        "code": "LongText",
+        "apply": {
+          "Java": {
+            "type": "String"
+          },
+          "Oracle": {
+            "type": "CLOB"
+          },
+          "MYSQL": {
+            "type": "TEXT"
+          },
+          "ORACLE": {
+            "type": "CLOB"
+          },
+          "JAVA": {
+            "type": "String"
+          },
+          "MySQL": {
+            "type": "longtext"
+          }
+        }
+      },
+      {
+        "name": "小数",
+        "code": "Double",
+        "apply": {
+          "Java": {
+            "type": "Double"
+          },
+          "Oracle": {
+            "type": "NUMBER(64,16)"
+          },
+          "MYSQL": {
+            "type": "DECIMAL(64,16)"
+          },
+          "ORACLE": {
+            "type": "NUMBER(64,16)"
+          },
+          "JAVA": {
+            "type": "Double"
+          }
+        }
+      },
+      {
+        "name": "比例",
+        "code": "Ratio",
+        "apply": {
+          "Java": {
+            "type": "Double"
+          },
+          "Oracle": {
+            "type": "NUMBER(2,2)"
+          },
+          "MYSQL": {
+            "type": "DECIMAL(4,2)"
+          },
+          "ORACLE": {
+            "type": "NUMBER(4,2)"
+          },
+          "JAVA": {
+            "type": "Double"
+          }
+        }
+      },
+      {
+        "name": "整数",
+        "code": "Integer",
+        "apply": {
+          "Java": {
+            "type": "Integer"
+          },
+          "Oracle": {
+            "type": "INT"
+          },
+          "MYSQL": {
+            "type": "INT"
+          },
+          "ORACLE": {
+            "type": "INT"
+          },
+          "JAVA": {
+            "type": "Integer"
+          },
+          "MySQL": {
+            "type": "INT(11)"
+          }
+        }
+      },
+      {
+        "name": "金额",
+        "code": "Money",
+        "apply": {
+          "Java": {
+            "type": "Double"
+          },
+          "Oracle": {
+            "type": "NUMBER(32,8)"
+          },
+          "MYSQL": {
+            "type": "DECIMAL(32,8)"
+          },
+          "ORACLE": {
+            "type": "NUMBER(32,8)"
+          },
+          "JAVA": {
+            "type": "Double"
+          }
+        }
+      },
+      {
+        "name": "是否",
+        "code": "YesNo",
+        "apply": {
+          "Java": {
+            "type": "String"
+          },
+          "Oracle": {
+            "type": "VARCHAR2(1)"
+          },
+          "MYSQL": {
+            "type": "VARCHAR(1)"
+          },
+          "ORACLE": {
+            "type": "VARCHAR2(1)"
+          },
+          "JAVA": {
+            "type": "String"
+          }
+        }
+      },
+      {
+        "name": "数据字典",
+        "code": "Dict",
+        "apply": {
+          "Java": {
+            "type": "String"
+          },
+          "Oracle": {
+            "type": "VARCHAR2(32)"
+          },
+          "MYSQL": {
+            "type": "VARCHAR(32)"
+          },
+          "ORACLE": {
+            "type": "VARCHAR2(32)"
+          },
+          "JAVA": {
+            "type": "String"
+          }
+        }
+      },
+      {
+        "name": "日期",
+        "code": "Date",
+        "apply": {
+          "Java": {
+            "type": "Date"
+          },
+          "Oracle": {
+            "type": "Date"
+          },
+          "MYSQL": {
+            "type": "DATE"
+          },
+          "ORACLE": {
+            "type": "DATE"
+          },
+          "JAVA": {
+            "type": "Date"
+          }
+        }
+      },
+      {
+        "name": "日期时间",
+        "code": "DateTime",
+        "apply": {
+          "Java": {
+            "type": "Date"
+          },
+          "Oracle": {
+            "type": "Date"
+          },
+          "MYSQL": {
+            "type": "DATETIME"
+          },
+          "ORACLE": {
+            "type": "DATE"
+          },
+          "JAVA": {
+            "type": "Date"
+          },
+          "MySQL": {
+            "type": "datetime"
+          }
+        }
+      }
+    ],
+    "database": [
+      {
+        "code": "Java",
+        "fileShow": true,
+        "defaultDatabase": true,
+        "template": "package group.rober.pdman.{{=it.module.name}}.entity;\n$blankline\nimport javax.persistence.*;\nimport java.io.Serializable;\nimport java.util.Date;\n$blankline\n$blankline\n@Table(name=\"{{=it.entity.title}}\")\npublic class {{=it.func.camel(it.entity.title,true) }} implements Serializable,Cloneable{\n{{~it.entity.fields:field:index}}\n    /** {{=it.func.join(field.chnname,field.remark,';')}} */\n    {{? field.pk }}\n    @Id\n    @GeneratedValue\n    {{?}}\n    private {{=field.type}} {{=it.func.camel(field.name,false)}} ;\n{{~}}\n$blankline\n{{~it.entity.fields:field:index}}\n    /** {{=it.func.join(field.chnname,field.remark,';')}} */\n    public {{=field.type}} get{{=it.func.camel(field.name,true)}}(){\n        return this.{{=it.func.camel(field.name,false)}};\n    }\n    /** {{=it.func.join(field.chnname,field.remark,';')}} */\n    public void set{{=it.func.camel(field.name,true)}}({{=field.type}} {{= it.func.camel(field.name,false) }}){\n        this.{{=it.func.camel(field.name,false)}} = {{= it.func.camel(field.name,false) }};\n    }\n{{~}}\n}",
+        "createTableTemplate": "package group.rober.pdman.{{=it.module.name}}.entity;\n$blankline\nimport javax.persistence.*;\nimport java.io.Serializable;\nimport java.util.Date;\n$blankline\n$blankline\n@Table(name=\"{{=it.entity.title}}\")\npublic class {{=it.func.camel(it.entity.title,true) }} implements Serializable,Cloneable{\n{{~it.entity.fields:field:index}}\n    /** {{=it.func.join(field.chnname,field.remark,';')}} */\n    {{? field.pk }}\n    @Id\n    @GeneratedValue\n    {{?}}\n    private {{=field.type}} {{=it.func.camel(field.name,false)}} ;\n{{~}}\n$blankline\n{{~it.entity.fields:field:index}}\n    /** {{=it.func.join(field.chnname,field.remark,';')}} */\n    public {{=field.type}} get{{=it.func.camel(field.name,true)}}(){\n        return this.{{=it.func.camel(field.name,false)}};\n    }\n    /** {{=it.func.join(field.chnname,field.remark,';')}} */\n    public void set{{=it.func.camel(field.name,true)}}({{=field.type}} {{= it.func.camel(field.name,false) }}){\n        this.{{=it.func.camel(field.name,false)}} = {{= it.func.camel(field.name,false) }};\n    }\n{{~}}\n}",
+        "deleteTableTemplate": "",
+        "rebuildTableTemplate": "",
+        "createFieldTemplate": "",
+        "updateFieldTemplate": "",
+        "deleteFieldTemplate": "",
+        "deleteIndexTemplate": "",
+        "createIndexTemplate": "",
+        "updateTableComment": ""
+      },
+      {
+        "code": "MySQL",
+        "fileShow": true,
+        "template": "DROP TABLE {{=it.entity.title}};\n$blankline\nCREATE TABLE {{=it.entity.title}}(\n{{ pkList = [] ; }}\n{{~it.entity.fields:field:index}}\n    {{? field.pk }}{{ pkList.push(field.name) }}{{?}}\n    {{=field.name}} {{=field.type}} {{= field.notNull ? 'NOT NULL' : '' }} COMMENT '{{=it.func.join(field.chnname,field.remark,';')}}' {{= index < it.entity.fields.length-1 ? ',' : ( pkList.length>0 ? ',' :'' ) }}\n{{~}}\n{{? pkList.length >0 }}\n    PRIMARY KEY ({{~pkList:pkName:i}}{{= pkName }}{{= i<pkList.length-1 ? ',' : '' }}{{~}})\n{{?}}\n)\nENGINE=InnoDB DEFAULT CHARSET=utf8mb4;\ncommit;",
+        "defaultDatabase": false,
+        "createTableTemplate": "CREATE TABLE `{{=it.entity.title}}` (\n{{ pkList = [] ; }}\n{{~it.entity.fields:field:index}}\n    {{? field.pk }}{{ pkList.push(field.name) }}{{?}}\n    `{{=field.name}}` {{=field.type}} {{= field.notNull ? 'NOT NULL' : '' }} {{= field.autoIncrement ? 'AUTO_INCREMENT' : '' }}  COMMENT '{{=it.func.join(field.chnname,field.remark,';')}}' {{= index < it.entity.fields.length-1 ? ',' : ( pkList.length>0 ? ',' :'' ) }}\n{{~}}\n{{? pkList.length >0 }}\n    PRIMARY KEY ({{~pkList:pkName:i}}`{{= pkName }}`{{= i<pkList.length-1 ? ',' : '' }}{{~}})\n{{?}}\n) COMMENT = '{{=it.func.join(it.entity.chnname,it.entity.remark,';') }}' ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4; ",
+        "deleteTableTemplate": "DROP TABLE {{=it.entity.title}};/*SkipError*/",
+        "rebuildTableTemplate": "create table PDMAN_UP_{{=it.oldEntity.title}}\r\nas select * from {{=it.oldEntity.title}};\r\n$blankline\r\n\r\ndrop table {{=it.oldEntity.title}};\r\n$blankline\r\n\r\nCREATE TABLE {{=it.newEntity.title}}(\r\n{{ pkList = [] ; }}\r\n{{~it.newEntity.fields:field:index}}\r\n    {{? field.pk }}{{ pkList.push(field.name) }}{{?}}\r\n    {{=field.name}} {{=field.type}} {{= field.notNull ? 'NOT NULL' : '' }} COMMENT '{{=it.func.join(field.chnname,field.remark,';')}}' {{= index < it.newEntity.fields.length-1 ? ',' : ( pkList.length>0 ? ',' :'' ) }}\r\n{{~}}\r\n{{? pkList.length >0 }}\r\n    PRIMARY KEY ({{~pkList:pkName:i}}{{= pkName }}{{= i<pkList.length-1 ? ',' : '' }}{{~}})\r\n{{?}}\r\n) COMMENT = '{{=it.func.join(it.newEntity.chnname,it.newEntity.remark,';') }}';\r\n$blankline\r\n\r\n{{ sameCols = it.func.intersect(it.newEntity.fields,it.newEntity.fields) ;}}\r\ninsert into {{=it.newEntity.title}}(\r\n{{~sameCols:field:index}}\r\n    {{=field.name}}{{? index<it.newEntity.fields.length-1}},{{?}}\r\n{{~}}\r\n) \r\nvalues\r\nselect \r\n{{~sameCols:field:index}}\r\n    {{=field.name}}{{? index<it.oldEntity.fields.length-1}},{{?}}\r\n{{~}}\r\nfrom PDMAN_UP_{{=it.oldEntity.title}};\r\n$blankline\r\n\r\ndrop table PDMAN_UP_{{=it.oldEntity.title}};",
+        "createFieldTemplate": "ALTER TABLE {{=it.entity.title}} ADD COLUMN {{=it.field.name}} {{=it.field.type}} {{? it.field.notNull}}NOT NULL{{?}} {{? ''!=it.field.defaultValue}}DEFAULT {{? null==it.field.defaultValue}}NULL{{??}}'{{=it.field.defaultValue}}'{{?}}{{?}} {{? it.field.autoIncrement}}AUTO_INCREMENT{{?}} {{? it.field.pk}}PRIMARY KEY{{?}} {{? it.field.chnname}}COMMENT '{{=it.field.chnname}}'{{?}} {{? it.field.addAfter}}AFTER {{=it.field.addAfter}}{{?}};",
+        "updateFieldTemplate": "ALTER TABLE {{=it.entity.title}} MODIFY COLUMN {{=it.field.name}} {{=it.field.type}} {{? it.field.notNull}}NOT NULL{{?}} {{? ''!=it.field.defaultValue}}DEFAULT {{? null==it.field.defaultValue}}NULL{{??}}'{{=it.field.defaultValue}}'{{?}}{{?}} {{? it.field.autoIncrement}}AUTO_INCREMENT{{?}} {{? it.field.chnname}}COMMENT '{{=it.field.chnname}}'{{?}};",
+        "deleteFieldTemplate": "ALTER TABLE {{=it.entity.title}} DROP {{=it.field.name}};",
+        "deleteIndexTemplate": "ALTER TABLE {{=it.entity.title}} DROP INDEX {{=it.index.name}};",
+        "createIndexTemplate": "ALTER TABLE {{=it.entity.title}} ADD {{? it.index.isUnique}}UNIQUE{{?}} {{=it.index.name}}({{=it.func.join(...it.index.fields,',')}});",
+        "updateTableComment": "ALTER TABLE {{=it.entity.title}} COMMENT '{{=it.entity.chnname}}';"
+      },
+      {
+        "code": "Oracle",
+        "fileShow": false,
+        "template": "DROP TABLE {{=it.entity.title}};\n$blankline\nCREATE TABLE {{=it.entity.title}}(\n{{ pkList = [] ; }}\n{{~it.entity.fields:field:index}}\n    {{? field.pk }}{{ pkList.push(field.name) }}{{?}}\n    {{=field.name}} {{=field.type}}  {{= field.notNull ? 'NOT NULL' : '' }} {{= index < it.entity.fields.length-1 ? ',' : ( pkList.length>0 ? ',' :'' ) }}\n{{~}}\n{{? pkList.length >0 }}\n    PRIMARY KEY ({{~pkList:pkName:i}}{{= pkName }}{{= i<pkList.length-1 ? ',' : '' }}{{~}})\n{{?}}\n);\n$blankline\nCOMMENT ON TABLE '{{=it.func.join(it.entity.chnname,it.entity.remark,';') }}';\n{{~it.entity.fields:field:index}}\nCOMMENT ON COLUMN {{=it.entity.title}}.{{=field.name}} IS '{{=it.func.join(field.chnname,field.remark,';')}}';\n{{~}}",
+        "createTableTemplate": "CREATE TABLE {{=it.entity.title}}(\n{{ pkList = [] ; }}\n{{~it.entity.fields:field:index}}\n    {{? field.pk }}{{ pkList.push(field.name) }}{{?}}\n    {{=field.name}} {{=field.type}}  {{= field.notNull ? 'NOT NULL' : '' }} {{= index < it.entity.fields.length-1 ? ',' : ( pkList.length>0 ? ',' :'' ) }}\n{{~}}\n{{? pkList.length >0 }}\n    PRIMARY KEY ({{~pkList:pkName:i}}{{= pkName }}{{= i<pkList.length-1 ? ',' : '' }}{{~}})\n{{?}}\n);\n$blankline\nCOMMENT ON TABLE '{{=it.func.join(it.entity.chnname,it.entity.remark,';') }}';\n{{~it.entity.fields:field:index}}\nCOMMENT ON COLUMN {{=it.entity.title}}.{{=field.name}} IS '{{=it.func.join(field.chnname,field.remark,';')}}';\n{{~}}",
+        "deleteTableTemplate": "DROP TABLE {{=it.entity.title}};/*SkipError*/",
+        "rebuildTableTemplate": "create table PDMAN_UP_{{=it.oldEntity.title}}\r\nas select * from {{=it.oldEntity.title}};\r\n$blankline\r\n\r\ndrop table {{=it.oldEntity.title}};\r\n$blankline\r\n\r\nCREATE TABLE {{=it.newEntity.title}}(\r\n{{ pkList = [] ; }}\r\n{{~it.newEntity.fields:field:index}}\r\n    {{? field.pk }}{{ pkList.push(field.name) }}{{?}}\r\n    {{=field.name}} {{=field.type}} {{= field.notNull ? 'NOT NULL' : '' }} COMMENT '{{=it.func.join(field.chnname,field.remark,';')}}' {{= index < it.newEntity.fields.length-1 ? ',' : ( pkList.length>0 ? ',' :'' ) }}\r\n{{~}}\r\n{{? pkList.length >0 }}\r\n    PRIMARY KEY ({{~pkList:pkName:i}}{{= pkName }}{{= i<pkList.length-1 ? ',' : '' }}{{~}})\r\n{{?}}\r\n) COMMENT = '{{=it.func.join(it.newEntity.chnname,it.newEntity.remark,';') }}';\r\n$blankline\r\n\r\n{{ sameCols = it.func.intersect(it.newEntity.fields,it.newEntity.fields) ;}}\r\ninsert into {{=it.newEntity.title}}(\r\n{{~sameCols:field:index}}\r\n    {{=field.name}}{{? index<it.newEntity.fields.length-1}},{{?}}\r\n{{~}}\r\n) \r\nvalues\r\nselect \r\n{{~sameCols:field:index}}\r\n    {{=field.name}}{{? index<it.oldEntity.fields.length-1}},{{?}}\r\n{{~}}\r\nfrom PDMAN_UP_{{=it.oldEntity.title}};\r\n$blankline\r\n\r\ndrop table PDMAN_UP_{{=it.oldEntity.title}};",
+        "createFieldTemplate": "ALTER TABLE {{=it.entity.title}} ADD({{=it.field.name}} {{=it.field.type}} {{? ''!=it.field.defaultValue}}DEFAULT {{? null==it.field.defaultValue}}NULL{{??}}'{{=it.field.defaultValue}}'{{?}}{{?}} {{? it.field.notNull}}NOT NULL{{?}});\r\nCOMMENT ON COLUMN {{=it.entity.title}}.{{=it.field.name}} is '{{=it.field.chnname}}';",
+        "updateFieldTemplate": "ALTER TABLE {{=it.entity.title}} MODIFY({{=it.field.name}} {{=it.field.type}} {{? ''!=it.field.defaultValue}}DEFAULT {{? null==it.field.defaultValue}}NULL{{??}}'{{=it.field.defaultValue}}'{{?}}{{?}} {{? it.field.notNull}}NOT NULL{{?}});\r\nCOMMENT ON COLUMN {{=it.entity.title}}.{{=it.field.name}} is '{{=it.field.chnname}}';",
+        "deleteFieldTemplate": "ALTER TABLE {{=it.entity.title}} DROP({{=it.field.name}});",
+        "deleteIndexTemplate": "DROP INDEX {{=it.entity.title}}.{{=it.index.name}};",
+        "createIndexTemplate": "CREATE {{? it.index.isUnique}}UNIQUE{{?}} INDEX {{=it.index.name}} ON {{=it.entity.title}}({{=it.func.join(...it.index.fields,',')}});",
+        "updateTableComment": "COMMENT ON TABLE {{=it.entity.title}} is '{{=it.entity.chnname}}';"
+      },
+      {
+        "code": "DB2",
+        "fileShow": false
+      },
+      {
+        "code": "SQLLITE",
+        "fileShow": false
+      },
+      {
+        "code": "SQLSERVER",
+        "fileShow": false
+      },
+      {
+        "code": "MyBlog",
+        "defaultDatabase": false,
+        "fileShow": false,
+        "template": "DROP TABLE {{=it.entity.title}};\n$blankline\nCREATE TABLE {{=it.entity.title}}(\n{{ pkList = [] ; }}\n{{~it.entity.fields:field:index}}\n    {{? field.pk }}{{ pkList.push(field.name) }}{{?}}\n    {{=field.name}} {{=field.type}} {{= field.notNull ? 'NOT NULL' : '' }} COMMENT '{{=it.func.join(field.chnname,field.remark,';')}}' {{= index < it.entity.fields.length-1 ? ',' : ( pkList.length>0 ? ',' :'' ) }}\n{{~}}\n{{? pkList.length >0 }}\n    PRIMARY KEY ({{~pkList:pkName:i}}{{= pkName }}{{= i<pkList.length-1 ? ',' : '' }}{{~}})\n{{?}}\n)\nENGINE=InnoDB DEFAULT CHARSET=utf8mb4\ncommit;"
+      }
+    ]
+  },
+  "profile": {
+    "dbs": [
+      {
+        "name": "5.6",
+        "defaultDB": true,
+        "type": "MySQL",
+        "properties": {
+          "driver_class_name": "com.mysql.jdbc.Driver",
+          "url": "jdbc:mysql://119.29.112.39:3306/MyBlog?characterEncoding=utf-8",
+          "username": "root",
+          "password": "nidejiaobu.7"
+        }
+      }
+    ]
+  }
+}

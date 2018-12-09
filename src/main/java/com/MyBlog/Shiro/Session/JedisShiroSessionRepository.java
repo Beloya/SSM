@@ -6,7 +6,7 @@ import java.util.Collection;
 import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.MyBlog.Logger.LoggerUtil;
+import com.MyBlog.Logger.MyLogger;
 import com.MyBlog.Shiro.Utils.ShiroSessionUtils;
 import com.MyBlog.cache.RedisUtil;
 import com.MyBlog.utils.SerializeUtil;
@@ -35,7 +35,7 @@ public void saveSession(Session session) {
         byte[] value = SerializeUtil.serialize(session);
         redisUtil.hset(SerializeUtil.serialize(buildRedisSessionKey(session.getId())),key, value,SESSION_VAL_TIME_SPAN);
     } catch (Exception e) {
-    	LoggerUtil.fmtError(getClass(), e, "save session error，id:[%s]",session.getId());
+    	MyLogger.fmtError(getClass(), e, "save session error，id:[%s]",session.getId());
     }
 }
 
@@ -48,7 +48,7 @@ public void deleteSession(Serializable id) {
     	redisUtil.del(DB_INDEX,SerializeUtil.serialize(buildRedisSessionKey(id)));
    // 	redisUtil.hset(SerializeUtil.serialize(buildRedisSessionKey(id)),key, value,SESSION_VAL_TIME_SPAN);
     } catch (Exception e) {
-    	LoggerUtil.fmtError(getClass(), e, "删除session出现异常，id:[%s]",id);
+    	MyLogger.fmtError(getClass(), e, "删除session出现异常，id:[%s]",id);
     }
 }
 
@@ -69,7 +69,7 @@ public Session getSession(Serializable id) {
 
         
     } catch (Exception e) {
-    	LoggerUtil.fmtError(getClass(), e, "获取session异常，id:[%s]",id);
+    	MyLogger.fmtError(getClass(), e, "获取session异常，id:[%s]",id);
     }
   
     return session;
@@ -80,7 +80,7 @@ public Collection<Session> getAllSessions() {
 	try {
 		sessions = redisUtil.AllSession(DB_INDEX,REDIS_SHIRO_SESSION);
 	} catch (Exception e) {
-		LoggerUtil.fmtError(getClass(), e, "获取全部session异常");
+		MyLogger.fmtError(getClass(), e, "获取全部session异常");
 	}
    
     return sessions;

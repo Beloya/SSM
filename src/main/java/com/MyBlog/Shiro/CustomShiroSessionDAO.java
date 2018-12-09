@@ -10,7 +10,7 @@ import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.session.mgt.eis.AbstractSessionDAO;
 import org.apache.shiro.session.mgt.eis.CachingSessionDAO;
 import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
-import com.MyBlog.Logger.LoggerUtil;
+import com.MyBlog.Logger.MyLogger;
 import com.MyBlog.Shiro.Session.ShiroSession;
 import com.MyBlog.Shiro.Session.ShiroSessionRepository;
 import com.MyBlog.utils.Servlets;
@@ -43,7 +43,7 @@ public class CustomShiroSessionDAO extends AbstractSessionDAO   {
 	  
 	    public void delete(Session session) {  
 	        if (session == null) {  
-	        	LoggerUtil.error(getClass(), "Session 不能为null");
+	        	MyLogger.error(getClass(), "Session 不能为null");
 	            return;  
 	        }  
 	        Serializable id = session.getId();  

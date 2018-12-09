@@ -1,0 +1,870 @@
+{
+  "modules": [
+    {
+      "name": "MyBlog",
+      "entities": [
+        {
+          "title": "archives",
+          "fields": [
+            {
+              "name": "AID",
+              "type": "Integer",
+              "remark": "自增",
+              "chnname": "主键",
+              "pk": true,
+              "notNull": true
+            },
+            {
+              "name": "Title",
+              "type": "MiddleString",
+              "remark": "",
+              "chnname": "标题",
+              "notNull": true
+            },
+            {
+              "name": "context",
+              "type": "LongText",
+              "remark": "",
+              "chnname": "内容",
+              "notNull": true
+            },
+            {
+              "name": "Type",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "类型",
+              "notNull": true
+            },
+            {
+              "name": "CREATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "创建人",
+              "notNull": true
+            },
+            {
+              "name": "CREATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间",
+              "notNull": true
+            },
+            {
+              "name": "UPDATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "更新人"
+            },
+            {
+              "name": "UPDATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            },
+            {
+              "name": "Status",
+              "type": "Integer",
+              "remark": "1审核||0正常||-1失效",
+              "chnname": "状态",
+              "notNull": true
+            },
+            {
+              "name": "ReadCount",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "阅读数",
+              "notNull": true
+            },
+            {
+              "name": "Flag",
+              "type": "Integer",
+              "remark": "外键",
+              "chnname": "标签"
+            },
+            {
+              "name": "VID",
+              "type": "Integer",
+              "remark": "外键",
+              "chnname": "可见性",
+              "notNull": true
+            }
+          ],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "文章",
+          "nameTemplate": "{code}[{name}]"
+        },
+        {
+          "title": "Flag",
+          "fields": [
+            {
+              "name": "FID",
+              "type": "Integer",
+              "remark": "自增",
+              "chnname": "主键",
+              "pk": true,
+              "notNull": true
+            },
+            {
+              "name": "Fdescribe",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "描述",
+              "pk": false,
+              "notNull": true
+            },
+            {
+              "name": "REVISION",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "乐观锁"
+            },
+            {
+              "name": "CREATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "创建人",
+              "notNull": true
+            },
+            {
+              "name": "CREATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间",
+              "notNull": true
+            },
+            {
+              "name": "UPDATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "更新人"
+            },
+            {
+              "name": "UPDATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            },
+            {
+              "name": "Status",
+              "type": "DefaultString",
+              "remark": "1审核||0正常||-1失效",
+              "chnname": "状态",
+              "notNull": true
+            }
+          ],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "文章标签"
+        },
+        {
+          "title": "archivesCommit",
+          "fields": [
+            {
+              "name": "CID",
+              "type": "DefaultString",
+              "remark": "自增",
+              "chnname": "主键",
+              "notNull": true,
+              "pk": true
+            },
+            {
+              "name": "Context",
+              "type": "LongString",
+              "remark": "评论内容",
+              "chnname": "内容",
+              "notNull": true
+            },
+            {
+              "name": "PID",
+              "type": "Integer",
+              "remark": "父评论",
+              "chnname": "父主键"
+            },
+            {
+              "name": "REVISION",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "乐观锁"
+            },
+            {
+              "name": "CREATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "创建人",
+              "notNull": true
+            },
+            {
+              "name": "CREATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间",
+              "notNull": true
+            },
+            {
+              "name": "UPDATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "更新人",
+              "notNull": false
+            },
+            {
+              "name": "UPDATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间",
+              "notNull": false
+            },
+            {
+              "name": "Status",
+              "type": "Integer",
+              "remark": "1审核||0正常||-1失效",
+              "chnname": "状态",
+              "notNull": true
+            },
+            {
+              "name": "AID",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "文章ID"
+            },
+            {
+              "name": "TYPE",
+              "type": "Integer",
+              "remark": "1游客||0普通",
+              "chnname": "类型"
+            },
+            {
+              "name": "Name",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "游客名"
+            }
+          ],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "文章评论"
+        },
+        {
+          "title": "message_board",
+          "fields": [
+            {
+              "name": "MBID",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "主键",
+              "pk": true,
+              "notNull": true
+            },
+            {
+              "name": "Context",
+              "type": "LongString",
+              "remark": "",
+              "chnname": "内容",
+              "notNull": true
+            },
+            {
+              "name": "REVISION",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "乐观锁"
+            },
+            {
+              "name": "CREATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "创建人",
+              "notNull": true
+            },
+            {
+              "name": "CREATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间",
+              "notNull": true
+            },
+            {
+              "name": "UPDATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "更新人"
+            },
+            {
+              "name": "UPDATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            },
+            {
+              "name": "Status",
+              "type": "Integer",
+              "remark": "1审核||0正常||-1失效",
+              "chnname": "状态",
+              "notNull": true
+            }
+          ],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "留言板"
+        },
+        {
+          "title": "message",
+          "fields": [
+            {
+              "name": "ID",
+              "type": "Integer",
+              "remark": "自增",
+              "chnname": "主键",
+              "pk": true,
+              "notNull": true
+            },
+            {
+              "name": "Context",
+              "type": "LongText",
+              "remark": "",
+              "chnname": "内容"
+            },
+            {
+              "name": "Link",
+              "type": "LongString",
+              "remark": "",
+              "chnname": "链接",
+              "notNull": true
+            },
+            {
+              "name": "REVISION",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "乐观锁"
+            },
+            {
+              "name": "CREATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "创建人",
+              "notNull": true
+            },
+            {
+              "name": "CREATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间",
+              "notNull": true
+            },
+            {
+              "name": "UPDATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "更新人"
+            },
+            {
+              "name": "UPDATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            },
+            {
+              "name": "Status",
+              "type": "Integer",
+              "remark": "1审核||0正常||-1失效",
+              "chnname": "状态",
+              "notNull": true
+            }
+          ],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "消息通知"
+        },
+        {
+          "title": "archivesVisibility",
+          "fields": [
+            {
+              "name": "ID",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "主键",
+              "pk": true,
+              "notNull": true,
+              "relationNoShow": true
+            },
+            {
+              "name": "Vdescribe",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "描述",
+              "notNull": true
+            },
+            {
+              "name": "REVISION",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "乐观锁"
+            },
+            {
+              "name": "CREATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "创建人",
+              "notNull": true
+            },
+            {
+              "name": "CREATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间",
+              "notNull": true
+            },
+            {
+              "name": "UPDATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "更新人"
+            },
+            {
+              "name": "UPDATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            },
+            {
+              "name": "Status",
+              "type": "Integer",
+              "remark": "1审核||0正常||-1失效",
+              "chnname": "状态",
+              "notNull": true
+            }
+          ],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "文章可见性"
+        },
+        {
+          "title": "Blog",
+          "fields": [
+            {
+              "name": "ID",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "主键",
+              "pk": true,
+              "notNull": true
+            },
+            {
+              "name": "BlogName",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "博客名",
+              "notNull": true
+            },
+            {
+              "name": "REVISION",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "乐观锁"
+            },
+            {
+              "name": "CREATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "创建人",
+              "notNull": true
+            },
+            {
+              "name": "CREATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间",
+              "notNull": true
+            },
+            {
+              "name": "UPDATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "更新人"
+            },
+            {
+              "name": "UPDATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            },
+            {
+              "name": "Title",
+              "type": "LongString",
+              "remark": "",
+              "chnname": "标题",
+              "notNull": true
+            }
+          ],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "博客信息"
+        },
+        {
+          "title": "archiveflag",
+          "fields": [
+            {
+              "name": "REVISION",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "乐观锁"
+            },
+            {
+              "name": "CREATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "创建人"
+            },
+            {
+              "name": "CREATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间"
+            },
+            {
+              "name": "UPDATED_BY",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "更新人"
+            },
+            {
+              "name": "UPDATED_TIME",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            }
+          ],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "文章标签关联"
+        }
+      ],
+      "graphCanvas": {
+        "nodes": [
+          {
+            "shape": "table",
+            "title": "Flag",
+            "x": 550,
+            "y": 160,
+            "id": "58a73d35"
+          },
+          {
+            "shape": "table",
+            "title": "archives",
+            "x": 130,
+            "y": 90,
+            "id": "7c76d965"
+          }
+        ],
+        "edges": [
+          {
+            "shape": "polyLineFlow",
+            "source": "7c76d965",
+            "target": "58a73d35",
+            "id": "9a8fd75b",
+            "controlPoints": [
+              {
+                "x": 268.6552734375,
+                "y": 212.9537037037037
+              },
+              {
+                "x": 411.3447265625,
+                "y": 102.19736842105263
+              }
+            ],
+            "sourceAnchor": 23,
+            "targetAnchor": 0
+          }
+        ]
+      },
+      "associations": [
+        {
+          "relation": "",
+          "from": {
+            "entity": "archives",
+            "field": "VID"
+          },
+          "to": {
+            "entity": "Flag",
+            "field": "FID"
+          }
+        }
+      ]
+    }
+  ],
+  "version": "v0.0.1",
+  "message": "初始化",
+  "date": "2018/9/1 9:27:0"
+}

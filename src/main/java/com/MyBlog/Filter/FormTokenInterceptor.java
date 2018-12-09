@@ -12,8 +12,8 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.MyBlog.Core.FormToken;
-import com.MyBlog.Logger.LoggerUtil;
-import com.MyBlog.utils.JsonOutUtils;
+import com.MyBlog.Logger.MyLogger;
+import com.MyBlog.utils.JsonUtils;
 import com.MyBlog.utils.ShiroFilterUtils;
 
 public class FormTokenInterceptor extends HandlerInterceptorAdapter{
@@ -35,10 +35,10 @@ public class FormTokenInterceptor extends HandlerInterceptorAdapter{
 	                if (needRemoveSession) {
 	                    if (isRepeatSubmit(request)) {
 	                    	if (ShiroFilterUtils.isAjax(request) ) {
-	            				LoggerUtil.debug(getClass(), "当前用户已经提交过，并且是Ajax请求！");
+	            				MyLogger.debug(getClass(), "当前用户已经提交过，并且是Ajax请求！");
 	            				resultMap.put("code", "503");
 	            				resultMap.put("msg", "请不要重复提交！");
-	            				JsonOutUtils.out(response, resultMap);
+	            				JsonUtils.out(response, resultMap);
 	            			}
 	                        return false;
 	                    }
