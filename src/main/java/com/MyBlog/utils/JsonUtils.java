@@ -41,7 +41,7 @@ public class JsonUtils {
 	    JSONObject map=JSONObject.parseObject(mapstr);
 	    queryResult=jsonObjectone.getString("result");
     	queryResult=queryResult.substring(2, queryResult.length()-2);
-    	String qz[]=queryResult.split(",");
+    	String qz[]=queryResult.split("\",\"");
     	Map<String,Object> addressmap=(Map<String,Object>)map;
     	Map<String,String> cmap=null;
     	for(int i=0;i<qz.length;i++) {

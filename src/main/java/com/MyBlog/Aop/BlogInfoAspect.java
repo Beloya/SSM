@@ -88,30 +88,29 @@ public class BlogInfoAspect {
 	        StringBuilder html = new StringBuilder();
 	  	  Archivescommit archivescommit = null;
 	  	MessageBoard messageboard=null;
-		   EmailUtilFactory eFactory=null;
-		   eFactory=new QQEmailUtilFactory();
-		   Email email=null;
-		   email=new Email();
+		   EmailUtilFactory eFactory=new QQEmailUtilFactory();
+		   Email email=new Email();
 		   email.setSubject("博客有人类来啦");
 			  Object[] cObjects=call.getArgs();
-			if(methodName.equals("NewarchivesCommit")) {
+			  switch(methodName) {
+			  case "NewarchivesCommit":
 				archivescommit=  (Archivescommit) cObjects[0];
 				 html.append("有人给你评论了");
 				  html.append(archivescommit.getCreatedBy()+" 在编号为"+archivescommit.getAid()+"文章说了:"+archivescommit.getContext());
-			}
-			else if(methodName.equals("NewSay")) {
+			break;
+			  case "NewSay" :
 				messageboard=  (MessageBoard) cObjects[0];
 				 html.append("有人给你留言了");
 				  html.append(messageboard.getCreatedBy()+" 留言:"+messageboard.getContext());
-			}
-		  else{
+			break;
+              default:
 			  html.append("有人在你的博客留下了印记");
-			
-		  }
+			break;
+		  
+			  }
 			  email.setText(html.toString());
 		   email.setTomail("468501955@qq.com");
-		   QQEmail qqEmail=null;
-		   qqEmail=(QQEmail) eFactory.CreateEmail();
+		   QQEmail qqEmail=(QQEmail) eFactory.CreateEmail();
 		   qqEmail.JoinEmailQueue(qqEmail,email); 
 	    	long end=System.currentTimeMillis();
 	    	

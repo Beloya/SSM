@@ -15,6 +15,7 @@ public class Email {
 	private Date senddate;
 	private String password;
 	private FileSystemResource file;
+	
 	public String getHost() {
 		return host;
 	}

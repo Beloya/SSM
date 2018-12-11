@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -28,14 +31,15 @@ import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
+import com.MyBlog.Logger.MyLogger;
 import com.MyBlog.ServiceImpl.TrainServiceImpl;
 import com.MyBlog.entity.trainData;
 import com.alibaba.fastjson.JSONObject;
 
-public class trainRequest extends httpRequest{
+public class trainRequest extends httpRequest implements Runnable{
 private trainData userTrain;
 
-
+private Lock lock=new ReentrantLock();
 
 
 private trainRequest() {
@@ -72,8 +76,10 @@ String result=null;
 }
 
 
-public  boolean processTask(trainRequest t) {
-	if(!t.getUserTrain().isStart()||t.getUserTrain().isComplete())
+public   boolean processTask() {
+	  
+	  
+	if(!userTrain.isStart()||userTrain.isComplete())
 		return true;
 	Calendar c=Calendar.getInstance();
 	JSONObject jsonObjectone = null;
@@ -82,108 +88,125 @@ public  boolean processTask(trainRequest t) {
 	  postMap=new HashMap<>();
 	  Multimap= null; 
 
-	  
+	  if(lock.tryLock()) {
+try {
 	  //拉取余票信息
-	  Multimap=(List<Map<String, String>>) TrainServiceImpl.queryTicket(t,t.getUserTrain().getFromStationTelecode(),t.getUserTrain().getToStationTelecode(),t.getUserTrain().getTrainQueryDate());
+	  Multimap=(List<Map<String, String>>) TrainServiceImpl.queryTicket(this,userTrain.getFromStationTelecode(),userTrain.getToStationTelecode(),userTrain.getTrainQueryDate());
 	 if(Multimap==null) {
 		 return false; 
 	 }
 	 
 	  //检查用户状态
-	  jsonObjectone=(JSONObject) TrainServiceImpl.CheckUser(t);
+	  jsonObjectone=(JSONObject) TrainServiceImpl.CheckUser(this);
 if(!jsonObjectone.getBoolean("status")
 		||!JSONObject.parseObject(jsonObjectone.getString("data")).getBoolean("flag")) {
-
+	TrainServiceImpl.faileAndStopBuyTask(this, "登录也许或许已经失效了，停止运行");
 		return false;
 	} 
 
 	 
 	  for (Map<String, String> map : Multimap) {
-		if(map.get("train_no").equals(t.getUserTrain().getTrain_no())
-				&&map.get("station_train_code").equals(t.getUserTrain().getStationTrainCode())) {
+		if(map.get("train_no").equals(userTrain.getTrain_no())
+				&&map.get("station_train_code").equals(userTrain.getStationTrainCode())) {
 			postMap.put("secretStr", URLDecoder.decode(map.get("secretStr")));
 			break;
 		}
 	}
 	  
 	 
-	  postMap.put("tour_flag", t.getUserTrain().getTour_flag());
-	  postMap.put("to_station_name", t.getUserTrain().getToStationTeleName());
-	  postMap.put("query_from_station_name", t.getUserTrain().getFromStationName());
-	  postMap.put("train_date", t.getUserTrain().getTrain_date());
+	  postMap.put("tour_flag", userTrain.getTour_flag());
+	  postMap.put("to_station_name", userTrain.getToStationTeleName());
+	  postMap.put("query_from_station_name", userTrain.getFromStationName());
+	  postMap.put("train_date", userTrain.getTrain_date());
 	  postMap.put("back_train_date", c.get(Calendar.YEAR)+"-"+(c.get(Calendar.MONTH)+1)+"-"+c.get(Calendar.DAY_OF_MONTH));
-	  postMap.put("purpose_codes", t.getUserTrain().getPurpose_codes());
+	  postMap.put("purpose_codes",userTrain.getPurpose_codes());
 
 
 	  
-	  
-	  jsonObjectone=(JSONObject) TrainServiceImpl.submitOrderRequest(t,postMap);
+	  //提交预订单
+	  jsonObjectone=(JSONObject) TrainServiceImpl.submitOrderRequest(this,postMap);
 	
 	 if(!jsonObjectone.getBoolean("status")) {
+		 userTrain.addMsgList("提交预订单失败["+jsonObjectone.getString("messages")+"]");
 		 return false;
 	 }
-	 TrainServiceImpl.getPassenger(t);
+	 //获取乘客信息
+	 TrainServiceImpl.getPassenger(this);
 
 
 postMap.clear();
-postMap.put("tour_flag", t.getUserTrain().getTour_flag());
+postMap.put("tour_flag", userTrain.getTour_flag());
 postMap.put("bed_level_order_num", "000000000000000000000000000000");
 postMap.put("whatsSelect", "1");
-postMap.put("passengerTicketStr",t.getUserTrain().getPassengerTicketStr());
-postMap.put("oldPassengerStr",t.getUserTrain().getOldPassengerStr());
+postMap.put("passengerTicketStr",userTrain.getPassengerTicketStr());
+postMap.put("oldPassengerStr",userTrain.getOldPassengerStr());
 postMap.put("_json_att","");
 postMap.put("randCode","");
 postMap.put("cancel_flag",2);
-jsonObjectone=(JSONObject) TrainServiceImpl.checkOrderInfo(t,postMap);
+//订单检查
+jsonObjectone=(JSONObject) TrainServiceImpl.checkOrderInfo(this,postMap);
 if(!jsonObjectone.getBoolean("status")
 		||!JSONObject.parseObject(jsonObjectone.getString("data")).getBoolean("submitStatus")) {
+	 userTrain.addMsgList("订单确认状态失败["+JSONObject.parseObject(jsonObjectone.getString("data"))
+	 .getString("errMsg")+"]");
 	 return false;
 }
 postMap.clear();
-postMap.put("seatType", t.getUserTrain().getSeatType());
-postMap.put("stationTrainCode", t.getUserTrain().getStationTrainCode());
-postMap.put("fromStationTelecode", t.getUserTrain().getFromStationTelecode());
-postMap.put("train_location", t.getUserTrain().getTrain_location());
-postMap.put("train_no", t.getUserTrain().getTrain_no());
-postMap.put("train_date", t.getUserTrain().getTrain_date().replace("-", "/"));
+postMap.put("seatType", userTrain.getSeatType());
+postMap.put("stationTrainCode", userTrain.getStationTrainCode());
+postMap.put("fromStationTelecode",userTrain.getFromStationTelecode());
+postMap.put("train_location", userTrain.getTrain_location());
+postMap.put("train_no", userTrain.getTrain_no());
+postMap.put("train_date", userTrain.getTrain_date().replace("-", "/"));
 postMap.put("_json_att", "");
-postMap.put("toStationTelecode", t.getUserTrain().getToStationTelecode());
+postMap.put("toStationTelecode", userTrain.getToStationTelecode());
 postMap.put("purpose_codes", "00");
-jsonObjectone=(JSONObject) TrainServiceImpl.getQueueCount(t,postMap);
+//获取订单队列
+jsonObjectone=(JSONObject) TrainServiceImpl.getQueueCount(this,postMap);
 if(!jsonObjectone.getBoolean("status")) {
+	 userTrain.addMsgList("确认订单状态失败["+jsonObjectone.getString("messages")+"]");
 	 return false;
 }
 postMap.clear();
 postMap.put("seatDetailType", "000");
 postMap.put("whatsSelect", "1");
 postMap.put("randCode", "");
-postMap.put("oldPassengerStr",t.getUserTrain().getOldPassengerStr());
-postMap.put("passengerTicketStr",t.getUserTrain().getPassengerTicketStr());
+postMap.put("oldPassengerStr",userTrain.getOldPassengerStr());
+postMap.put("passengerTicketStr",userTrain.getPassengerTicketStr());
 postMap.put("purpose_codes", "00");
-postMap.put("train_location", t.getUserTrain().getTrain_location());
+postMap.put("train_location", userTrain.getTrain_location());
 postMap.put("dwAll", "N");
 postMap.put("choose_seats", "");
 postMap.put("_json_att", "");
 postMap.put("roomType", "00");
-jsonObjectone=(JSONObject) TrainServiceImpl.confirmSingleQueue(t,postMap);
+jsonObjectone=(JSONObject) TrainServiceImpl.confirmSingleQueue(this,postMap);
 if(!jsonObjectone.getBoolean("status")
 		||!JSONObject.parseObject(jsonObjectone.getString("data")).getBoolean("submitStatus")) {
+	 userTrain.addMsgList("下单失败["+JSONObject.parseObject(jsonObjectone.getString("data"))
+	 .getString("errMsg")+"]");
 	 return false;
 }
 long timstamp=System.currentTimeMillis();
 postMap.clear();
 postMap.put("random", timstamp);
-postMap.put("tourFlag", t.getUserTrain().getTour_flag());
-jsonObjectone=(JSONObject) TrainServiceImpl.getQueryOrderWaitTime(t,postMap);
-
-
+postMap.put("tourFlag", userTrain.getTour_flag());
+jsonObjectone=(JSONObject) TrainServiceImpl.getQueryOrderWaitTime(this,postMap);
 
 
 postMap=null;
-TrainServiceImpl.completeBuyTask(t);
-	return true;
-}
+TrainServiceImpl.completeBuyTask(this);
 
+}
+catch (Exception e) {
+MyLogger.error(getClass(), "抢票任务异常");
+}
+finally{
+	lock.unlock();
+}
+	  }
+	return true;
+
+}
 
 public httpRequest useMyHeader(boolean h) {
 	useMyHeader=h;
@@ -200,4 +223,11 @@ public  httpRequest custom() {
 	HttpClientBuilder.create();
 	return this;
 }
+@Override
+public void run() {
+	processTask();
+	
+}
+
+
 }

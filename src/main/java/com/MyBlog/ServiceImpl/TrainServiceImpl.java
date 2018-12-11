@@ -3,23 +3,21 @@ package com.MyBlog.ServiceImpl;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
-
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Service;
-
 import com.MyBlog.HttpRequest.trainRequest;
+import com.MyBlog.Message.EmailUtilFactory;
+import com.MyBlog.Message.QQEmail;
+import com.MyBlog.Message.QQEmailUtilFactory;
 import com.MyBlog.Service.TrainService;
+import com.MyBlog.entity.Email;
 import com.MyBlog.entity.Users;
 import com.MyBlog.entity.trainData;
 import com.MyBlog.utils.JsonUtils;
@@ -37,25 +35,23 @@ public class TrainServiceImpl implements TrainService{
 	@Override
 	public Object userLogin(String trainusername, String trainpassword, String verifyCode) {
 		getJession();
-		Map<String,Object> postmap=null;
-		trainRequest trainRequst=null;
+		Map<String,Object> postmap=new HashMap<>();
+		trainRequest trainRequst=(trainRequest) getUserSession();
 			JSONObject jsonObject =null;
-		postmap=new HashMap<>();
 		postmap.put("username", trainusername);
 		postmap.put("password", trainpassword);
 		postmap.put("appid", "otn");
 		postmap.put("answer", verifyCode);
-			trainRequst=(trainRequest) getUserSession();
+
 		String login_result=trainRequst.doPost(loginUrl,postmap);
 	   jsonObject = JSONObject.parseObject(login_result);
 	   if(jsonObject.getInteger("result_code")==0) {
-	   HashMap<String,Object> hm=null ;
-	   hm= new HashMap<>();
+	   HashMap<String,Object> hm=new HashMap<>();
 	   hm.put("appid", "otn");
 		  String result= trainRequst.doPost(uamtkUrl,hm);
 			JSONObject jsonuamtk =JSONObject.parseObject(result);
 		String uamtkstr=jsonuamtk.getString("newapptk");
-		hm=new HashMap<>();
+		hm.clear();
 		hm.put("tk", uamtkstr);
 	trainRequst.doPost(uamauthclientUrl,hm);
 	
@@ -66,10 +62,9 @@ public class TrainServiceImpl implements TrainService{
 	@Override
 	public Object getVerify() {
 		String result=null,verifyImg=null;
-		trainRequest trainRequest=null;
+		trainRequest trainRequest=getUserSession();
 JSONObject jsonObjectone = null;
 long timstamp=System.currentTimeMillis();   
-	trainRequest=getUserSession();
 	result=trainRequest.DoGet(getVerifyUrl+timstamp);
 	jsonObjectone = JSONObject.parseObject(result);
 	verifyImg=	jsonObjectone.getString("image");
@@ -103,11 +98,11 @@ long timstamp=System.currentTimeMillis();
 		String result=null;
 		String tempdata=null;
 	//String mapstr=null,queryResult=null;
-		trainRequest trainRequest=null;
+		trainRequest trainRequest=getUserSession();
 		JSONObject jsonObjectone = null;
 		try {
 		  List<Map<String,String>> Multimap =new ArrayList<>(); 
-			trainRequest=getUserSession();		
+			
 			  trainRequest.getUserTrain().setTrainQueryDate(time);	
 			result=trainRequest.
 DoGet(queryUrl+"train_date="+time+"&leftTicketDTO.from_station="+from_station+
@@ -185,11 +180,9 @@ public synchronized static void sessionTaskPut(String key,Object value) {
 @Override
 public Object CheckUser() {
 	String result=null;
-	trainRequest trainRequest=null;
-	Map<String,Object> postmap=null;
+	trainRequest trainRequest=getUserSession();
+	Map<String,Object> postmap=new HashMap<>();
 	JSONObject jsonObjectone = null;
-	postmap=new HashMap<>();
-		trainRequest=getUserSession();
 		postmap.put("_json_att", "");
 		result=trainRequest.
 				doPost(checkUserUrl, postmap);
@@ -202,9 +195,8 @@ public Object CheckUser() {
 public static Object CheckUser(trainRequest trainRequest) {
 	String result=null;
 
-	Map<String,Object> postmap=null;
+	Map<String,Object> postmap=new HashMap<>();
 	JSONObject jsonObjectone = null;
-	postmap=new HashMap<>();
 		postmap.put("_json_att", "");
 		result=trainRequest.
 				doPost(checkUserUrl, postmap);
@@ -216,10 +208,8 @@ public static Object CheckUser(trainRequest trainRequest) {
 public Object getPassenger() {
 	String result=null;
 	trainRequest trainRequest=null;
-	Map<String,Object> postmap=null;
+	Map<String,Object> postmap=new HashMap<>();
 	JSONObject jsonObjectone = null;
-	postmap=new HashMap<>();
-
 	getinitDcTOKEN();
 		trainRequest=(trainRequest) getUserSession();
 		postmap.put("REPEAT_SUBMIT_TOKEN",
@@ -234,10 +224,8 @@ public Object getPassenger() {
 public static Object getPassenger(trainRequest trainRequest) {
 	String result=null;
 
-	Map<String,Object> postmap=null;
+	Map<String,Object> postmap=new HashMap<>();
 	JSONObject jsonObjectone = null;
-	postmap=new HashMap<>();
-
 	getinitDcTOKEN(trainRequest);
 		postmap.put("REPEAT_SUBMIT_TOKEN",
 				Optional.ofNullable(trainRequest.getUserTrain().getRepeat_submit_token()).orElse(""));
@@ -251,11 +239,9 @@ public static Object getPassenger(trainRequest trainRequest) {
 private Object getinitDcTOKEN() {
 	String result=null,temp=null,TOKEN=null;
 	trainRequest trainRequest=null;
-	Map<String,Object> postmap=null;
-	Map<String,String> tokenMap=null;
-	tokenMap=new HashMap<>();
+	Map<String,Object> postmap=new HashMap<>();
+	Map<String,String> tokenMap=new HashMap<>();
 	int n=0,m=0;
-	postmap=new HashMap<>();
 	postmap.put("_json_att", "");
 		trainRequest=(trainRequest) getUserSession();
 		result=trainRequest.
@@ -294,11 +280,9 @@ private Object getinitDcTOKEN() {
 private static Object getinitDcTOKEN(trainRequest trainRequest) {
 	String result=null,temp=null,TOKEN=null;
 
-	Map<String,Object> postmap=null;
-	Map<String,String> tokenMap=null;
-	tokenMap=new HashMap<>();
+	Map<String,Object> postmap=new HashMap<>();
+	Map<String,String> tokenMap=new HashMap<>();
 	int n=0,m=0;
-	postmap=new HashMap<>();
 	postmap.put("_json_att", "");
 		result=trainRequest.
 				doPost(initDcUrl, postmap);
@@ -352,11 +336,10 @@ public   trainRequest getUserSession() {
 public Object submitOrderRequest(Map<String,Object> postmap) {
 
 	String result=null;
-	trainRequest trainRequest=null;
+	trainRequest trainRequest=getUserSession();
 	JSONObject jsonObjectone = null;
-	trainRequest=(trainRequest) getUserSession();
 	trainRequest.getUserTrain().setTour_flag((String)postmap.get("tour_flag"));
-	trainRequest.getUserTrain().setToStationTeleName((String)postmap.get("to_station_name"));
+	trainRequest.getUserTrain().setToStationTeleName((String)postmap.get("query_to_station_name"));
 	trainRequest.getUserTrain().setFromStationName((String)postmap.get("query_from_station_name"));
 	trainRequest.getUserTrain().setTrain_date((String)postmap.get("train_date"));
 	trainRequest.getUserTrain().setPurpose_codes((String)postmap.get("purpose_codes"));
@@ -387,9 +370,8 @@ public static Object submitOrderRequest(trainRequest trainRequest,Map<String,Obj
 
 public  Object checkOrderInfo(Map<String,Object> postmap) {
 	String result=null;
-	trainRequest trainRequest=null;
+	trainRequest trainRequest=getUserSession();
 	JSONObject jsonObjectone = null;
-	trainRequest=(trainRequest) getUserSession();
 	postmap.put("REPEAT_SUBMIT_TOKEN",
 			Optional.ofNullable(trainRequest.getUserTrain().getRepeat_submit_token()).orElse(""));
 	trainRequest.getUserTrain().setPassengerTicketStr((String)postmap.get("passengerTicketStr"));
@@ -416,9 +398,8 @@ public static Object checkOrderInfo(trainRequest trainRequest,Map<String,Object>
 
 public Object getQueueCount(Map<String,Object> postmap) {
 	String result=null;
-	trainRequest trainRequest=null;
+	trainRequest trainRequest= getUserSession();
 	JSONObject jsonObjectone = null;
-	trainRequest=(trainRequest) getUserSession();
 	postmap.put("REPEAT_SUBMIT_TOKEN",
 			Optional.ofNullable(trainRequest.getUserTrain().getRepeat_submit_token()).orElse(""));
 	postmap.put("leftTicket",trainRequest.getUserTrain().getLeftTicket()!=null?trainRequest.getUserTrain().getLeftTicket():"");
@@ -458,9 +439,8 @@ public static Object getQueueCount(trainRequest trainRequest,Map<String,Object> 
 
 public Object confirmSingleQueue(Map<String,Object> postmap) {
 	String result=null;
-	trainRequest trainRequest=null;
+	trainRequest trainRequest= getUserSession();
 	JSONObject jsonObjectone = null;
-	trainRequest=(trainRequest) getUserSession();
 	postmap.put("REPEAT_SUBMIT_TOKEN",
 			Optional.ofNullable(trainRequest.getUserTrain().getRepeat_submit_token()).orElse(""));
 	postmap.put("leftTicketStr",trainRequest.getUserTrain().getLeftTicket()!=null?trainRequest.getUserTrain().getLeftTicket():"");
@@ -473,9 +453,8 @@ public Object confirmSingleQueue(Map<String,Object> postmap) {
 
 public Object joinConfirmSingleQueue(Map<String,Object> postmap) {
 	String result=null;
-	trainRequest trainRequest=null;
+	trainRequest trainRequest=getUserSession();
 	JSONObject jsonObjectone = null;
-	trainRequest=(trainRequest) getUserSession();
 	postmap.put("REPEAT_SUBMIT_TOKEN",
 			Optional.ofNullable(trainRequest.getUserTrain().getRepeat_submit_token()).orElse(""));
 	postmap.put("leftTicketStr",trainRequest.getUserTrain().getLeftTicket()!=null?trainRequest.getUserTrain().getLeftTicket():"");
@@ -508,9 +487,8 @@ public static Object confirmSingleQueue(trainRequest trainRequest,Map<String,Obj
 
 public  Object getQueryOrderWaitTime(Map<String,Object> postmap) {
 	String result=null;
-	trainRequest trainRequest=null;
+	trainRequest trainRequest=(trainRequest) getUserSession();
 	JSONObject jsonObjectone = null;
-	trainRequest=(trainRequest) getUserSession();
 	postmap.put("REPEAT_SUBMIT_TOKEN",
 			Optional.ofNullable(trainRequest.getUserTrain().getRepeat_submit_token()).orElse(""));
 	result=trainRequest.
@@ -533,24 +511,43 @@ public static Object getQueryOrderWaitTime(trainRequest trainRequest,Map<String,
 }
 
 private void getJession() {
-	trainRequest trainRequest=null;
-	trainRequest=(trainRequest) getUserSession();
+	trainRequest trainRequest=getUserSession();
 	trainRequest.DoGet(initloginUrl);
 }
 
 
 
-public static synchronized CopyOnWriteArraySet<Object> getBuyTask() {
+public static  CopyOnWriteArraySet<Object> getBuyTask() {
 
 	return buyTask;
 }
 
-public static synchronized boolean completeBuyTask(trainRequest t) {
+public static  boolean completeBuyTask(trainRequest t) {
 	buyTask.remove(t);
 	if(t!=null) {
 	t.getUserTrain().setStart(false);
 	t.getUserTrain().setComplete(true);
+	t.getUserTrain().addMsgList("购买完成");
 	
+	
+	   Users Principaluser=null;
+			Subject subject = SecurityUtils.getSubject(); 
+			Object Principal=  subject.getPrincipal();
+			if(Principal!=null) {
+				Principaluser=(Users) Principal;
+			}
+
+	
+	 EmailUtilFactory eFactory=new QQEmailUtilFactory();
+	 Email email=new Email();
+	  email.setSubject("12306购票成功");
+	   email.setText("由 "+t.getUserTrain().getFromStationName()+" 开往 "
+	 +t.getUserTrain().getToStationTeleName()+"的 "+t.getUserTrain().getStationTrainCode()+
+	 "次列车购票完成，请前往12306官网付款");
+	
+		email.setTomail("468501955@qq.com");
+		QQEmail qqEmail=(QQEmail) eFactory.CreateEmail();
+		   qqEmail.JoinEmailQueue(qqEmail,email); 
 	}
 	else {
 		return false;
@@ -558,13 +555,24 @@ public static synchronized boolean completeBuyTask(trainRequest t) {
 	return true;
 }
 
-public synchronized static void setBuyTask(CopyOnWriteArraySet<Object> buyTask) {
+public static  void faileAndStopBuyTask(trainRequest t,String remark) {
+	buyTask.remove(t);
+
+	t.getUserTrain().setStart(false);
+	t.getUserTrain().setComplete(false);
+	t.getUserTrain().addMsgList(remark);
+
+}
+
+public  static void setBuyTask(CopyOnWriteArraySet<Object> buyTask) {
 	TrainServiceImpl.buyTask = buyTask;
 }
-public synchronized static void addBuyTask(trainRequest obj) {
+public  static void addBuyTask(trainRequest obj) {
 	TrainServiceImpl.buyTask.add(obj);
 	obj.getUserTrain().setStart(true);
 }
+
+
 
 
 }

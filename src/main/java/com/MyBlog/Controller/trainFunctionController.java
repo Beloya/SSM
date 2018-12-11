@@ -1,5 +1,6 @@
 package com.MyBlog.Controller;
 
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -55,8 +56,7 @@ private TrainServiceImpl tsi;
 	@RequestMapping("trainqueryJson")
 	  @ResponseBody
 	  public Object query(String from_station,String to_station,String time,HttpServletRequest request) {
-		Map<String,Object> resultMap=null;
-		resultMap=new HashMap<>();
+		Map<String,Object> resultMap=new HashMap<>();
 		 List<Map<String,String>> Multimap =new ArrayList<>(); 
 		 Multimap=(List<Map<String, String>>) tsi.queryTicket(from_station, to_station, time);
 		 if(Multimap!=null) {
@@ -77,10 +77,8 @@ private TrainServiceImpl tsi;
 	@RequestMapping("trainGetverifyImg")
 	@ResponseBody
 	public Object trainGetVerify(HttpServletRequest request) {
-		Map<String,Object> resultMap=null;
-		resultMap=new HashMap<>();
-		String verifyImg=null;
-		verifyImg=(String) tsi.getVerify();
+		Map<String,Object> resultMap=new HashMap<>();
+		String verifyImg=(String) tsi.getVerify();
 		resultMap.put("code", 0);
 		resultMap.put("verifyImg", verifyImg);
 			return resultMap;
@@ -121,22 +119,20 @@ private TrainServiceImpl tsi;
 	@ResponseBody
 	public Object trainsubmitOrderRequest(String secretStr,String start_train_date,String from_station_name,String to_station_name,HttpServletRequest request) {
 		JSONObject jsonObjectone = null;
-		Map<String,Object> postMap=null;
+		Map<String,Object> postMap=new HashMap<>();
 			Map<String,Object> resultMap=new HashMap<>();
 			String train_date;
 			train_date=start_train_date.substring(0,4)+"-"+start_train_date.substring(4,6)+"-"+start_train_date.substring(6,8);
 		Calendar c=Calendar.getInstance();
-			postMap=new HashMap<>();
-		postMap.put("secretStr", secretStr);
+		postMap.put("secretStr", URLDecoder.decode(secretStr));
 		postMap.put("train_date", train_date);
 		postMap.put("back_train_date", c.get(Calendar.YEAR)+"-"+(c.get(Calendar.MONTH)+1)+"-"+c.get(Calendar.DAY_OF_MONTH));
 		postMap.put("query_from_station_name", from_station_name);
-		postMap.put("to_station_name", to_station_name);
+		postMap.put("query_to_station_name", to_station_name);
 		postMap.put("tour_flag", "dc");
 		postMap.put("purpose_codes", "ADULT");
 		postMap.put("undefined", "");
 		jsonObjectone=(JSONObject) tsi.submitOrderRequest(postMap);
-		if(jsonObjectone.getBoolean("status")) {
 		jsonObjectone=(JSONObject) tsi.getPassenger();
 		JSONArray array =jsonObjectone.parseArray(jsonObjectone.parseObject(jsonObjectone.getString("data")).getString("normal_passengers"));
 		resultMap.put("code",0);
@@ -144,12 +140,7 @@ private TrainServiceImpl tsi;
 		resultMap.put("count",20);
 		resultMap.put("data",array);
 		return resultMap;
-		}
-		else {
-			resultMap.put("code",404);
-			resultMap.put("msg",jsonObjectone.getString("messages"));
-			return resultMap;
-		}
+	
 	}
 	
 	
@@ -158,10 +149,7 @@ private TrainServiceImpl tsi;
 	public Object trainSumbitOrder(String oldPassengerStr,String passengerTicketStr,String tour_flag,String whatsSelect,String train_date,trainData traindata,HttpServletRequest request) {
 
 		JSONObject jsonObjectone = null;
-		Map<String,Object> postmap=null;
-		postmap=new HashMap<>();
-
-		
+		Map<String,Object> postmap=new HashMap<>();
 		postmap.put("oldPassengerStr", oldPassengerStr);
 		postmap.put("passengerTicketStr", passengerTicketStr);
 		postmap.put("tour_flag", tour_flag);
@@ -172,7 +160,7 @@ private TrainServiceImpl tsi;
 		postmap.put("bed_level_order_num","000000000000000000000000000000");
 		jsonObjectone=(JSONObject) tsi.checkOrderInfo(postmap);
 		
-		postmap=new HashMap<>();
+		postmap.clear();
 		postmap.put("train_date", train_date);
 		postmap.put("train_no", traindata.getTrain_no());
 		postmap.put("stationTrainCode", traindata.getStationTrainCode());
@@ -188,10 +176,7 @@ private TrainServiceImpl tsi;
 	@RequestMapping("trainconfirmSingleForQueue")
 	@ResponseBody
 	public Object trainconfirmSingleForQueue(String oldPassengerStr,String passengerTicketStr,String whatsSelect,trainData traindata,HttpServletRequest request) {
-		JSONObject jsonObjectone = null;
-		Map<String,Object> postmap=null;
-		Map<String,Object> resultMap=new HashMap<>();
-		postmap=new HashMap<>();
+		Map<String,Object> postmap=new HashMap<>(),resultMap=new HashMap<>();
 		postmap.put("oldPassengerStr", oldPassengerStr);
 		postmap.put("passengerTicketStr", passengerTicketStr);
 		postmap.put("whatsSelect", whatsSelect);
@@ -221,9 +206,8 @@ private TrainServiceImpl tsi;
 	@ResponseBody
 	public Object trainqueryOrderWaitTimeUrl(String tour_flag,HttpServletRequest request) {
 		JSONObject jsonObjectone = null;
-		Map<String,Object> postmap=null;
+		Map<String,Object> postmap=new HashMap<>();
 		long timestamp=System.currentTimeMillis();
-		postmap=new HashMap<>();
 		postmap.put("tourFlag", tour_flag);
 	
 		postmap.put("random", timestamp);

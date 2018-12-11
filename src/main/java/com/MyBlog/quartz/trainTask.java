@@ -1,37 +1,31 @@
 package com.MyBlog.quartz;
 
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
 import com.MyBlog.HttpRequest.trainRequest;
-import com.MyBlog.Service.TrainService;
 import com.MyBlog.ServiceImpl.TrainServiceImpl;
-import com.MyBlog.entity.trainData;
+
 
 @EnableAsync
 @Component
 public class trainTask{
-	@Autowired
-	private TrainService tsi;
-	  private Lock lock = null;
+	private ExecutorService p=Executors.newFixedThreadPool(20);
 	  @Async
-	@Scheduled(cron = " 0/3 * * * * ?  ")
+	@Scheduled(cron = " 0/3 * 8,9,10,11,12,13,14,15,16,17,18 * * ?  ")
 	public void tryBuy(){
 		
-		  CopyOnWriteArraySet<Object> buyTask=TrainServiceImpl.buyTask;
+	
 			
-		  for (Object object : buyTask) {
+		  for (Object object :  TrainServiceImpl.buyTask) {
 			  trainRequest t=(trainRequest) object;
 			  if(t.getUserTrain().isStart()&&!t.getUserTrain().isComplete()) {
-			t.processTask(t);
+				  p.execute(t);
+			
 			
 			  
 			  }

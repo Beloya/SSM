@@ -1,7 +1,7 @@
 package com.MyBlog.Message;
 
 import java.security.GeneralSecurityException;
-
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -32,7 +32,7 @@ public class QQEmail implements EmailUtil{
 	public static ArrayBlockingQueue<QQEmail> emailqueue=new ArrayBlockingQueue<QQEmail>(50);
 	private FileSystemResource file;
 	public QQEmail(){}
- 
+
 	public <T> void  JoinEmailQueue(T t,Email email) {
 
 		this.tomail = email.getTomail();
@@ -48,7 +48,7 @@ public class QQEmail implements EmailUtil{
 	
 	}
 
-	public synchronized Object SendMail(Email email) {
+	public  Object SendMail(Email email) {
 		try {
 	
 		JavaMailSenderImpl senderImpl = new JavaMailSenderImpl(); 

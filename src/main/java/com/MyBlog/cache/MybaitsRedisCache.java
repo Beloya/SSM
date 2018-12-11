@@ -113,14 +113,14 @@ public class MybaitsRedisCache implements Cache{
 	         //   connection.select(DB_Index);
 	        	byte[] b=jedis.hget(SerializeUtil.serialize(MybaitsKey),SerializeUtil.serialize(key));
 	        	if(b==null) {
-	        		MyLogger.INFO(getClass(), "缓存未命中,当前命中率为:"+(succescache/++readcachecount));
+	        		MyLogger.INFO(getClass(), "缓存未命中,当前命中率为:"+(succescache/++readcachecount)*100+"%");
 	        		
 	        		return result;
 	        	}
 	            result = SerializeUtil.unserialize(b);
 	
 
-	  MyLogger.INFO(getClass(), "缓存命中,当前命中率为:"+(++succescache/++readcachecount));
+	  MyLogger.INFO(getClass(), "缓存命中,当前命中率为:"+(++succescache/++readcachecount)*100+"%");
 	        }
 	        catch (JedisConnectionException e)
 	        {

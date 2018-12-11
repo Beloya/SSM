@@ -64,21 +64,21 @@ layui.use(['table','laydate','form'], function(){
   if(data!=null&&data!=undefined){
 	  console.log(data);
 var seat=data.swz_num=="--"?"":"商务座";
-		seat+=data.zy_num=="--"?"":"、一等座";
-		seat+=data.ze_num=="--"?"":"、二等座";
-		seat+=data.gr_num=="--"?"":"、高级软卧";
-		seat+=data.rw_num=="--"?"":"、软卧";
-		seat+=data.yw_num=="--"?"":"、硬卧";
-		seat+=data.rz_num=="--"?"":"、软座";
-		seat+=data.yz_num=="--"?"":"、硬座";
-		seat+=data.wz_num=="--"?"":"、站票";
+		seat+=data.zy_num=="--"?"":" 一等座";
+		seat+=data.ze_num=="--"?"":" 二等座";
+		seat+=data.gr_num=="--"?"":" 高级软卧";
+		seat+=data.rw_num=="--"?"":" 软卧";
+		seat+=data.yw_num=="--"?"":" 硬卧";
+		seat+=data.rz_num=="--"?"":" 软座";
+		seat+=data.yz_num=="--"?"":" 硬座";
+		seat+=data.wz_num=="--"?"":" 站票";
    $("#select_Order").html("车次："+data.station_train_code+"  当前有票座位：<br/>"+seat);
-   var desecretStr=decodeURIComponent(data.secretStr);
+  // var desecretStr=decodeURIComponent(data.secretStr);
   table.reload('passenger_id_no', {
 	  url: '<%=request.getContextPath()%>/trainsubmitOrderRequest'
 	  ,where: {
 		
-		  secretStr:desecretStr,
+		  secretStr:data.secretStr,
 		  start_train_date:data.start_train_date,
 		  from_station_name:data.from_station_name,
 		  to_station_name:data.to_station_name
@@ -138,25 +138,7 @@ data:"passengerTicketStr="+passengerTicketStr+"&oldPassengerStr="+oldPassengerSt
  data:"passengerTicketStr="+passengerTicketStr+"&oldPassengerStr="+oldPassengerStr+"&whatsSelect="+whatsSelect+"&train_location="+train_location
     	        ,success: function(result){
     	        	console.log(result);
-    	        	if(result.status&&result.data.submitStatus){    
-    	        			 $.ajax({ 
-    	        				    url: "<%=request.getContextPath()%>/trainqueryOrderWaitTime", 
-    	        				    type:'POST',
-    	        				 data:"tour_flag="+tour_flag
-    	        		,success: function(result){
-    	        	console.log(result);
-    	        			if(result.code==0){
-    	        				
-    	        		alter("已加入肯德基豪华午餐");
-    	        			window.clearInterval(q);	
-    	        			}
-    	        			
-    	        			
-    	        				    	        }
-    	        			 });
     	        	
-    	        		
-    	        	}
     	        	
     	        	
     	        }
