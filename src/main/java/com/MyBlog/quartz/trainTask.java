@@ -16,7 +16,7 @@ import com.MyBlog.ServiceImpl.TrainServiceImpl;
 public class trainTask{
 	private ExecutorService p=Executors.newFixedThreadPool(20);
 	  @Async
-	@Scheduled(cron = " 0/3 * 8,9,10,11,12,13,14,15,16,17,18 * * ?  ")
+	@Scheduled(cron = " 0/5 * 8,9,10,11,12,13,14,15,16,17,18 * * ?  ")
 	public void tryBuy(){
 		
 	

@@ -99,7 +99,7 @@ var seat=data.swz_num=="--"?"":"商务座";
   */
   
   form.on('submit(train_sumbit)', function(formdata){
-	    layer.msg(JSON.stringify(formdata.field.seat));
+	 //   layer.msg(JSON.stringify(formdata.field.seat));
 	var ticket_type=1;
 	    var seatType=formdata.field.seat;
 	    var idate=data.start_train_date+"";
@@ -128,26 +128,26 @@ var seat=data.swz_num=="--"?"":"商务座";
 data:"passengerTicketStr="+passengerTicketStr+"&oldPassengerStr="+oldPassengerStr+"&tour_flag="+tour_flag+"&whatsSelect="+whatsSelect+"&train_date="+train_date+"&train_no="+train_no+"&stationTrainCode="+stationTrainCode+"&seatType="+seatType+"&fromStationTelecode="+fromStationTelecode+"&toStationTelecode="+toStationTelecode+"&train_location="+train_location
 ,success: function(result){
 	 console.log(result);  
-	if(result.status){
-    	        	
-    	        	 
-    	        	 
+      	 
    $.ajax({ 
     url: "<%=request.getContextPath()%>/trainconfirmSingleForQueue", 
     type:'POST',
  data:"passengerTicketStr="+passengerTicketStr+"&oldPassengerStr="+oldPassengerStr+"&whatsSelect="+whatsSelect+"&train_location="+train_location
     	        ,success: function(result){
     	        	console.log(result);
+    	        	if(result.code==0){
+    	        		layer.confirm('已加入队列', {icon: 1, title:'提示'}, function(index){
+    	        			var index = parent.layer.getFrameIndex(window.name); 
+        	        		parent.layer.close(index); 
+    	        			});
     	        	
-    	        	
-    	        	
-    	        }
-    	        	    });
+    	        	}
+    	        		
+    	        }});
     	        	 
     	        	 
-	}
-    	           }
-	    });
+	
+    	           }});
 	    
 	    return false;
 	  });

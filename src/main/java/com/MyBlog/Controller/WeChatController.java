@@ -3,6 +3,7 @@ package com.MyBlog.Controller;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
@@ -18,14 +19,12 @@ import com.MyBlog.Socket.ChatServic;
 
 @Controller
 public class WeChatController {
-	private  static ReentrantLock Wechatlock = new ReentrantLock(); 
+
    public static Set<String> websocktPostion=new HashSet<>();
 	@RequestMapping("WeChat")
 	public String WeChatShow(HttpServletRequest request,HttpServletResponse response,Model model) {
 
-		StringBuilder Name=null;
-		
-		Name=new StringBuilder("御坂");
+		StringBuilder Name=new StringBuilder("御坂");
 		
 
 	synchronized(websocktPostion) {

@@ -132,7 +132,52 @@ word-break:break-all;
   </div>
 
 
-    <div class="layui-tab-item">内容2</div>
+    <div class="layui-tab-item"> 
+    <div class="layui-card">
+  <div class="layui-card-header"><c:if test="${!empty trainData }">
+  
+  由   ${trainData.fromStationName} 开往 ${trainData.toStationTeleName}  ${trainData.stationTrainCode }次列车</c:if></div>
+  <div class="layui-card-body">
+  <c:if test="${!empty trainData }">
+
+  <div class="layui-collapse" >
+  <div class="layui-colla-item">
+    <h2 class="layui-colla-title">状态</h2>
+    
+     <div class="layui-colla-content layui-show">
+     <p>
+     <c:if test="${trainData.isComplete==true }">
+      <i class="layui-icon layui-icon-ok" style="font-size: 30px; color: #009688;"></i>已完成</c:if>
+      </p>   <p>
+     <c:if test="${trainData.isStart==true }">
+     <i class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop" style="font-size: 30px; color: #1E9FFF;"></i> 进行中</c:if>
+          <c:if test="${trainData.isStart==false }">
+           <i class="layui-icon layui-icon-face-surprised" style="font-size: 30px; color: #FF5722;"></i>已停止</c:if>
+          </p>
+          <p>
+          最近一次执行时间：${trainData.showlastExecuteTime}
+          </p>
+          <p>
+          已尝试抢${trainData.executeCount}次
+          </p>
+     </div>
+    </div>
+  
+ <div class="layui-colla-item">
+    <h2 class="layui-colla-title">日志详情</h2>
+
+<c:forEach items="${trainData.msgList }" var="msg">
+ 
+    <div class="layui-colla-content ">${msg }</div>
+  
+</c:forEach>
+</div>
+</div>
+</c:if>
+  </div>
+</div>
+    
+    </div>
     
     </div>
   </div>

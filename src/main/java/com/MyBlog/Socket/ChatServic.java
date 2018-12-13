@@ -87,30 +87,20 @@ public class ChatServic {
 	    public void onClose(Session session, CloseReason reason){
 		//从set中删除
 		  chatWebSocketQueSub(this.userName.trim()); 
-		  Map<String, String> msgmap=null;
-		   msgmap=new HashMap<String,String>(2);
+		  Map<String, String> msgmap=new HashMap<String,String>(2);
 		   msgmap.put(userName, userImg);
 		   allMessage(SUB_LOAD_CODE,msgmap);
-		   WeChatController.websocktPostion.remove(userName.trim());
+		   WeChatController.websocktPostion.remove(this.userName.trim());
 	        //在线数减1
 	        subOnlineCount();          
-	  /*      for(ChatServic item: webSocketSet.values()){
-	            try {
-	            	
-	                item.sendMessage(megmap.get(MSG_CODE));
-	            } catch (IOException e) {
-	                e.printStackTrace();
-	                continue;
-	            }
-	        }*/
+	
 	        System.out.println("有一连接关闭！当前在线人数为" + getOnlineCount());
 	    }
 	  @OnMessage
 	    public void onMessage(String message, Session session) {
 	        System.out.println("来自客户端的消息:" + message);
 	        Map<String, String> msgmap=messageProcess(message);
-	        Map<String, String> msg=null;
-	        msg=new HashMap<>();
+	        Map<String, String> msg=new HashMap<>();
 
 	        if(msgmap.get(MSG_CODE)!=null) {
 		        msg.put(this.userName, msgmap.get(MSG_CODE));
@@ -121,7 +111,7 @@ public class ChatServic {
 	  @OnError
 	    public void onError(Session session, Throwable error,@PathParam("userName") String userName){
 	        System.out.println("发生错误");
-	    	WeChatController.websocktPostion.remove(userName);
+	    	WeChatController.websocktPostion.remove(userName.trim());
 	        error.printStackTrace();
 	    }
 	  
@@ -149,12 +139,11 @@ public class ChatServic {
 			e.printStackTrace();
 		}
 	  }
-	  public synchronized void init(String userName,String userImg,String sessionId) {
+	  public  void init(String userName,String userImg,String sessionId) {
 		  this.userName=userName.trim();
 		  this.userImg=userImg;
 		  this.sessionId=sessionId;
-		  Map<String, String> infomap=null;
-		  infomap=new HashMap<>();
+		  Map<String, String> infomap=new HashMap<>();
 		//加入set中
 		chatWebSocketQueAdd(this.userName,this);    
 		     for(ChatServic item: webSocketSet.values()){
@@ -168,10 +157,8 @@ public class ChatServic {
 	  }
 	  
 	 public Map<String,String> messageProcess(String message){
-		 Map<String, String> msgmap=null;
-		 String code=null;
-		 msgmap=new HashMap<>(1);
-		 code=message.substring(0, 5);
+		 Map<String, String> msgmap=new HashMap<>(1);
+		 String code=message.substring(0, 5);
 		 msgmap.put(code, message.substring(5));
 		 return msgmap;
 	 } 

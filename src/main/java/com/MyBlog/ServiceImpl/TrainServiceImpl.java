@@ -529,7 +529,7 @@ public static  boolean completeBuyTask(trainRequest t) {
 	t.getUserTrain().setComplete(true);
 	t.getUserTrain().addMsgList("购买完成");
 	
-	
+	t.getUserTrain().setRemark("已完成");
 	   Users Principaluser=null;
 			Subject subject = SecurityUtils.getSubject(); 
 			Object Principal=  subject.getPrincipal();
@@ -557,7 +557,7 @@ public static  boolean completeBuyTask(trainRequest t) {
 
 public static  void faileAndStopBuyTask(trainRequest t,String remark) {
 	buyTask.remove(t);
-
+	t.getUserTrain().setRemark("登录也许或许已经失效了，停止运行");
 	t.getUserTrain().setStart(false);
 	t.getUserTrain().setComplete(false);
 	t.getUserTrain().addMsgList(remark);

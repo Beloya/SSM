@@ -7,16 +7,23 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.expression.spel.ast.OpInc;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.MyBlog.HttpRequest.trainRequest;
 import com.MyBlog.ServiceImpl.TrainServiceImpl;
+import com.MyBlog.entity.Users;
 import com.MyBlog.entity.trainData;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -31,6 +38,16 @@ private TrainServiceImpl tsi;
 	public String trainquery(Model model) {
 		Calendar c=  Calendar.getInstance();
 		String nowDay=c.get(Calendar.YEAR)+"-"+(c.get(Calendar.MONTH)+1)+"-"+(c.get(Calendar.DAY_OF_MONTH)+1);
+		String username=null;
+		Users Principaluser=null;
+		trainRequest train=null;
+		Subject subject = SecurityUtils.getSubject(); 
+	
+			Principaluser= (Users) Optional.ofNullable(subject.getPrincipal()).orElse(null);
+			username=Principaluser!=null?Principaluser.getUserName():"";
+			train=(trainRequest) TrainServiceImpl.sessionTaskGet(username);
+
+		model.addAttribute("trainData", train!=null?train.getUserTrain():null);
 		model.addAttribute("nowDay", nowDay);
 		return "/jsp/lab/trainView";
 	}

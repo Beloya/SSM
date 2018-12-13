@@ -3,6 +3,7 @@ package com.MyBlog.HttpRequest;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -78,7 +79,10 @@ String result=null;
 
 public   boolean processTask() {
 	  
-	  
+	  LocalDateTime now=LocalDateTime.now();
+	  LocalDateTime delayTime=userTrain.getLastExecuteTime().plusMinutes(userTrain.getDelayTime());
+	  if(now.compareTo(delayTime)<0)
+		  return false;  
 	if(!userTrain.isStart()||userTrain.isComplete())
 		return true;
 	Calendar c=Calendar.getInstance();
@@ -135,6 +139,8 @@ if(!jsonObjectone.getBoolean("status")
 
 
 postMap.clear();
+
+userTrain.setDelayTime(0L);
 postMap.put("tour_flag", userTrain.getTour_flag());
 postMap.put("bed_level_order_num", "000000000000000000000000000000");
 postMap.put("whatsSelect", "1");
@@ -195,17 +201,23 @@ jsonObjectone=(JSONObject) TrainServiceImpl.getQueryOrderWaitTime(this,postMap);
 
 postMap=null;
 TrainServiceImpl.completeBuyTask(this);
-
+return true;
 }
 catch (Exception e) {
-MyLogger.error(getClass(), "抢票任务异常");
+MyLogger.error(getClass(), "抢票任务异常",e);
+
+userTrain.setDelayTime(userTrain.getDelayTime()<30?userTrain.getDelayTime()+1:userTrain.getDelayTime());
+userTrain.addMsgList("状态异常，将在"+userTrain.getDelayTime()+"分钟后重新启动抢票");
+return false;
 }
 finally{
+	userTrain.setExecuteCount(userTrain.getExecuteCount()+1);
+	userTrain.setLastExecuteTime(LocalDateTime.now());
 	lock.unlock();
 }
 	  }
-	return true;
-
+	
+return false;
 }
 
 public httpRequest useMyHeader(boolean h) {

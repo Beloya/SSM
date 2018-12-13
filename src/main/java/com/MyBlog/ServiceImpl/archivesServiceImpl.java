@@ -124,17 +124,16 @@ public class archivesServiceImpl implements archivesService{
 
 	public List<Archives> IndexShow(int Status,Pager pager) {
 		List<Archives> archivelist=null;
-		Archives archives=null;
-		Integer vis=null;
-		archives=new Archives();
+		Archives archives=new Archives();
+		Integer vid=null;
 		
 		Users user=(Users) SecurityUtils.getSubject().getPrincipal();
 		Blog blog=BlogInfoSignle.blogInfoSignle.getBlog();
 		if(user!=null) {
-	 vis=user.getUserName()==Optional.ofNullable(blog.getCreatedBy()).orElse("notfoundblog")?null:Archivesvisibility.pub;
+	 vid=user.getUserName().equals(Optional.ofNullable(blog.getCreatedBy()).orElse("notfoundblog"))?null:Archivesvisibility.pub;
 		}
 		archives.setStatus(Status);
-		archives.setVid(vis);
+		archives.setVid(vid);
 		
 		PageHelper.startPage(pager.getPage(), pager.getSize());
 		archivelist=amapper.FindByParam(archives);

@@ -1,5 +1,7 @@
 package com.MyBlog.entity;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +30,10 @@ private boolean isStart=false;
 private boolean isComplete=false;
 private String remark;
 private  List<String> msgList=new ArrayList<>();
-private int executeCount=0;
+private Integer executeCount=0;
+private LocalDateTime lastExecuteTime=LocalDateTime.now();
+private Long delayTime=0L;
+
 
 
 /*
@@ -158,11 +163,18 @@ public String getOldPassengerStr() {
 public void setOldPassengerStr(String oldPassengerStr) {
 	this.oldPassengerStr = oldPassengerStr;
 }
+public boolean getIsStart() {
+	return isStart;
+}
+
 public boolean isStart() {
 	return isStart;
 }
 public void setStart(boolean isStart) {
 	this.isStart = isStart;
+}
+public boolean getIsComplete() {
+	return isComplete;
 }
 public boolean isComplete() {
 	return isComplete;
@@ -200,5 +212,23 @@ public String getTrainQueryDate() {
 public void setTrainQueryDate(String trainQueryDate) {
 	this.trainQueryDate = trainQueryDate;
 }
+public LocalDateTime getLastExecuteTime() {
+	return lastExecuteTime;
+}
+public void setLastExecuteTime(LocalDateTime lastExecuteTime) {
+	this.lastExecuteTime = lastExecuteTime;
+}
+public Long getDelayTime() {
+	return delayTime;
+}
+public void setDelayTime(Long delayTime) {
+	this.delayTime = delayTime;
+}
+public String getShowlastExecuteTime() {
+
+	return lastExecuteTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+}
+
+
 
 }
