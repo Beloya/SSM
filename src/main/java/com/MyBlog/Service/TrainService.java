@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.MyBlog.HttpRequest.httpRequest;
 import com.MyBlog.HttpRequest.trainRequest;
+import com.google.common.collect.ImmutableMap;
 
 /**
  * 
@@ -16,7 +17,7 @@ public final static String getVerifyUrl="https://kyfw.12306.cn/passport/captcha/
 public final static String checkVerifyUrl="https://kyfw.12306.cn/passport/captcha/captcha-check?callback=jQuery19100155250425586555_1542871515363&rand=sjrand&login_site=E&_=";
 public final static String loginUrl="https://kyfw.12306.cn/passport/web/login";
 public final static String checkUserUrl="https://kyfw.12306.cn/otn/login/checkUser";
-public final static String queryUrl="https://kyfw.12306.cn/otn/leftTicket/query?leftTicketDTO.";
+public final static String queryUrl="https://kyfw.12306.cn/otn/leftTicket/queryA?leftTicketDTO.";
 public final static String uamtkUrl="https://kyfw.12306.cn/passport/web/auth/uamtk";
 public final static String uamauthclientUrl="https://kyfw.12306.cn/otn/uamauthclient";
 public final static String getPassengerUrl="https://kyfw.12306.cn/otn/confirmPassenger/getPassengerDTOs";
@@ -27,6 +28,17 @@ public final static String getQueueCountUrl="https://kyfw.12306.cn/otn/confirmPa
 public final static String confirmSingleForDcQueueUrl="https://kyfw.12306.cn/otn/confirmPassenger/confirmSingleForQueue";
 public final static String queryOrderWaitTimeUrl="https://kyfw.12306.cn/otn/confirmPassenger/queryOrderWaitTime";
 public final static String initloginUrl="https://kyfw.12306.cn/otn/login/init";
+public static Map<String,String> seatMap=ImmutableMap.<String, String>builder()
+.put("9","swz_num")
+.put("M","zy_num")
+.put("O","ze_num")
+.put("6","gr_num")
+.put("4","rw_num")
+.put("3","yw_num")
+.put("2","rz_num")
+.put("1","yz_num")
+.build();
+
 /**登录接口
  * 
  * @param trainusername 12306用户名
@@ -53,6 +65,14 @@ public final static String initloginUrl="https://kyfw.12306.cn/otn/login/init";
 	 * @return json串
 	 */
 	public Object queryTicket(String from_station,String to_station,String time);
+	
+	/**
+	 * 检查是否有余票
+	 * @param map 车次信息
+	 * @param 作为
+	 * @return boolean
+	 */
+	public boolean queryHasTicket(Map<String,Object> map);
 /**
  * 
  * @return 检查是否登录
@@ -113,5 +133,5 @@ public Object CheckUser();
 	 * @param postmap 提交时post的参数
 	 * @return
 	 */
-	public Object getQueryOrderWaitTime(Map<String,Object> postmap);
+	public  Object getQueryOrderWaitTime(Map<String,Object> postmap);
 }

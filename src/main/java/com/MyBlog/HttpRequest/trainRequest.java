@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -80,7 +81,7 @@ String result=null;
 public   boolean processTask() {
 	  
 	  LocalDateTime now=LocalDateTime.now();
-	  LocalDateTime delayTime=userTrain.getLastExecuteTime().plusMinutes(userTrain.getDelayTime());
+	  LocalDateTime delayTime=userTrain.getLastExecuteTime().plusSeconds(userTrain.getDelayTime());
 	  if(now.compareTo(delayTime)<0)
 		  return false;  
 	if(!userTrain.isStart()||userTrain.isComplete())
@@ -99,20 +100,39 @@ try {
 	 if(Multimap==null) {
 		 return false; 
 	 }
-	 
+
 	  //检查用户状态
 	  jsonObjectone=(JSONObject) TrainServiceImpl.CheckUser(this);
 if(!jsonObjectone.getBoolean("status")
 		||!JSONObject.parseObject(jsonObjectone.getString("data")).getBoolean("flag")) {
-	TrainServiceImpl.faileAndStopBuyTask(this, "登录也许或许已经失效了，停止运行");
+	TrainServiceImpl.faileAndStopBuyTask(this, 
+			LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))+
+			"登录也许或许已经失效了，停止运行");
 		return false;
 	} 
 
-	 
+//无访问错误将恢复间隔时间
+userTrain.setDelayTime(0L);	 
 	  for (Map<String, String> map : Multimap) {
+		 
+		  
 		if(map.get("train_no").equals(userTrain.getTrain_no())
 				&&map.get("station_train_code").equals(userTrain.getStationTrainCode())) {
+		
+			
+			 //检测是否有票
+			if(!TrainServiceImpl.queryHasTicket(map, this)) {
+				 userTrain.addMsgList(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))+" "+
+						 userTrain.getStationTrainCode()+"车次 的 "
+						 +userTrain.seatMap.get(userTrain.getSeatType())+"无票");
+				return false;
+			}
+			
+			
+			//有票则获取下单密匙
 			postMap.put("secretStr", URLDecoder.decode(map.get("secretStr")));
+			
+			
 			break;
 		}
 	}
@@ -131,7 +151,8 @@ if(!jsonObjectone.getBoolean("status")
 	  jsonObjectone=(JSONObject) TrainServiceImpl.submitOrderRequest(this,postMap);
 	
 	 if(!jsonObjectone.getBoolean("status")) {
-		 userTrain.addMsgList("提交预订单失败["+jsonObjectone.getString("messages")+"]");
+		 userTrain.addMsgList(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))+
+				 "提交预订单失败["+jsonObjectone.getString("messages")+"]");
 		 return false;
 	 }
 	 //获取乘客信息
@@ -140,7 +161,7 @@ if(!jsonObjectone.getBoolean("status")
 
 postMap.clear();
 
-userTrain.setDelayTime(0L);
+
 postMap.put("tour_flag", userTrain.getTour_flag());
 postMap.put("bed_level_order_num", "000000000000000000000000000000");
 postMap.put("whatsSelect", "1");
@@ -153,7 +174,8 @@ postMap.put("cancel_flag",2);
 jsonObjectone=(JSONObject) TrainServiceImpl.checkOrderInfo(this,postMap);
 if(!jsonObjectone.getBoolean("status")
 		||!JSONObject.parseObject(jsonObjectone.getString("data")).getBoolean("submitStatus")) {
-	 userTrain.addMsgList("订单确认状态失败["+JSONObject.parseObject(jsonObjectone.getString("data"))
+	 userTrain.addMsgList(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))+
+			 "订单确认状态失败["+JSONObject.parseObject(jsonObjectone.getString("data"))
 	 .getString("errMsg")+"]");
 	 return false;
 }
@@ -170,7 +192,8 @@ postMap.put("purpose_codes", "00");
 //获取订单队列
 jsonObjectone=(JSONObject) TrainServiceImpl.getQueueCount(this,postMap);
 if(!jsonObjectone.getBoolean("status")) {
-	 userTrain.addMsgList("确认订单状态失败["+jsonObjectone.getString("messages")+"]");
+	 userTrain.addMsgList(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))+
+			 "确认订单状态失败["+jsonObjectone.getString("messages")+"]");
 	 return false;
 }
 postMap.clear();
@@ -188,7 +211,8 @@ postMap.put("roomType", "00");
 jsonObjectone=(JSONObject) TrainServiceImpl.confirmSingleQueue(this,postMap);
 if(!jsonObjectone.getBoolean("status")
 		||!JSONObject.parseObject(jsonObjectone.getString("data")).getBoolean("submitStatus")) {
-	 userTrain.addMsgList("下单失败["+JSONObject.parseObject(jsonObjectone.getString("data"))
+	 userTrain.addMsgList(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))+
+			 "下单失败["+JSONObject.parseObject(jsonObjectone.getString("data"))
 	 .getString("errMsg")+"]");
 	 return false;
 }
@@ -204,10 +228,11 @@ TrainServiceImpl.completeBuyTask(this);
 return true;
 }
 catch (Exception e) {
-MyLogger.error(getClass(), "抢票任务异常",e);
-
-userTrain.setDelayTime(userTrain.getDelayTime()<30?userTrain.getDelayTime()+1:userTrain.getDelayTime());
-userTrain.addMsgList("状态异常，将在"+userTrain.getDelayTime()+"分钟后重新启动抢票");
+	MyLogger.error(getClass(), e.getMessage());
+	e.printStackTrace();
+userTrain.setDelayTime(userTrain.getDelayTime()<180?userTrain.getDelayTime()+((int)Math.random( )*5+5):userTrain.getDelayTime());
+userTrain.addMsgList(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))+
+		"状态异常，将在"+userTrain.getDelayTime()+"秒后重新启动抢票");
 return false;
 }
 finally{
@@ -219,6 +244,8 @@ finally{
 	
 return false;
 }
+
+
 
 public httpRequest useMyHeader(boolean h) {
 	useMyHeader=h;

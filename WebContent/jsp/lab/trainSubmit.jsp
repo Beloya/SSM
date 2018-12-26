@@ -27,7 +27,7 @@
 </table>
     <div class="layui-inline"> 
  <div class="layui-input-inline">
-<select name="seat" lay-verify="">
+<select name="seat" lay-verify="" required  >
   <option value="">请选择座位</option>
 
 <option value="9">商务座</option>
@@ -62,7 +62,7 @@ layui.use(['table','laydate','form'], function(){
   ,form = layui.form;
   var data=parent.sumbitdata;
   if(data!=null&&data!=undefined){
-	  console.log(data);
+
 var seat=data.swz_num=="--"?"":"商务座";
 		seat+=data.zy_num=="--"?"":" 一等座";
 		seat+=data.ze_num=="--"?"":" 二等座";
@@ -72,7 +72,7 @@ var seat=data.swz_num=="--"?"":"商务座";
 		seat+=data.rz_num=="--"?"":" 软座";
 		seat+=data.yz_num=="--"?"":" 硬座";
 		seat+=data.wz_num=="--"?"":" 站票";
-   $("#select_Order").html("车次："+data.station_train_code+"  当前有票座位：<br/>"+seat);
+   $("#select_Order").html("车次："+data.station_train_code+"  当前可选座位：<br/>"+seat);
   // var desecretStr=decodeURIComponent(data.secretStr);
   table.reload('passenger_id_no', {
 	  url: '<%=request.getContextPath()%>/trainsubmitOrderRequest'
@@ -81,8 +81,9 @@ var seat=data.swz_num=="--"?"":"商务座";
 		  secretStr:data.secretStr,
 		  start_train_date:data.start_train_date,
 		  from_station_name:data.from_station_name,
-		  to_station_name:data.to_station_name
-		  
+		  to_station_name:data.to_station_name,
+		  start_time:data.start_time,
+		  lishi:data.lishi
 	  } //设定异步数据接口的额外参数
 	  //,height: 300
 		

@@ -4,11 +4,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Map.Entry;
+
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CopyOnWriteArraySet;
+
 
 import javax.websocket.CloseReason;
 import javax.websocket.OnClose;
@@ -19,18 +18,13 @@ import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
-import org.apache.shiro.SecurityUtils;
+
 import org.apache.shiro.codec.Base64;
-import org.apache.shiro.mgt.SecurityManager;
-import org.apache.shiro.subject.Subject;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
+
 import org.springframework.web.socket.server.standard.SpringConfigurator;
 
 import com.MyBlog.Controller.WeChatController;
-import com.MyBlog.Core.BlogInfoSignle;
-import com.MyBlog.entity.Users;
+
 import com.MyBlog.utils.StringUtils;
 
 
@@ -40,15 +34,22 @@ import com.MyBlog.utils.StringUtils;
  * @author Beloya
  *
  */
-
+//该注解用来指定一个URI，客户端可以通过这个URI来连接到WebSocket。
+/**
+类似Servlet的注解mapping。无需在web.xml中配置。
+* configurator = SpringConfigurator.class是为了使该类可以通过Spring注入。
+*/
 @ServerEndpoint(value = "/websocket/{userName}/{sessionId}/{userImg}", configurator = SpringConfigurator.class)
 public class ChatServic {
-	
+	//静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
 	 private static int onlineCount = 0;
 	 private  String userName;
 	 private  String userImg;
 	 private String sessionId;
+	 //与客户端的连接会话，需要通过它来给客户端发送数据
 	 private  Session session;
+	 //concurrent包的线程安全Map，用来存放每个客户端对应的MyWebSocket对象。
+	    // 若要实现服务端与单一客户端通信的话，可以使用Map来存放，其中Key可以为用户标识
 	 public static  ConcurrentHashMap<String,ChatServic> webSocketSet = new ConcurrentHashMap<String,ChatServic>();
 	 public static Set<Integer> NameNum=new HashSet<>(50);
 	 public final static String MSG_CODE="#MSG#";
@@ -61,7 +62,10 @@ public class ChatServic {
 	 public final static String SYS_ERR_CODE="#SEC#";
 	  public ChatServic() {
 	    }
-	
+	  /**
+	     * 连接建立成功调用的方法
+	     * @param session  可选的参数。session为与某个客户端的连接会话，需要通过它来给客户端发送数据
+	     */
 	  @OnOpen
 	    public void onOpen(Session session,@PathParam("userName") String userName ,@PathParam("sessionId") String sessionId,@PathParam("userImg") String userImg){
 		 this.sessionId=sessionId;
@@ -83,6 +87,9 @@ public class ChatServic {
 	        System.out.println("有新连接加入！当前在线人数为" + getOnlineCount());
 	     //  WeChatController.removeConditoin.signal();
 	    }
+	   /**
+	     * 连接关闭调用的方法
+	     */
 	  @OnClose
 	    public void onClose(Session session, CloseReason reason){
 		//从set中删除
@@ -96,6 +103,11 @@ public class ChatServic {
 	
 	        System.out.println("有一连接关闭！当前在线人数为" + getOnlineCount());
 	    }
+	  /**
+	     * 收到客户端消息后调用的方法
+	     * @param message 客户端发送过来的消息
+	     * @param session 可选的参数
+	     */
 	  @OnMessage
 	    public void onMessage(String message, Session session) {
 	        System.out.println("来自客户端的消息:" + message);
@@ -108,13 +120,22 @@ public class ChatServic {
 	        	allMessage(MSG_CODE,msg);
 	        }
 	    }
+	   /**
+	     * 发生错误时调用
+	     * @param session
+	     * @param error
+	     */
 	  @OnError
 	    public void onError(Session session, Throwable error,@PathParam("userName") String userName){
 	        System.out.println("发生错误");
 	    	WeChatController.websocktPostion.remove(userName.trim());
 	        error.printStackTrace();
 	    }
-	  
+	  /**
+	     * 这个方法与上面几个方法不一样。没有用注解，是根据自己需要添加的方法。
+	     * @param message
+	     * @throws IOException
+	     */
 	  public void sendMessage(String message) throws IOException{
 	    /*    //保存数据到数据库
 	        Content content = new Content() ;
@@ -125,6 +146,11 @@ public class ChatServic {
 	       this.session.getBasicRemote().sendText(message);
 	      //  this.session.getAsyncRemote().sendText(message);
 	    }
+	  /**
+	     * 自定义错误方法
+	     * @param userName
+	     * @throws IOException
+	     */
 	  public void myErroClose(String userName) {
 		  Map<String, String> infomap=null;
 		  infomap=new HashMap<>();
@@ -139,6 +165,13 @@ public class ChatServic {
 			e.printStackTrace();
 		}
 	  }
+	  /**
+	     * 自定义初始化方法
+	     * @param userName
+	     * @param userImg
+	     * @param sessionId
+	     * @throws IOException
+	     */
 	  public  void init(String userName,String userImg,String sessionId) {
 		  this.userName=userName.trim();
 		  this.userImg=userImg;
@@ -155,13 +188,22 @@ public class ChatServic {
 	                e.printStackTrace();
 	            }
 	  }
-	  
+	  /**
+	     * 自定义消息处理方法
+	     * @param message
+	     * @throws IOException
+	     */
 	 public Map<String,String> messageProcess(String message){
 		 Map<String, String> msgmap=new HashMap<>(1);
 		 String code=message.substring(0, 5);
 		 msgmap.put(code, message.substring(5));
 		 return msgmap;
 	 } 
+	 /**
+	  *  群发消息
+	  * @param type
+	  * @param message
+	  */
 	 public static void allMessage(String type,Object message) {
 		 for(ChatServic item:webSocketSet.values()){
 	    

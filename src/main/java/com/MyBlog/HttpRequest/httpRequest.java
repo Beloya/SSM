@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -61,6 +62,7 @@ public  String DoGet(String url) {
 	}
   
     return result;
+	
 }
 public void close() {
 	  // 关闭资源
@@ -80,7 +82,7 @@ public void close() {
     }
 }
 public  String doPost(String url, Map<String, Object> paramMap) {
-
+	
     String result = "";
     // 创建httpPost远程连接实例
     HttpPost httpPost = new HttpPost(url);
@@ -92,7 +94,7 @@ public  String doPost(String url, Map<String, Object> paramMap) {
     // 为httpPost实例设置配置
     httpPost.setConfig(requestConfig);
     // 设置请求头
-    if(headers.isEmpty()||!useMyHeader) {
+    if(!headers.isEmpty()||!useMyHeader) {
     httpPost.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36"); // 设置请求头消息User-Agent
     httpPost.addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
     httpPost.setHeader("X-Requested-With", "XMLHttpRequest"); 
@@ -138,6 +140,7 @@ public  String doPost(String url, Map<String, Object> paramMap) {
         e.printStackTrace();
     } 
     return result;
+	
 }
 
 public httpRequest useMyHeader(boolean h) {
@@ -157,10 +160,14 @@ public Map<String, String> getHeaders() {
 	return headers;
 }
 public void setHeaders(Map<String, String> headers) {
+
 	this.headers = headers;
+	
 }
 public void putHeaders(String key, String val) {
+	synchronized (headers) {
 	headers.put(key, val);
+	}
 }
 public httpRequest useSSL()  {
 	try {

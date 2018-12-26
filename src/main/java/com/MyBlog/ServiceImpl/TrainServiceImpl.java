@@ -22,6 +22,8 @@ import com.MyBlog.entity.Users;
 import com.MyBlog.entity.trainData;
 import com.MyBlog.utils.JsonUtils;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.ImmutableMap;
+
 /**
  * 
  * @author Beloya
@@ -102,7 +104,7 @@ long timstamp=System.currentTimeMillis();
 		JSONObject jsonObjectone = null;
 		try {
 		  List<Map<String,String>> Multimap =new ArrayList<>(); 
-			
+			if(!trainRequest.getUserTrain().isStart())
 			  trainRequest.getUserTrain().setTrainQueryDate(time);	
 			result=trainRequest.
 DoGet(queryUrl+"train_date="+time+"&leftTicketDTO.from_station="+from_station+
@@ -333,16 +335,24 @@ public   trainRequest getUserSession() {
 	return trainRequest;
 }
 
+
+
 public Object submitOrderRequest(Map<String,Object> postmap) {
 
 	String result=null;
 	trainRequest trainRequest=getUserSession();
 	JSONObject jsonObjectone = null;
+
 	trainRequest.getUserTrain().setTour_flag((String)postmap.get("tour_flag"));
 	trainRequest.getUserTrain().setToStationTeleName((String)postmap.get("query_to_station_name"));
 	trainRequest.getUserTrain().setFromStationName((String)postmap.get("query_from_station_name"));
 	trainRequest.getUserTrain().setTrain_date((String)postmap.get("train_date"));
 	trainRequest.getUserTrain().setPurpose_codes((String)postmap.get("purpose_codes"));
+	trainRequest.getUserTrain().setTrainStartDateTime((String)postmap.get("start_time"));
+	trainRequest.getUserTrain().setTrainNeedDateTime((String)postmap.get("lishi"));
+	
+	postmap.remove("start_time");
+	postmap.remove("lishi");
 	result=trainRequest.
 			doPost(submitOrderUrl, postmap);
 	jsonObjectone=JSONObject.parseObject(result);
@@ -356,11 +366,7 @@ public static Object submitOrderRequest(trainRequest trainRequest,Map<String,Obj
 
 	JSONObject jsonObjectone = null;
 	
-	trainRequest.getUserTrain().setTour_flag((String)postmap.get("tour_flag"));
-	trainRequest.getUserTrain().setToStationTeleName((String)postmap.get("to_station_name"));
-	trainRequest.getUserTrain().setFromStationName((String)postmap.get("query_from_station_name"));
-	trainRequest.getUserTrain().setTrain_date((String)postmap.get("train_date"));
-	trainRequest.getUserTrain().setPurpose_codes((String)postmap.get("purpose_codes"));
+
 	result=trainRequest.
 			doPost(submitOrderUrl, postmap);
 	jsonObjectone=JSONObject.parseObject(result);
@@ -460,6 +466,8 @@ public Object joinConfirmSingleQueue(Map<String,Object> postmap) {
 	postmap.put("leftTicketStr",trainRequest.getUserTrain().getLeftTicket()!=null?trainRequest.getUserTrain().getLeftTicket():"");
 	postmap.put("key_check_isChange",trainRequest.getUserTrain().getKey_check_isChange()!=null?trainRequest.getUserTrain().getKey_check_isChange():"");
 	trainRequest.getUserTrain().setStart(true);
+	trainRequest.getUserTrain().setComplete(false);
+	trainRequest.getUserTrain().setRemark("");
 	addBuyTask(trainRequest);
 	//result=trainRequest.
 	//		doPost(confirmSingleForDcQueueUrl, postmap);
@@ -528,7 +536,9 @@ public static  boolean completeBuyTask(trainRequest t) {
 	t.getUserTrain().setStart(false);
 	t.getUserTrain().setComplete(true);
 	t.getUserTrain().addMsgList("购买完成");
-	
+	t.getUserTrain().addMsgList("由 "+t.getUserTrain().getFromStationName()+" 开往 "
+			 +t.getUserTrain().getToStationTeleName()+"的 "+t.getUserTrain().getStationTrainCode()+
+			 "次列车购票完成，请前往12306官网付款");
 	t.getUserTrain().setRemark("已完成");
 	   Users Principaluser=null;
 			Subject subject = SecurityUtils.getSubject(); 
@@ -544,8 +554,7 @@ public static  boolean completeBuyTask(trainRequest t) {
 	   email.setText("由 "+t.getUserTrain().getFromStationName()+" 开往 "
 	 +t.getUserTrain().getToStationTeleName()+"的 "+t.getUserTrain().getStationTrainCode()+
 	 "次列车购票完成，请前往12306官网付款");
-	
-		email.setTomail("468501955@qq.com");
+		email.setTomail(Principaluser.getEmail());
 		QQEmail qqEmail=(QQEmail) eFactory.CreateEmail();
 		   qqEmail.JoinEmailQueue(qqEmail,email); 
 	}
@@ -572,6 +581,31 @@ public  static void addBuyTask(trainRequest obj) {
 	obj.getUserTrain().setStart(true);
 }
 
+@Override
+public boolean queryHasTicket(Map<String, Object> map) {
+	trainRequest t=getUserSession();
+	String seatType=t.getUserTrain().getSeatType();
+
+
+	if(!map.get(seatMap.get(seatType)).equals("--")
+			&&!map.get(seatMap.get(seatType)).equals("无")&&!map.get(seatMap.get(seatType)).equals("0")){
+				return true;
+			}
+
+	return false;
+}
+public static boolean queryHasTicket(Map<String, String> map,trainRequest t) {
+
+	String seatType=t.getUserTrain().getSeatType();
+
+
+	if(!map.get(seatMap.get(seatType)).equals("--")
+			&&!map.get(seatMap.get(seatType)).equals("无")&&!map.get(seatMap.get(seatType)).equals("0")){
+				return true;
+			}
+
+	return false;
+}
 
 
 

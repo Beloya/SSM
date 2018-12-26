@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>抢票王(仅供娱乐)</title>
 <link rel="stylesheet" href="https://tuxiang-1251384861.cos.ap-guangzhou.myqcloud.com/css/main.css"
 	media="all" />
 	<style type="text/css">
@@ -70,6 +70,7 @@ word-break:break-all;
   </ul>
   <div class="layui-tab-content">
      <div class="layui-tab-item layui-show" style="padding:20px 20px 20px 20px;">
+     <span class="layui-badge">该功能仅供娱乐。任务并不会持久化，仅在内存中保存</span>
   <form class="layui-form" action="">
  
    <div class="layui-inline">
@@ -135,8 +136,12 @@ word-break:break-all;
     <div class="layui-tab-item"> 
     <div class="layui-card">
   <div class="layui-card-header"><c:if test="${!empty trainData }">
-  
-  由   ${trainData.fromStationName} 开往 ${trainData.toStationTeleName}  ${trainData.stationTrainCode }次列车</c:if></div>
+  <span class="layui-badge layui-bg-cyan">
+  由   ${trainData.fromStationName} 开往 ${trainData.toStationTeleName} ${trainData.train_date } ${trainData.trainStartDateTime } 出发
+   历时${trainData.trainNeedDateTime }  ${trainData.stationTrainCode }次列车
+    </span>
+  </c:if></div>
+
   <div class="layui-card-body">
   <c:if test="${!empty trainData }">
 
@@ -147,12 +152,12 @@ word-break:break-all;
      <div class="layui-colla-content layui-show">
      <p>
      <c:if test="${trainData.isComplete==true }">
-      <i class="layui-icon layui-icon-ok" style="font-size: 30px; color: #009688;"></i>已完成</c:if>
+      <i class="layui-icon layui-icon-ok" style="font-size: 30px; color: #009688;"></i>已完成 (${trainData.remark })</c:if>
       </p>   <p>
      <c:if test="${trainData.isStart==true }">
      <i class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop" style="font-size: 30px; color: #1E9FFF;"></i> 进行中</c:if>
           <c:if test="${trainData.isStart==false }">
-           <i class="layui-icon layui-icon-face-surprised" style="font-size: 30px; color: #FF5722;"></i>已停止</c:if>
+           <i class="layui-icon layui-icon-face-surprised" style="font-size: 30px; color: #FF5722;"></i>已停止 (${trainData.remark })</c:if>
           </p>
           <p>
           最近一次执行时间：${trainData.showlastExecuteTime}
@@ -196,12 +201,16 @@ word-break:break-all;
 	<script src='js/EasePack.min.js'></script>
 	<script src='https://tuxiang-1251384861.cos.ap-guangzhou.myqcloud.com/js/TweenLite.min.js'></script>
 	<script src="js/index.js"></script>
+	<c:if test="${isStart}">
 	<script type="text/html" id="barDemo">
-
   <a class="layui-btn layui-btn-xs" lay-event="buy">预订</a>
-
 </script>
-
+</c:if>
+	<c:if test="${!isStart}">
+	<script type="text/html" id="barDemo">
+  <a class="layui-btn layui-btn-xs" lay-event="isStart">停止任务</a>
+</script>
+</c:if>
 		<script  type="text/javascript">
 		 var sumbitdata;
 layui.use(['table','laydate','form'], function(){

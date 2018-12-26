@@ -116,8 +116,8 @@ public class BlogInfoAspect {
 	    	
 	    }  
 	    //应用异常抛出后通知  
-	   @AfterThrowing("execution(* com.MyBlog.Controller.*.*(..))")  
-	    public void afterThrowing(JoinPoint call) {  
+	   @AfterThrowing(throwing="ex",pointcut="execution(* com.MyBlog.Controller.*.*(..))")  
+	    public void afterThrowing(JoinPoint call,Throwable ex) {  
 		   
 	        String className = call.getTarget().getClass().getName();
 
@@ -128,7 +128,7 @@ public class BlogInfoAspect {
 			   Email email=null;
 			   email= new Email();
 			   email.setSubject("系统发生异常，请检查");
-					 html.append(className+"."+methodName+"()方法抛出了异常...");
+					 html.append(className+"."+methodName+"()方法抛出了异常"+ex);
 				  email.setText(html.toString());
 			   email.setSenddate(new Date());
 			   email.setTomail("468501955@qq.com");
@@ -147,7 +147,7 @@ public class BlogInfoAspect {
 	            result = call.proceed();  
 	            this.afterReturn(call); //相当于后置通知  
 	        } catch (Throwable e) {  
-	            this.afterThrowing(call);  //相当于异常抛出后通知  
+	            this.afterThrowing(call,e);  //相当于异常抛出后通知  
 	            throw e;  
 	        }finally{  
 	            this.after(call);  //相当于最终通知  

@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.MyBlog.HttpRequest.trainRequest;
+import com.MyBlog.Logger.MyLogger;
 import com.MyBlog.ServiceImpl.TrainServiceImpl;
 import com.MyBlog.entity.Users;
 import com.MyBlog.entity.trainData;
@@ -81,7 +82,7 @@ private TrainServiceImpl tsi;
 		resultMap.put("msg","");
 		resultMap.put("count",20);
 		resultMap.put("data",Multimap);
-		System.out.println(Multimap);
+		MyLogger.INFO(getClass(), Multimap.toString());
 		 }
 		 else {
 				resultMap.put("code",404);
@@ -134,7 +135,10 @@ private TrainServiceImpl tsi;
 	}
 	@RequestMapping("trainsubmitOrderRequest")
 	@ResponseBody
-	public Object trainsubmitOrderRequest(String secretStr,String start_train_date,String from_station_name,String to_station_name,HttpServletRequest request) {
+	public Object trainsubmitOrderRequest(String secretStr,String start_train_date,
+			String from_station_name,String to_station_name,
+			String start_time,String lishi,HttpServletRequest request) {
+		
 		JSONObject jsonObjectone = null;
 		Map<String,Object> postMap=new HashMap<>();
 			Map<String,Object> resultMap=new HashMap<>();
@@ -149,6 +153,8 @@ private TrainServiceImpl tsi;
 		postMap.put("tour_flag", "dc");
 		postMap.put("purpose_codes", "ADULT");
 		postMap.put("undefined", "");
+		postMap.put("start_time", start_time);
+		postMap.put("lishi", lishi);
 		jsonObjectone=(JSONObject) tsi.submitOrderRequest(postMap);
 		jsonObjectone=(JSONObject) tsi.getPassenger();
 		JSONArray array =jsonObjectone.parseArray(jsonObjectone.parseObject(jsonObjectone.getString("data")).getString("normal_passengers"));

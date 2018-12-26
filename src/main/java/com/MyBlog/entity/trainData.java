@@ -3,7 +3,12 @@ package com.MyBlog.entity;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+
+import com.google.common.collect.ImmutableMap;
 
 public class trainData {
 private String key_check_isChange;
@@ -19,6 +24,8 @@ private String train_location;
 private String seatType;
 private String train_date;
 private String tour_flag;
+private String trainStartDateTime;
+private String trainNeedDateTime;
 private String purpose_codes;
 private String fromStationName;
 private String toStationTeleName;
@@ -29,7 +36,7 @@ private String oldPassengerStr;
 private boolean isStart=false;
 private boolean isComplete=false;
 private String remark;
-private  List<String> msgList=new ArrayList<>();
+private  List<String> msgList=new LinkedList<>();
 private Integer executeCount=0;
 private LocalDateTime lastExecuteTime=LocalDateTime.now();
 private Long delayTime=0L;
@@ -46,6 +53,16 @@ private String passenger_id_type_name;
 public final static String REPEAT_SUBMIT_TOKENinitDc="var globalRepeatSubmitToken = '";
 public final static String key_check_isChangeinitDc="'key_check_isChange':'";
 public final static String leftTicketStrinitDc="'leftTicketStr':'";
+public static Map<String,String> seatMap=ImmutableMap.<String, String>builder()
+.put("9","商务座")
+.put("M","一等座")
+.put("O","二等座")
+.put("6","高级软卧")
+.put("4","软卧")
+.put("3","硬卧")
+.put("2","软座")
+.put("1","硬座")
+.build();
 
 public String getKey_check_isChange() {
 	return key_check_isChange;
@@ -189,13 +206,25 @@ public void setRemark(String remark) {
 	this.remark = remark;
 }
 public List<String> getMsgList() {
-	return msgList;
+	List<String> list=new ArrayList<>(msgList);
+	
+	Collections.reverse(list);
+	return list;
 }
 public void setMsgList(List<String> msgList) {
 	this.msgList = msgList;
 }
 public void addMsgList(String msg) {
+
+		
 	msgList.add(msg);
+	
+	if(msgList.size()>50) {
+		for(int i=0;i<25;i++) {
+			msgList.remove(0);
+		}
+	}
+
 }
 public int getExecuteCount() {
 	return executeCount;
@@ -227,6 +256,22 @@ public void setDelayTime(Long delayTime) {
 public String getShowlastExecuteTime() {
 
 	return lastExecuteTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+}
+public String getTrainStartDateTime() {
+	return trainStartDateTime;
+}
+public void setTrainStartDateTime(String trainStartDateTime) {
+	this.trainStartDateTime = trainStartDateTime;
+}
+public String getTrainNeedDateTime() {
+	return trainNeedDateTime;
+}
+
+public String getTrainDate() {
+	return train_date+" "+trainStartDateTime;
+}
+public void setTrainNeedDateTime(String trainNeedDateTime) {
+	this.trainNeedDateTime = trainNeedDateTime;
 }
 
 
