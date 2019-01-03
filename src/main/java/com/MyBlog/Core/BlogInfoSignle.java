@@ -4,6 +4,7 @@ package com.MyBlog.Core;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -26,10 +27,14 @@ private   Blog blog=null;
 private  Syslink syslink=null;
 private  List<Syslink> menulink=null;
 private  List<Syslink> communionlink=null;
-private   HashMap<String,Syslink> foundlink=null;
-private   ConcurrentHashMap<Integer, Integer> readcountmap=new ConcurrentHashMap<Integer, Integer>();
-private   boolean inited=false;
 
+private   HashMap<String,Syslink> foundlink=null;
+//阅读数
+private   ConcurrentHashMap<Integer, Integer> readcountmap=new ConcurrentHashMap<Integer, Integer>();
+//是否初始化
+private   boolean inited=false;
+//URL所需权限
+private ConcurrentHashMap<String,String> urlFilterMap=new ConcurrentHashMap<>();
 private BlogInfoSignle(){
 
 }

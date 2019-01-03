@@ -34,6 +34,7 @@ public class JsonUtils {
 	    List<Map<String,String>> Multimap =new ArrayList<>(); 
 	    String mapstr=null,tempdata=null,queryResult=null,nstr="--";
 		JSONObject jsonObjectone = null,queryResultJson=null;
+		try {
 	    jsonObjectone=JSONObject.parseObject(data);
         tempdata=jsonObjectone.getString("data");
         jsonObjectone= JSONObject.parseObject(tempdata);
@@ -88,6 +89,15 @@ public class JsonUtils {
     		Multimap.add(cmap);
     	}
 	    return Multimap;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		finally {
+			Multimap =null;mapstr=null;tempdata=null;queryResult=null;nstr=null;
+			jsonObjectone = null;queryResultJson=null;
+		}
 	}
 	
 	

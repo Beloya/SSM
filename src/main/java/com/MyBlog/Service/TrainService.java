@@ -17,7 +17,8 @@ public final static String getVerifyUrl="https://kyfw.12306.cn/passport/captcha/
 public final static String checkVerifyUrl="https://kyfw.12306.cn/passport/captcha/captcha-check?callback=jQuery19100155250425586555_1542871515363&rand=sjrand&login_site=E&_=";
 public final static String loginUrl="https://kyfw.12306.cn/passport/web/login";
 public final static String checkUserUrl="https://kyfw.12306.cn/otn/login/checkUser";
-public final static String queryUrl="https://kyfw.12306.cn/otn/leftTicket/queryA?leftTicketDTO.";
+public final static String queryBase="https://kyfw.12306.cn/otn/leftTicket/init";
+public final static String queryBaseUrl="https://kyfw.12306.cn/otn/";
 public final static String uamtkUrl="https://kyfw.12306.cn/passport/web/auth/uamtk";
 public final static String uamauthclientUrl="https://kyfw.12306.cn/otn/uamauthclient";
 public final static String getPassengerUrl="https://kyfw.12306.cn/otn/confirmPassenger/getPassengerDTOs";

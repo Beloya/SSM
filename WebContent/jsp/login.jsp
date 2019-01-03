@@ -185,11 +185,11 @@ layui.use(['form', 'layedit', 'laydate'], function(){
                     		$("#loginbtn").removeClass("layui-btn-disabled");
          }
          if(result.code=="0"){
-             if(result.preUrl==undefined||result.preUrl=='undefined'){
+             if(result.requestUrl==undefined||result.requestUrl==''){
       window.location.href="<%=request.getContextPath()%>/";
            
 }else{
-
+	  window.location.href=result.requestUrl;
       }
              
          }

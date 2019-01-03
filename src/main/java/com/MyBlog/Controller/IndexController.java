@@ -1,38 +1,32 @@
 package com.MyBlog.Controller;
 
+
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collector;
+
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.session.Session;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.MyBlog.Core.BlogInfoSignle;
 import com.MyBlog.Service.archivesService;
-import com.MyBlog.Service.blogService;
+
 import com.MyBlog.Service.typeService;
-import com.MyBlog.Shiro.Session.ShiroSession;
-import com.MyBlog.cache.SpringRedisCache;
-import com.MyBlog.entity.Blog;
-import com.MyBlog.entity.Flag;
+
 import com.MyBlog.entity.Pager;
-import com.MyBlog.entity.Users;
+
 import com.MyBlog.entity.Archives;
 import com.MyBlog.entity.type;
-import com.github.pagehelper.ISelect;
+
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 
@@ -52,11 +46,10 @@ public class IndexController {
 		
 		Pager pager=null;
 		pager=new Pager();
-		pager.setPage(1);
-		if(page!=null)
-			pager.setPage(page);
+			pager.setPage(Optional.ofNullable(page).orElse(1));
 		pager.setSize(5);
 	 List<Archives> archives=aservice.IndexShow(0,pager);
+	 
 end=System.currentTimeMillis();
 System.out.println("耗费时间:"+(end-start));
 		model.addAttribute("archives", archives);
@@ -69,7 +62,6 @@ System.out.println("耗费时间:"+(end-start));
 		Pager pager=new Pager();
 		pager.setPage(1);
 		pager.setSize(2);
-	 List<Archives> archives=aservice.IndexShow(0,pager);
 	PageHelper.startPage(1, 10);
 	List<type> types=tservice.FindAll();
 	long typecount= ((Page) types).getTotal();
@@ -85,17 +77,11 @@ System.out.println("耗费时间:"+(end-start));
 		Pager pager=new Pager();
 		Archives a=new Archives();
 		type ty=new type();
-		a.setStatus(0);
-		if(TID!=null) {
-		a.setType(TID);
-		ty.setTid(TID);
-		}
-	
-		pager.setPage(1);
-		if(page!=null)
-			pager.setPage(page);
-		pager.setSize(12);
-		
+		a.setStatus(0);	
+		a.setType(Optional.ofNullable(TID).orElse(null));
+		ty.setTid(Optional.ofNullable(TID).orElse(null));	
+		pager.setPage(Optional.ofNullable(page).orElse(1));
+		pager.setSize(12);	
 		PageHelper.startPage(pager.getPage(), pager.getSize());
 	 List<Archives> archives=aservice.FindcategoriesList(a);
 	long archivescount= ((Page) archives).getTotal();
@@ -116,9 +102,7 @@ System.out.println("耗费时间:"+(end-start));
 		Set<Integer> years=null;
 		Calendar c = Calendar.getInstance();
 		pager=new Pager();
-		pager.setPage(1);
-		if(page!=null)
-			pager.setPage(page);
+			pager.setPage(Optional.ofNullable(page).orElse(1));
 		pager.setSize(12);
 		 List<Archives> archives=aservice.IndexShow(0,pager);
 	long archivescount= pager.getTotal();

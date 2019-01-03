@@ -19,13 +19,13 @@ public class ShiroSession extends SimpleSession implements Serializable {
     public ShiroSession() {
         super();
         this.setChanged(true);
-        MyLogger.INFO(getClass(), "无参构造");
+        MyLogger.INFO(getClass(), "新的连接");
     }
 
     public ShiroSession(String host) {
         super(host);
         this.setChanged(true);
-        MyLogger.INFO(getClass(), "有参构造");
+        MyLogger.INFO(getClass(), "新访客"+host);
     }
 
 
@@ -33,28 +33,28 @@ public class ShiroSession extends SimpleSession implements Serializable {
     public void setId(Serializable id) {
         super.setId(id);
         this.setChanged(true);
-        MyLogger.INFO(getClass(), "更新Id");
+  
     }
 
     @Override
     public void setStopTimestamp(Date stopTimestamp) {
         super.setStopTimestamp(stopTimestamp);
         this.setChanged(true);
-        MyLogger.INFO(getClass(), "更新Timestamp");
+      
     }
 
     @Override
     public void setExpired(boolean expired) {
         super.setExpired(expired);
         this.setChanged(true);
-        MyLogger.INFO(getClass(), "更新Expired");
+  
     }
 
     @Override
     public void setTimeout(long timeout) {
         super.setTimeout(timeout);
         this.setChanged(true);
-        MyLogger.INFO(getClass(), "更新Timeout");
+      
     }
 
     @Override

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.StringUtils;
 import org.apache.shiro.web.filter.AccessControlFilter;
+import org.apache.shiro.web.util.SavedRequest;
 import org.apache.shiro.web.util.WebUtils;
 
 import com.MyBlog.Logger.MyLogger;
@@ -26,6 +27,7 @@ public class PermissionFilter extends AccessControlFilter{
 		
 		//先判断带参数的权限判断
 		Subject subject = getSubject(request, response);
+		System.out.println("mappedValue:"+mappedValue);
 		if(null != mappedValue){
 			String[] arra = (String[])mappedValue;
 			for (String permission : arra) {
@@ -37,6 +39,7 @@ public class PermissionFilter extends AccessControlFilter{
 		HttpServletRequest httpRequest = ((HttpServletRequest)request);
 		String uri = httpRequest.getRequestURI();//获取URI
 		String basePath = httpRequest.getContextPath();//获取basePath
+		System.out.println("basePath:"+basePath+"\n uri:"+uri);
 		if(null != uri && uri.startsWith(basePath)){
 			uri = uri.replaceFirst(basePath, "");
 		}
@@ -50,6 +53,8 @@ public class PermissionFilter extends AccessControlFilter{
 			resultMap.put("msg", "\u5F53\u524D\u7528\u6237\u6CA1\u6709\u767B\u5F55\uFF01");//当前用户没有登录！
 			ShiroFilterUtils.out(response, resultMap);
 		}
+	
+		WebUtils.saveRequest(httpRequest);
 		return Boolean.FALSE;
 	}
 

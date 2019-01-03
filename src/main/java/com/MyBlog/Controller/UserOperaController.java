@@ -11,12 +11,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.MyBlog.entity.Users;
+import com.MyBlog.Service.userService;
 
 @Controller
 public class UserOperaController {
 
 	  @Autowired
-	    private com.MyBlog.Service.userService userService;
+	    private userService userService;
 	  
 	@RequestMapping("SignIn")
 	@ResponseBody

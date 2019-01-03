@@ -38,7 +38,7 @@ public class MybaitsRedisCache implements Cache{
 	        if (id == null) {
 	            throw new IllegalArgumentException("Cache instances require an ID");
 	        }
-	        MyLogger.debug(getClass(),("MybatisRedisCache:id=" + id));
+	      //  MyLogger.debug(getClass(),("MybatisRedisCache:id=" + id));
 	        this.id = id;
 	    }
 	    // 从连接池获取redis连接
@@ -113,14 +113,14 @@ public class MybaitsRedisCache implements Cache{
 	         //   connection.select(DB_Index);
 	        	byte[] b=jedis.hget(SerializeUtil.serialize(MybaitsKey),SerializeUtil.serialize(key));
 	        	if(b==null) {
-	        		MyLogger.INFO(getClass(), "缓存未命中,当前命中率为:"+(succescache/++readcachecount)*100+"%");
+	        	//	MyLogger.INFO(getClass(), "缓存未命中,当前命中率为:"+(succescache/++readcachecount)*100+"%");
 	        		
 	        		return result;
 	        	}
 	            result = SerializeUtil.unserialize(b);
 	
 
-	  MyLogger.INFO(getClass(), "缓存命中,当前命中率为:"+(++succescache/++readcachecount)*100+"%");
+	//  MyLogger.INFO(getClass(), "缓存命中,当前命中率为:"+(++succescache/++readcachecount)*100+"%");
 	        }
 	        catch (JedisConnectionException e)
 	        {
@@ -129,7 +129,7 @@ public class MybaitsRedisCache implements Cache{
 	        finally
 	        {
 	        	end=System.currentTimeMillis();
-	        	  MyLogger.INFO(getClass(), "读取缓存耗费时间:"+(end-start));
+	     //   	  MyLogger.INFO(getClass(), "读取缓存耗费时间:"+(end-start));
 	        	recycleJedis(jedis);
 	        }
 	        return result;

@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TimeZone;
 import java.util.UUID;
 
@@ -189,8 +190,7 @@ return Msg;
 		
 		Archives archives=aservice.SeeArchives(AID);
 		Pager pager=new Pager();
-		if(page!=null)
-			pager.setPage(page);
+			pager.setPage(Optional.ofNullable(page).orElse(1));
 		List<Flag> flags=new ArrayList<Flag>();
 		PageHelper.startPage(pager.getPage(),8);
 		pager.setSize(8);

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.MyBlog.Dao.UrlPermissionsMapper">
+<resultMap id="UrlPermissionsFILED" type="com.MyBlog.entity.UrlPermissions" >
+        <result column="upid" property="upid" />
+        <result column="url" property="url" />
+        <result column="check" property="check" />
+        <result column="type" property="type" />
+        <result column="revision" property="revision" />
+        <result column="created_by" property="createdBy" />
+        <result column="created_time" property="createdTime" />
+        <result column="updated_by" property="updatedBy" />
+        <result column="updated_time" property="updatedTime" />
+        <result column="datalevel" property="datalevel" />
+        </resultMap>
+         <sql id="Base_Column_List">
+        `upid`,
+        `url`,
+        `check`,
+        `type`,
+        `revision`,
+        `created_by`,
+        `created_time`,
+        `updated_by`,
+        `updated_time`,
+        `datalevel`
+    </sql>
+    <select id="FindAll" resultMap="UrlPermissionsFILED">
+    select <include refid="Base_Column_List" /> from url_permissions
+    </select>
+      <select id="FindById" parameterType="int" resultMap="UrlPermissionsFILED">
+    select <include refid="Base_Column_List" /> from url_permissions t where t.upid=#{upid}
+    </select>
+       <select id="FindByParam" parameterType="UrlPermissions" resultMap="UrlPermissionsFILED">
+    select <include refid="Base_Column_List" /> 
+    from url_permissions t 
+    <where>
+    <if test="upid!=null">
+    t.upid=#{upid}
+    </if>
+      <if test="url!=null">
+    t.url=#{url}
+    </if>
+      <if test="check!=null">
+    t.check=#{check}
+    </if>
+       <if test="revision!=null">
+    t.revision=#{revision}
+    </if>
+           <if test="createdBy!=null">
+    t.created_by=#{createdBy}
+    </if>
+            <if test="createdTime!=null">
+    t.created_time=#{createdTime}
+    </if>
+          <if test="updatedBy!=null">
+    t.updated_by=#{updatedBy}
+    </if>
+      <if test="updatedTime!=null">
+    t.updated_time=#{updatedTime}
+    </if>
+          <if test="datalevel!=null">
+    t.datalevel=#{datalevel}
+    </if>
+    </where>
+    <if test="orderColumn!=null">
+    order by t.${orderColumn}   <if test="orderType!=null"> ${orderType} </if>
+    </if>
+    </select>
+    
+    <update id="Update" parameterType="UrlPermissions" >
+        UPDATE url_permissions
+        SET
+            url = #{url},
+            check = #{check},
+            type = #{type},
+            revision = #{revision},
+            created_by = #{createdBy},
+            created_time = #{createdTime},
+            updated_by = #{updatedBy},
+            updated_time = #{updatedTime},
+            datalevel = #{datalevel},
+            UpdateTime = NOW()
+        WHERE upid = #{upid}
+    </update>
+    
+     <delete id="delete" parameterType="UrlPermissions" >
+        DELETE FROM url_permissions
+        WHERE upid = #{upid}
+    </delete>
+    <insert id="insert" parameterType="UrlPermissions" >
+        INSERT INTO url_permissions (
+            `upid`,
+            `url`,
+            `check`,
+            `type`,
+            `revision`,
+            `created_by`,
+            `created_time`,
+            `updated_by`,
+            `updated_time`,
+            `datalevel`
+        )
+        VALUES(
+            #{upid},
+            #{url},
+            #{check},
+            #{type},
+            #{revision},
+            #{createdBy},
+            #{createdTime},
+            #{updatedBy},
+            #{updatedTime},
+            #{datalevel}
+        )
+    </insert>
+    </mapper>

@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,9 +24,7 @@ import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.util.SavedRequest;
 import org.apache.shiro.web.util.WebUtils;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.MyBlog.entity.Users;
+import com.MyBlog.utils.ShiroFilterUtils;
 
 @Controller
 
@@ -47,16 +47,18 @@ public class LoginController {
 	  
 	  @RequestMapping("/SignOut")
 	  @ResponseBody
-	    public Object  Dologin(Users user,String RememberMe,HttpServletResponse response,HttpServletRequest request) throws JsonGenerationException, JsonMappingException, IOException{
+	    public Object  Dologin(Users user,String RememberMe,HttpServletResponse response,HttpServletRequest request) throws  IOException{
 		  Map<String, String> LoginMsg=new HashMap<String, String>();
 		  SavedRequest savedRequest=WebUtils.getSavedRequest(request);
 		  LoginMsg=(Map<String, String>) userService.Login(user, RememberMe);
-		  
+		  if(savedRequest!=null)
+LoginMsg.put("requestUrl", ShiroFilterUtils.urlSuffix(savedRequest.getRequestUrl()));
+		
 	      return LoginMsg;
 	     
 	    }
 	  @RequestMapping("/login")
-	    public String  login(Users user,String RememberMe,HttpServletResponse response,HttpServletRequest request) throws JsonGenerationException, JsonMappingException, IOException{
+	    public String  login(Users user,String RememberMe,HttpServletResponse response,HttpServletRequest request) throws  IOException{
 		  
 	      return "/jsp/login";
 	    }

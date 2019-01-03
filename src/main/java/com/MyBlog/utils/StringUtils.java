@@ -48,9 +48,11 @@ public class StringUtils extends org.apache.commons.lang.StringUtils{
 	public static String getRandom(int length) {
 		String val = "";
 		Random random = new Random();
+		String charOrNum = random.nextInt(2) % 2 == 0 ? "char" : "num";
+		try {
 		for (int i = 0; i < length; i++) {
 			// 输出字母还是数字
-			String charOrNum = random.nextInt(2) % 2 == 0 ? "char" : "num";
+		
 			// 字符串
 			if ("char".equalsIgnoreCase(charOrNum)) {
 				// 取得大写字母还是小写字母
@@ -61,6 +63,14 @@ public class StringUtils extends org.apache.commons.lang.StringUtils{
 			}
 		}
 		return val.toLowerCase();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		finally {
+			random=null;charOrNum=null;
+		}
 	}
 	/**
 	 * 判断字符是否含有非法字符
@@ -71,12 +81,17 @@ public class StringUtils extends org.apache.commons.lang.StringUtils{
 	
 	public static boolean isIllegalCharacter(String str) {
 		String[] SqlStr2 = {"*","'","-",";","or","+","//","/","%","#","=","?","<",">","{","}","\\"};//特殊字符
+		try {
 		   for (int i = 0; i < SqlStr2.length; i++) {
 		         if (str.indexOf(SqlStr2[i]) >= 0) {
 		            return true;
 		         }
 		     }
 		   return false;
+		}
+		finally {
+			SqlStr2=null;
+		}
 	}
 	/**
 	 * 一次性判断多个或单个对象不为空。
@@ -144,6 +159,7 @@ public class StringUtils extends org.apache.commons.lang.StringUtils{
 	 */
 	public static JSONArray isJSONArray(Object args) {
 		JSONArray result = new JSONArray();
+		try {
 		if(isBlank(args)){
 			return null ;
 		}
@@ -161,6 +177,14 @@ public class StringUtils extends org.apache.commons.lang.StringUtils{
 			return result;
 		}else{
 			return null ;
+		}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return null ;
+		}
+		finally {
+			result=null;
 		}
 		
 	}
@@ -194,6 +218,9 @@ public class StringUtils extends org.apache.commons.lang.StringUtils{
        } catch (Exception e) { 
           return ""; 
        }
+       finally {
+    	   decoder=null;
+	}
     }
     /**
      * 把Map转换成get请求参数类型,如 {"name"=20,"age"=30} 转换后变成 name=20&age=30
@@ -257,6 +284,7 @@ public class StringUtils extends org.apache.commons.lang.StringUtils{
     public static String toUnicode(String str) {
         String as[] = new String[str.length()];
         String s1 = "";
+        try {
         for (int i = 0; i < str.length(); i++) {
         	int v = str.charAt(i);
         	if(v >=19968 && v <= 171941){
@@ -267,6 +295,13 @@ public class StringUtils extends org.apache.commons.lang.StringUtils{
         	}
         }
         return s1;
+        }
+        catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}finally {
+			as=null;s1=null;
+		}
      }
     /**
      * 合并数据

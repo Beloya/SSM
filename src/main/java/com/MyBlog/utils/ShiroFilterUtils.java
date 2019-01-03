@@ -53,7 +53,10 @@ public class ShiroFilterUtils {
 			}
 		}
 	}
-
+public static String urlSuffix(String url) {
+	
+	return url.replace(".do","");
+}
 	public static String getLoginUrl() {
 		return LOGIN_URL;
 	}

@@ -166,7 +166,7 @@
         
        
 
-        <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <bean id="shiroFilter" class="com.MyBlog.Shiro.Filter.myShiroFilterFactoryBean">
 <property name="securityManager" ref="securityManager"/>
  <property name="loginUrl" value="${LOGIN_URL}" />
         <!--  property name="successUrl" value="jsp/suc.htm" /-->
@@ -195,9 +195,8 @@
            /editarchives=perms[普通:文章:edit]
             /admin/**=perms[系统:管理:view],kickout
        /druid/**=perms[系统:监控:view],kickout
-      /druidWeb/**=perms[系统:监控:view],kickout
-      /trainquery.do=authc
-      /**=simple
+    
+      
             </value>
               </property>
        

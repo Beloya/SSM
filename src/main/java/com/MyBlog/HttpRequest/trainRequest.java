@@ -82,8 +82,16 @@ public   boolean processTask() {
 	  
 	  LocalDateTime now=LocalDateTime.now();
 	  LocalDateTime delayTime=userTrain.getLastExecuteTime().plusSeconds(userTrain.getDelayTime());
+	  LocalDateTime trainDate=
+			  LocalDateTime.parse(userTrain.getTrainDate(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
 	  if(now.compareTo(delayTime)<0)
 		  return false;  
+	  if(LocalDateTime.now().plusHours(1).
+			  compareTo(trainDate)>0)
+		  TrainServiceImpl.faileAndStopBuyTask(this, 
+					LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))+
+					"已过抢票时间，停止抢票");
+	  
 	if(!userTrain.isStart()||userTrain.isComplete())
 		return true;
 	Calendar c=Calendar.getInstance();

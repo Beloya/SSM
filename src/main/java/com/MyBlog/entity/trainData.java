@@ -36,6 +36,7 @@ private String oldPassengerStr;
 private boolean isStart=false;
 private boolean isComplete=false;
 private String remark;
+private String email;
 private  List<String> msgList=new LinkedList<>();
 private Integer executeCount=0;
 private LocalDateTime lastExecuteTime=LocalDateTime.now();
@@ -53,6 +54,7 @@ private String passenger_id_type_name;
 public final static String REPEAT_SUBMIT_TOKENinitDc="var globalRepeatSubmitToken = '";
 public final static String key_check_isChangeinitDc="'key_check_isChange':'";
 public final static String leftTicketStrinitDc="'leftTicketStr':'";
+public final static String CLeftTicketUrlStr="var CLeftTicketUrl = '";
 public static Map<String,String> seatMap=ImmutableMap.<String, String>builder()
 .put("9","商务座")
 .put("M","一等座")
@@ -272,6 +274,12 @@ public String getTrainDate() {
 }
 public void setTrainNeedDateTime(String trainNeedDateTime) {
 	this.trainNeedDateTime = trainNeedDateTime;
+}
+public String getEmail() {
+	return email;
+}
+public void setEmail(String email) {
+	this.email = email;
 }
 
 

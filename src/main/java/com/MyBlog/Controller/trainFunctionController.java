@@ -70,6 +70,7 @@ private TrainServiceImpl tsi;
 	return "/jsp/lab/trainSubmit";
 	}
 	
+
 	@SuppressWarnings("unchecked")
 	@RequestMapping("trainqueryJson")
 	  @ResponseBody
@@ -237,5 +238,19 @@ private TrainServiceImpl tsi;
 		jsonObjectone=(JSONObject) tsi.getQueryOrderWaitTime(postmap);
 		
 			return jsonObjectone;
+	}
+	@RequestMapping("stoptraintask")
+	public String trainStop(HttpServletRequest request,Model model) {
+
+	tsi.StopTask();
+	
+	return "redirect:../"+request.getContextPath()+"/trainquery";
+	}
+	@RequestMapping("restarttraintask")
+	public String trainRestart(HttpServletRequest request,Model model) {
+
+	tsi.restartTask();
+	
+	return "redirect:../"+request.getContextPath()+"/trainquery";
 	}
 }

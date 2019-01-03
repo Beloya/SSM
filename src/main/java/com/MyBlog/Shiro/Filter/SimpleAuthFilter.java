@@ -40,7 +40,7 @@ public class SimpleAuthFilter extends AccessControlFilter{
 		if(url.startsWith("/")){
 			return Boolean.TRUE;
 		}
-
+	
 		Map<String, String> resultMap = new HashMap<String, String>();
 		
 		 Users user = (Users) session.getAttribute("user");  

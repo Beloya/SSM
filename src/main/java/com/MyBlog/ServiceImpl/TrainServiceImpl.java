@@ -1,7 +1,6 @@
 package com.MyBlog.ServiceImpl;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +8,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Service;
@@ -22,7 +24,7 @@ import com.MyBlog.entity.Users;
 import com.MyBlog.entity.trainData;
 import com.MyBlog.utils.JsonUtils;
 import com.alibaba.fastjson.JSONObject;
-import com.google.common.collect.ImmutableMap;
+
 
 /**
  * 
@@ -33,6 +35,10 @@ import com.google.common.collect.ImmutableMap;
 public class TrainServiceImpl implements TrainService{
     private static ConcurrentHashMap<String, Object> sessionTask=new ConcurrentHashMap<>();
     public static CopyOnWriteArraySet<Object> buyTask=new CopyOnWriteArraySet<>();
+    public static ExecutorService p=Executors.newFixedThreadPool(20);
+    public  static String queryUrl;
+    public static String CLeftTicketUrl;
+    
 	private long timstamp=0; 
 	@Override
 	public Object userLogin(String trainusername, String trainpassword, String verifyCode) {
@@ -44,7 +50,7 @@ public class TrainServiceImpl implements TrainService{
 		postmap.put("password", trainpassword);
 		postmap.put("appid", "otn");
 		postmap.put("answer", verifyCode);
-
+	
 		String login_result=trainRequst.doPost(loginUrl,postmap);
 	   jsonObject = JSONObject.parseObject(login_result);
 	   if(jsonObject.getInteger("result_code")==0) {
@@ -75,6 +81,48 @@ long timstamp=System.currentTimeMillis();
 		return verifyImg;
 	}
 
+	public synchronized String getCLeftTicketUrl(Map<String,Object> postmap) {
+		String result=null,temp=null,TOKEN=null;
+		trainRequest trainRequest=null;
+		int n=0,m=0;
+			trainRequest=(trainRequest) getUserSession();
+			result=trainRequest.
+					DoGet(queryBase+"?linktypeid="+postmap.get("linktypeid")+"&fs="
+			+postmap.get("fs")+"&ts="+postmap.get("ts")+"&date="+postmap.get("date")
+			+"&flag="+postmap.get("flag"));
+		
+			if((n=result.indexOf(trainData.CLeftTicketUrlStr))!=-1) {
+				n+=trainData.CLeftTicketUrlStr.length();
+				temp=result.substring(n);
+				m=n+temp.indexOf("';");
+				TOKEN=result.substring(n, m);
+				trainRequest.getUserTrain().setRepeat_submit_token(TOKEN);
+				CLeftTicketUrl=TOKEN;
+				queryUrl=queryBaseUrl+CLeftTicketUrl;
+			}
+			postmap=null;
+			return queryUrl;
+	}
+	public synchronized static String getCLeftTicketUrl(Map<String,Object> postmap,trainRequest trainRequest) {
+		String result=null,temp=null,TOKEN=null;
+		int n=0,m=0;
+			
+		result=trainRequest.
+				DoGet(queryBase+"?linktypeid="+postmap.get("linktypeid")+"&fs="
+		+postmap.get("fs")+"&ts="+postmap.get("ts")+"&date="+postmap.get("date")
+		+"&flag="+postmap.get("flag"));
+			if((n=result.indexOf(trainData.CLeftTicketUrlStr))!=-1) {
+				n+=trainData.CLeftTicketUrlStr.length();
+				temp=result.substring(n);
+				m=n+temp.indexOf("';");
+				TOKEN=result.substring(n, m);
+				trainRequest.getUserTrain().setRepeat_submit_token(TOKEN);
+				CLeftTicketUrl=TOKEN;
+				queryUrl=queryBaseUrl+CLeftTicketUrl;
+			}
+			postmap=null;
+			return queryUrl;
+	}
 	@Override
 	public Object checkVerify(String verifyCode) {
 		timstamp=System.currentTimeMillis();
@@ -102,12 +150,22 @@ long timstamp=System.currentTimeMillis();
 	//String mapstr=null,queryResult=null;
 		trainRequest trainRequest=getUserSession();
 		JSONObject jsonObjectone = null;
+		if(CLeftTicketUrl==null||CLeftTicketUrl.trim().equals("")) {
+			Map<String,Object> postMap=new HashMap<>();
+			postMap.put("linktypeid", "dc");
+			postMap.put("fs",from_station);
+			postMap.put("ts",to_station);
+			postMap.put("date",time);
+			postMap.put("flag","N,N,Y");
+			getCLeftTicketUrl(postMap);
+			postMap=null;
+		}
 		try {
 		  List<Map<String,String>> Multimap =new ArrayList<>(); 
 			if(!trainRequest.getUserTrain().isStart())
 			  trainRequest.getUserTrain().setTrainQueryDate(time);	
 			result=trainRequest.
-DoGet(queryUrl+"train_date="+time+"&leftTicketDTO.from_station="+from_station+
+DoGet(queryUrl+"?leftTicketDTO.train_date="+time+"&leftTicketDTO.from_station="+from_station+
 		"&leftTicketDTO.to_station="+to_station+"&purpose_codes=ADULT");
 			jsonObjectone=JSONObject.parseObject(result);
 	         tempdata=jsonObjectone.getString("data");
@@ -120,7 +178,14 @@ DoGet(queryUrl+"train_date="+time+"&leftTicketDTO.from_station="+from_station+
 		return Multimap;
 		 }
 		 catch (Exception e) {
-			 
+				Map<String,Object> postMap=new HashMap<>();
+				postMap.put("linktypeid", "dc");
+				postMap.put("fs",from_station);
+				postMap.put("ts",to_station);
+				postMap.put("date",time);
+				postMap.put("flag","N,N,Y");
+				getCLeftTicketUrl(postMap);
+				postMap=null;
 			 return null;
 		}
 		
@@ -130,13 +195,22 @@ DoGet(queryUrl+"train_date="+time+"&leftTicketDTO.from_station="+from_station+
 		String result=null;
 		String tempdata=null;
 	//String mapstr=null,queryResult=null;
-	
+		if(CLeftTicketUrl==null||CLeftTicketUrl.trim().equals("")) {
+			Map<String,Object> postMap=new HashMap<>();
+			postMap.put("linktypeid", "dc");
+			postMap.put("fs",from_station);
+			postMap.put("ts",to_station);
+			postMap.put("date",time);
+			postMap.put("flag","N,N,Y");
+			getCLeftTicketUrl(postMap,trainRequest);
+			postMap=null;
+		}
 		JSONObject jsonObjectone = null;
 		try {
 		  List<Map<String,String>> Multimap =new ArrayList<>(); 
 		  trainRequest.getUserTrain().setTrainQueryDate(time);	
 			result=trainRequest.
-DoGet(queryUrl+"train_date="+time+"&leftTicketDTO.from_station="+from_station+
+DoGet(queryUrl+"?leftTicketDTO.train_date="+time+"&leftTicketDTO.from_station="+from_station+
 		"&leftTicketDTO.to_station="+to_station+"&purpose_codes=ADULT");
 			
 			jsonObjectone=JSONObject.parseObject(result);
@@ -150,7 +224,14 @@ DoGet(queryUrl+"train_date="+time+"&leftTicketDTO.from_station="+from_station+
 		return Multimap;
 		 }
 		 catch (Exception e) {
-			 
+				Map<String,Object> postMap=new HashMap<>();
+				postMap.put("linktypeid", "dc");
+				postMap.put("fs",from_station);
+				postMap.put("ts",to_station);
+				postMap.put("date",time);
+				postMap.put("flag","N,N,Y");
+				getCLeftTicketUrl(postMap,trainRequest);
+				postMap=null;
 			 return null;
 		}
 		
@@ -237,6 +318,8 @@ public static Object getPassenger(trainRequest trainRequest) {
 		postmap=null;
 	return jsonObjectone;
 }
+
+
 
 private Object getinitDcTOKEN() {
 	String result=null,temp=null,TOKEN=null;
@@ -460,6 +543,10 @@ public Object confirmSingleQueue(Map<String,Object> postmap) {
 public Object joinConfirmSingleQueue(Map<String,Object> postmap) {
 	String result=null;
 	trainRequest trainRequest=getUserSession();
+	Users Principaluser=null;
+	Subject subject = SecurityUtils.getSubject(); 
+	Object Principal=  subject.getPrincipal();
+
 	JSONObject jsonObjectone = null;
 	postmap.put("REPEAT_SUBMIT_TOKEN",
 			Optional.ofNullable(trainRequest.getUserTrain().getRepeat_submit_token()).orElse(""));
@@ -468,6 +555,12 @@ public Object joinConfirmSingleQueue(Map<String,Object> postmap) {
 	trainRequest.getUserTrain().setStart(true);
 	trainRequest.getUserTrain().setComplete(false);
 	trainRequest.getUserTrain().setRemark("");
+	if(Principal!=null) {
+		Principaluser=(Users) Principal;
+		trainRequest.getUserTrain().setEmail(Principaluser.getEmail());;
+	
+	}
+
 	addBuyTask(trainRequest);
 	//result=trainRequest.
 	//		doPost(confirmSingleForDcQueueUrl, postmap);
@@ -540,21 +633,14 @@ public static  boolean completeBuyTask(trainRequest t) {
 			 +t.getUserTrain().getToStationTeleName()+"的 "+t.getUserTrain().getStationTrainCode()+
 			 "次列车购票完成，请前往12306官网付款");
 	t.getUserTrain().setRemark("已完成");
-	   Users Principaluser=null;
-			Subject subject = SecurityUtils.getSubject(); 
-			Object Principal=  subject.getPrincipal();
-			if(Principal!=null) {
-				Principaluser=(Users) Principal;
-			}
-
-	
+	 
 	 EmailUtilFactory eFactory=new QQEmailUtilFactory();
 	 Email email=new Email();
 	  email.setSubject("12306购票成功");
 	   email.setText("由 "+t.getUserTrain().getFromStationName()+" 开往 "
 	 +t.getUserTrain().getToStationTeleName()+"的 "+t.getUserTrain().getStationTrainCode()+
 	 "次列车购票完成，请前往12306官网付款");
-		email.setTomail(Principaluser.getEmail());
+		email.setTomail(t.getUserTrain().getEmail());
 		QQEmail qqEmail=(QQEmail) eFactory.CreateEmail();
 		   qqEmail.JoinEmailQueue(qqEmail,email); 
 	}
@@ -566,11 +652,17 @@ public static  boolean completeBuyTask(trainRequest t) {
 
 public static  void faileAndStopBuyTask(trainRequest t,String remark) {
 	buyTask.remove(t);
-	t.getUserTrain().setRemark("登录也许或许已经失效了，停止运行");
+	t.getUserTrain().setRemark("抢票任务已停止");
 	t.getUserTrain().setStart(false);
 	t.getUserTrain().setComplete(false);
 	t.getUserTrain().addMsgList(remark);
-
+	 EmailUtilFactory eFactory=new QQEmailUtilFactory();
+	 Email email=new Email();
+	  email.setSubject("抢票任务已停止");
+	   email.setText("原因:"+remark);
+		email.setTomail(t.getUserTrain().getEmail());
+		QQEmail qqEmail=(QQEmail) eFactory.CreateEmail();
+		   qqEmail.JoinEmailQueue(qqEmail,email); 
 }
 
 public  static void setBuyTask(CopyOnWriteArraySet<Object> buyTask) {
@@ -607,6 +699,27 @@ public static boolean queryHasTicket(Map<String, String> map,trainRequest t) {
 	return false;
 }
 
+public   void StopTask() {
 
+	trainRequest t=getUserSession();
+	if(buyTask.contains(t))
+	buyTask.remove(t);
+	t.getUserTrain().setRemark("抢票任务已停止");
+	t.getUserTrain().setStart(false);
+
+
+	
+}
+public   void restartTask() {
+
+	trainRequest t=getUserSession();
+	if(!buyTask.contains(t))
+	buyTask.add(t);
+	t.getUserTrain().setRemark("抢票任务重新启动");
+	t.getUserTrain().setStart(true);
+
+
+	
+}
 
 }

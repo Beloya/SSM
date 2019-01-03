@@ -50,9 +50,7 @@ import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.Factory;
 import org.apache.shiro.util.ThreadContext;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -399,7 +397,7 @@ l1=l1.next;
 	}
 	
 //	@Test
-	public void JsonTest() throws GeneralSecurityException, ParseException, JsonGenerationException, JsonMappingException, IOException {
+/*	public void JsonTest() throws GeneralSecurityException, ParseException, JsonGenerationException, JsonMappingException, IOException {
 		  ObjectMapper mapper = new ObjectMapper();
 		  List<HashMap<String,Object>> datas=new ArrayList<HashMap<String, Object>>();
 		  HashMap<String,Object>  data=new HashMap<String, Object>();
@@ -414,6 +412,6 @@ l1=l1.next;
 		  jd.setMsg("nice");
 		  String Text=mapper.writeValueAsString(jd);
 		  System.out.println(Text);
-	}
+	}*/
 
 }

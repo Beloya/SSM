@@ -64,7 +64,6 @@ public class MyLogger {
 	 * @param message	输出信息
 	 */
 	public static void INFO(Class<? extends Object> clazz ,String message){
-	LocalDate date=LocalDate.now();
 		Logger logger = Logger.getLogger(clazz);
 		logger.info(LocalDate.now()+"   "+message);
 	}

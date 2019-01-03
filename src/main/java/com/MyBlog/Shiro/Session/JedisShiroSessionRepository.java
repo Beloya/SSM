@@ -124,7 +124,7 @@ public static String getREDIS_SHIRO_SESSION() {
 	return REDIS_SHIRO_SESSION;
 }
 
-public static void setREDIS_SHIRO_SESSION(String rEDIS_SHIRO_SESSION) {
+public  void setREDIS_SHIRO_SESSION(String rEDIS_SHIRO_SESSION) {
 	REDIS_SHIRO_SESSION = rEDIS_SHIRO_SESSION;
 }
 
@@ -132,7 +132,7 @@ public static String getREDIS_SHIRO_ALL() {
 	return REDIS_SHIRO_ALL;
 }
 
-public static void setREDIS_SHIRO_ALL(String rEDIS_SHIRO_ALL) {
+public  void setREDIS_SHIRO_ALL(String rEDIS_SHIRO_ALL) {
 	REDIS_SHIRO_ALL = rEDIS_SHIRO_ALL;
 }
 

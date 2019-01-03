@@ -16,15 +16,18 @@ import com.MyBlog.Logger.MyLogger;
 import com.MyBlog.Message.QQEmail;
 
 
-@EnableAsync
+
 @Component
 public class EmailTask {
-	  @Async
+	  QQEmail qqeamil=null;
+	BlockingQueue<QQEmail> emailqueue;
+
 	@Scheduled(cron = " 0/30 * * * * ?")
 	public void pro() throws InterruptedException {
+		  emailqueue= qqeamil.getEmailqueue();
 		try {
-		QQEmail qqeamil=new QQEmail();
-		BlockingQueue<QQEmail> emailqueue=qqeamil.getEmailqueue();
+		
+		
 		for(int i=0;i<emailqueue.size();i++) {
 			
 			qqeamil= emailqueue.take();
@@ -33,6 +36,9 @@ public class EmailTask {
 		}
 		catch (Exception e) {
 			MyLogger.error(getClass(), "邮件定时器异常", e);
+		}
+		finally {
+			qqeamil=null;
 		}
 	}
 }

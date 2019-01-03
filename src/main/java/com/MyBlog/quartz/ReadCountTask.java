@@ -11,12 +11,12 @@ import org.springframework.stereotype.Component;
 import com.MyBlog.Logger.MyLogger;
 import com.MyBlog.Service.archivesService;
 
-@EnableAsync
+
 @Component
 public class ReadCountTask {
 	@Autowired
 	private archivesService as;
-	  @Async
+	 
 	@Scheduled(cron = " 0 0 0/1 * * ?  ")
 	public void UpdateReadCount(){
 		try {

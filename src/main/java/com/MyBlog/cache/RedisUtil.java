@@ -196,7 +196,7 @@ public class RedisUtil {
 	        	MyLogger.error(getClass(), "", e);
 			}
 	        finally {
-	        	System.out.println("RedisDel:key="+SerializeUtil.deserialize(key)+" value="+SerializeUtil.deserialize(fields));
+	        	//System.out.println("RedisDel:key="+SerializeUtil.deserialize(key)+" value="+SerializeUtil.deserialize(fields));
 	        	recycleJedis(jedis);
 			}
 	        return 0;
@@ -213,7 +213,7 @@ public class RedisUtil {
 	    	Jedis jedis = null;
 	        try {
 	        	jedis=getJedis();
-	        	 System.out.println("RedisSet:key="+SerializeUtil.deserialize(key)+" field="+SerializeUtil.deserialize(field)+" value="+SerializeUtil.deserialize(value));
+	        	// System.out.println("RedisSet:key="+SerializeUtil.deserialize(key)+" field="+SerializeUtil.deserialize(field)+" value="+SerializeUtil.deserialize(value));
 	        Long s = jedis.hset(key, field, value);
 	       if(expire!=null) {
 	    	   jedis.expire(key, expire);
@@ -262,7 +262,7 @@ public class RedisUtil {
 	        try {
 	        	jedis=getJedis();
 	        byte[] s = jedis.hget(key, field);
-	    	System.out.println("RedisGet:key="+SerializeUtil.deserialize(key)+" value="+SerializeUtil.deserialize(field)+" value="+SerializeUtil.deserialize(s));
+	    //	System.out.println("RedisGet:key="+SerializeUtil.deserialize(key)+" value="+SerializeUtil.deserialize(field)+" value="+SerializeUtil.deserialize(s));
 	        return s;
 	        }
 	        catch (Exception e) {
@@ -344,7 +344,7 @@ public class RedisUtil {
 	        	jedis=getJedis(dbIndex);
 	       
 	            value = jedis.get(key);
-	         	System.out.println("GET key:"+SerializeUtil.unserialize(key)+" value:"+SerializeUtil.unserialize(value));
+	      //   	System.out.println("GET key:"+SerializeUtil.unserialize(key)+" value:"+SerializeUtil.unserialize(value));
 	        } finally {
 	        	recycleJedis(jedis);
 	        }
@@ -378,7 +378,7 @@ public class RedisUtil {
 		        try {
 		        	jedis=getJedis(dbIndex);
 	            jedis.set(key, value);
-	        	System.out.println("SET key:"+SerializeUtil.unserialize(key)+" value:"+SerializeUtil.unserialize(value));
+	      //  	System.out.println("SET key:"+SerializeUtil.unserialize(key)+" value:"+SerializeUtil.unserialize(value));
 	            if (expire != 0) {
 	                jedis.expire(key, expire);
 	            }
@@ -568,7 +568,7 @@ public class RedisUtil {
 		public void setExpire(int expire) {
 			this.expire = expire;
 		}
-		public synchronized static void setJedisConnectionFactory(JedisConnectionFactory jedisConnectionFactory) {
+		public synchronized  void setJedisConnectionFactory(JedisConnectionFactory jedisConnectionFactory) {
 	    	RedisUtil.jedisConnectionFactory= jedisConnectionFactory;   	
 	    }
 }

@@ -2,6 +2,7 @@ package com.MyBlog.Core;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.PostConstruct;
@@ -17,10 +18,14 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import com.MyBlog.Dao.archivesMapper;
+import com.MyBlog.HttpRequest.trainRequest;
 import com.MyBlog.Logger.MyLogger;
+import com.MyBlog.Message.QQEmail;
 import com.MyBlog.Service.SyslinkService;
+import com.MyBlog.Service.UrlPermissionsService;
 import com.MyBlog.Service.archivesService;
 import com.MyBlog.Service.blogService;
+import com.MyBlog.ServiceImpl.TrainServiceImpl;
 import com.MyBlog.entity.Blog;
 import com.MyBlog.entity.Syslink;
 import com.MyBlog.entity.Archives;
@@ -35,6 +40,8 @@ public class BlogInfoLoad  implements ApplicationListener<ContextRefreshedEvent>
 	private SyslinkService syslinkservice;
 	@Autowired
 	private archivesService as;
+	@Autowired
+	private UrlPermissionsService upService;
 	public  void BlogInfoInit() {
 		Blog blog=null;
 		List<Syslink> syslinks=null;
@@ -67,10 +74,31 @@ public class BlogInfoLoad  implements ApplicationListener<ContextRefreshedEvent>
 	
    	 }
 	}
+	
+	
+	public void urlFilterLoad() {
+		
+	}
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 		BlogInfoInit();
 	}
 	public void destroy() throws Exception {
+		QQEmail qqeamil=new QQEmail();
+		BlockingQueue<QQEmail> emailqueue=qqeamil.getEmailqueue();
+		 for (Object object :  TrainServiceImpl.buyTask) {
+			  trainRequest t=(trainRequest) object;
+			  if(t.getUserTrain().isStart()&&!t.getUserTrain().isComplete()) {
+				  TrainServiceImpl.faileAndStopBuyTask(t,"服务重启中，任务已重置");
+				
+			  }
+		}
+		 TrainServiceImpl.p.shutdown();
+		for(int i=0;i<emailqueue.size();i++) {
+			
+			qqeamil= emailqueue.take();
+			qqeamil.SendAttMail();
+		}
+		
 		as.UpdateReadCount();
 		
 	}

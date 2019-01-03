@@ -155,9 +155,12 @@ word-break:break-all;
       <i class="layui-icon layui-icon-ok" style="font-size: 30px; color: #009688;"></i>已完成 (${trainData.remark })</c:if>
       </p>   <p>
      <c:if test="${trainData.isStart==true }">
-     <i class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop" style="font-size: 30px; color: #1E9FFF;"></i> 进行中</c:if>
+     <i class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop" style="font-size: 30px; color: #1E9FFF;"></i>
+     进行中   <a class="layui-btn layui-btn-xs layui-btn-danger" href="<%=request.getContextPath()%>/stoptraintask">停止任务</a></c:if>
           <c:if test="${trainData.isStart==false }">
-           <i class="layui-icon layui-icon-face-surprised" style="font-size: 30px; color: #FF5722;"></i>已停止 (${trainData.remark })</c:if>
+           <i class="layui-icon layui-icon-face-surprised" style="font-size: 30px; color: #FF5722;"></i>已停止 (${trainData.remark })
+           <a class="layui-btn layui-btn-xs layui-btn-normal" href="<%=request.getContextPath()%>/restarttraintask">重启任务</a>
+           </c:if>
           </p>
           <p>
           最近一次执行时间：${trainData.showlastExecuteTime}
@@ -201,12 +204,12 @@ word-break:break-all;
 	<script src='js/EasePack.min.js'></script>
 	<script src='https://tuxiang-1251384861.cos.ap-guangzhou.myqcloud.com/js/TweenLite.min.js'></script>
 	<script src="js/index.js"></script>
-	<c:if test="${isStart}">
+	<c:if test="${!isStart}">
 	<script type="text/html" id="barDemo">
   <a class="layui-btn layui-btn-xs" lay-event="buy">预订</a>
 </script>
 </c:if>
-	<c:if test="${!isStart}">
+	<c:if test="${isStart}">
 	<script type="text/html" id="barDemo">
   <a class="layui-btn layui-btn-xs" lay-event="isStart">停止任务</a>
 </script>
