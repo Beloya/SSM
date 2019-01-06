@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>抢票王(仅供娱乐)</title>
+<title>抢票</title>
 <link rel="stylesheet" href="https://tuxiang-1251384861.cos.ap-guangzhou.myqcloud.com/css/main.css"
 	media="all" />
 	<style type="text/css">
@@ -70,10 +70,11 @@ word-break:break-all;
   </ul>
   <div class="layui-tab-content">
      <div class="layui-tab-item layui-show" style="padding:20px 20px 20px 20px;">
-     <span class="layui-badge">该功能仅供娱乐。任务并不会持久化，仅在内存中保存</span>
-  <form class="layui-form" action="">
+     <span class="layui-badge" style="margin-bottom: 15px;">该功能仅供娱乐。任务并不会持久化，仅在内存中保存</span>
+   
+  <form class="layui-form" action="" style="margin-top: 15px;">
  
-   <div class="layui-inline">
+   <div class="layui-inline" >
       <label class="layui-form-label">出发地</label>
       <div class="layui-input-inline">
         <select name="modules" lay-verify="required" name="from_station" id="fromStationText" lay-search="">

@@ -4,9 +4,12 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -31,6 +34,7 @@ private String fromStationName;
 private String toStationTeleName;
 private String start_time;
 private String trainQueryDate;
+private Set<String> taskTrainQueryDate=new HashSet<>();
 private String passengerTicketStr;
 private String oldPassengerStr;
 private boolean isStart=false;
@@ -41,7 +45,6 @@ private  List<String> msgList=new LinkedList<>();
 private Integer executeCount=0;
 private LocalDateTime lastExecuteTime=LocalDateTime.now();
 private Long delayTime=0L;
-
 
 
 /*

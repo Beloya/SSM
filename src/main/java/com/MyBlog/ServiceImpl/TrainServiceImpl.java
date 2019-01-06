@@ -121,6 +121,7 @@ long timstamp=System.currentTimeMillis();
 				queryUrl=queryBaseUrl+CLeftTicketUrl;
 			}
 			postmap=null;
+			result=null;
 			return queryUrl;
 	}
 	@Override
@@ -203,7 +204,7 @@ DoGet(queryUrl+"?leftTicketDTO.train_date="+time+"&leftTicketDTO.from_station="+
 			postMap.put("date",time);
 			postMap.put("flag","N,N,Y");
 			getCLeftTicketUrl(postMap,trainRequest);
-			postMap=null;
+			
 		}
 		JSONObject jsonObjectone = null;
 		try {
@@ -220,7 +221,7 @@ DoGet(queryUrl+"?leftTicketDTO.train_date="+time+"&leftTicketDTO.from_station="+
 	    	//queryResult=jsonObjectone.getString("result");
 	        //	JSONObject map=JSONObject.parseObject(mapstr);
 	    	Multimap=(List<Map<String, String>>) JsonUtils.trainJsonQuery(result);
-		
+	    	
 		return Multimap;
 		 }
 		 catch (Exception e) {
@@ -233,6 +234,10 @@ DoGet(queryUrl+"?leftTicketDTO.train_date="+time+"&leftTicketDTO.from_station="+
 				getCLeftTicketUrl(postMap,trainRequest);
 				postMap=null;
 			 return null;
+		}
+		finally {
+			result=null;
+			
 		}
 		
 	}
@@ -271,6 +276,7 @@ public Object CheckUser() {
 				doPost(checkUserUrl, postmap);
 		jsonObjectone=JSONObject.parseObject(result);
 		postmap=null;
+		result=null;
 		return jsonObjectone;
 }
 
@@ -285,6 +291,7 @@ public static Object CheckUser(trainRequest trainRequest) {
 				doPost(checkUserUrl, postmap);
 		jsonObjectone=JSONObject.parseObject(result);
 		postmap=null;
+		result=null;
 		return jsonObjectone;
 }
 
@@ -316,6 +323,7 @@ public static Object getPassenger(trainRequest trainRequest) {
 				doPost(getPassengerUrl, postmap);
 		jsonObjectone=JSONObject.parseObject(result);
 		postmap=null;
+		result=null;
 	return jsonObjectone;
 }
 
@@ -398,6 +406,7 @@ private static Object getinitDcTOKEN(trainRequest trainRequest) {
 			tokenMap.put("leftTicket",TOKEN);
 		}
 		postmap=null;
+		result=null;
 		return tokenMap;
 		
 }
@@ -453,7 +462,7 @@ public static Object submitOrderRequest(trainRequest trainRequest,Map<String,Obj
 	result=trainRequest.
 			doPost(submitOrderUrl, postmap);
 	jsonObjectone=JSONObject.parseObject(result);
-
+	result=null;
 	return jsonObjectone;
 }
 
@@ -482,6 +491,8 @@ public static Object checkOrderInfo(trainRequest trainRequest,Map<String,Object>
 	result=trainRequest.
 			doPost(checkOrderUrl, postmap);
 	jsonObjectone=JSONObject.parseObject(result);
+	result=null;
+	postmap=null;
 	return jsonObjectone;
 }
 
@@ -502,6 +513,8 @@ public Object getQueueCount(Map<String,Object> postmap) {
 	result=trainRequest.
 			doPost(getQueueCountUrl, postmap);
 	jsonObjectone=JSONObject.parseObject(result);
+	result=null;
+	postmap=null;
 	return jsonObjectone;
 }
 
@@ -523,6 +536,8 @@ public static Object getQueueCount(trainRequest trainRequest,Map<String,Object> 
 	result=trainRequest.
 			doPost(getQueueCountUrl, postmap);
 	jsonObjectone=JSONObject.parseObject(result);
+	result=null;
+	postmap=null;
 	return jsonObjectone;
 }
 
@@ -582,6 +597,8 @@ public static Object confirmSingleQueue(trainRequest trainRequest,Map<String,Obj
 	result=trainRequest.
 			doPost(confirmSingleForDcQueueUrl, postmap);
 	jsonObjectone=JSONObject.parseObject(result);
+	result=null;
+	postmap=null;
 	return jsonObjectone;
 }
 
@@ -608,6 +625,7 @@ public static Object getQueryOrderWaitTime(trainRequest trainRequest,Map<String,
 	result=trainRequest.
 			doPost(queryOrderWaitTimeUrl, postmap);
 	jsonObjectone=JSONObject.parseObject(result);
+	result=null;
 	return jsonObjectone;
 }
 
@@ -643,6 +661,7 @@ public static  boolean completeBuyTask(trainRequest t) {
 		email.setTomail(t.getUserTrain().getEmail());
 		QQEmail qqEmail=(QQEmail) eFactory.CreateEmail();
 		   qqEmail.JoinEmailQueue(qqEmail,email); 
+		   
 	}
 	else {
 		return false;
@@ -702,10 +721,11 @@ public static boolean queryHasTicket(Map<String, String> map,trainRequest t) {
 public   void StopTask() {
 
 	trainRequest t=getUserSession();
-	if(buyTask.contains(t))
-	buyTask.remove(t);
 	t.getUserTrain().setRemark("抢票任务已停止");
 	t.getUserTrain().setStart(false);
+	if(buyTask.contains(t))
+	buyTask.remove(t);
+
 
 
 	
@@ -713,10 +733,11 @@ public   void StopTask() {
 public   void restartTask() {
 
 	trainRequest t=getUserSession();
+	t.getUserTrain().setStart(true);
+	t.getUserTrain().addMsgList("抢票任务重新启动");
 	if(!buyTask.contains(t))
 	buyTask.add(t);
-	t.getUserTrain().setRemark("抢票任务重新启动");
-	t.getUserTrain().setStart(true);
+	
 
 
 	

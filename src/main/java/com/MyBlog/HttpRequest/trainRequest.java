@@ -78,6 +78,7 @@ String result=null;
 }
 
 
+@SuppressWarnings("unchecked")
 public   boolean processTask() {
 	  
 	  LocalDateTime now=LocalDateTime.now();
@@ -86,6 +87,11 @@ public   boolean processTask() {
 			  LocalDateTime.parse(userTrain.getTrainDate(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
 	  if(now.compareTo(delayTime)<0)
 		  return false;  
+	  else {
+			userTrain.setExecuteCount(userTrain.getExecuteCount()+1);
+		userTrain.setLastExecuteTime(LocalDateTime.now());
+	  }
+	  
 	  if(LocalDateTime.now().plusHours(1).
 			  compareTo(trainDate)>0)
 		  TrainServiceImpl.faileAndStopBuyTask(this, 
@@ -103,9 +109,15 @@ public   boolean processTask() {
 
 	  if(lock.tryLock()) {
 try {
+	
+	
+
+	
+	
 	  //拉取余票信息
 	  Multimap=(List<Map<String, String>>) TrainServiceImpl.queryTicket(this,userTrain.getFromStationTelecode(),userTrain.getToStationTelecode(),userTrain.getTrainQueryDate());
-	 if(Multimap==null) {
+	
+	  if(Multimap==null) {
 		 return false; 
 	 }
 
@@ -123,7 +135,7 @@ if(!jsonObjectone.getBoolean("status")
 userTrain.setDelayTime(0L);	 
 	  for (Map<String, String> map : Multimap) {
 		 
-		  
+		  //是否存在该趟
 		if(map.get("train_no").equals(userTrain.getTrain_no())
 				&&map.get("station_train_code").equals(userTrain.getStationTrainCode())) {
 		
@@ -143,8 +155,9 @@ userTrain.setDelayTime(0L);
 			
 			break;
 		}
+	
 	}
-	  
+
 	 
 	  postMap.put("tour_flag", userTrain.getTour_flag());
 	  postMap.put("to_station_name", userTrain.getToStationTeleName());
@@ -244,8 +257,7 @@ userTrain.addMsgList(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyy
 return false;
 }
 finally{
-	userTrain.setExecuteCount(userTrain.getExecuteCount()+1);
-	userTrain.setLastExecuteTime(LocalDateTime.now());
+
 	lock.unlock();
 }
 	  }
