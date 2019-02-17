@@ -20,6 +20,7 @@ import com.MyBlog.entity.UrlPermissions;
 
 public class myShiroFilterFactoryBean extends ShiroFilterFactoryBean{
 	private String definitions;
+	private String suffix;
 	@Autowired
 	private UrlPermissionsService upService;
 	 @Override
@@ -50,7 +51,7 @@ public void setFilterChainDefinitionMap(Map<String, String> filterChainDefinitio
 		 permissions.setOrderColumn("`url`");
 		 permissions.setOrderType("desc");
 		 List<UrlPermissions> UrlPermissionsList=upService.FindByParam(permissions);
-String suffix=".do";
+
 		 for (UrlPermissions urlPermissions : UrlPermissionsList) {
 			 String check=urlPermissions.getCheck();
 			 
@@ -168,5 +169,13 @@ for (Map.Entry<String, String> entry:filterMap.entrySet()) {
 
 
 	 }
+
+	public String getSuffix() {
+		return suffix;
+	}
+
+	public void setSuffix(String suffix) {
+		this.suffix = suffix;
+	}
 	 
 }

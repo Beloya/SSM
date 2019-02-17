@@ -25,7 +25,7 @@ import org.springframework.web.socket.server.standard.SpringConfigurator;
 
 import com.MyBlog.Controller.WeChatController;
 
-import com.MyBlog.utils.StringUtils;
+import com.MyBlog.utils.myStringUtils;
 
 
 
@@ -71,7 +71,7 @@ public class ChatServic {
 		 this.sessionId=sessionId;
 		 this.session=session;
 		
-            if(!StringUtils.isIllegalCharacter(userName.trim())&&!webSocketSet.containsKey(userName.trim())) {
+            if(!myStringUtils.isIllegalCharacter(userName.trim())&&!webSocketSet.containsKey(userName.trim())) {
 	        Map<String, String> msgmap=null;
 	 	   msgmap=new HashMap<String,String>(2);
 	 	   msgmap.put(userName.trim(),  Base64.decodeToString(userImg));

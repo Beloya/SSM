@@ -15,7 +15,7 @@ import com.MyBlog.Logger.MyLogger;
 import com.MyBlog.Online.entity.UserOnline;
 import com.MyBlog.Shiro.CustomShiroSessionDAO;
 import com.MyBlog.entity.Users;
-import com.MyBlog.utils.StringUtils;
+import com.MyBlog.utils.myStringUtils;
 
 
 
@@ -54,7 +54,7 @@ public class CustomSessionManager {
 	@SuppressWarnings("unchecked")
 	public List<SimplePrincipalCollection> getSimplePrincipalCollectionByUserId(Long...userIds){
 		//把userIds 转成Set，好判断
-		Set<Long> idset = (Set<Long>) StringUtils.array2Set(userIds);
+		Set<Long> idset = (Set<Long>) myStringUtils.array2Set(userIds);
 		//获取所有session
 		Collection<Session> sessions = customShiroSessionDAO.getActiveSessions();
 		//定义返回

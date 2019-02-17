@@ -12,6 +12,7 @@ import com.MyBlog.Service.MessageBoardService;
 import com.MyBlog.entity.MessageBoard;
 
 @Service
+
 public class MessageBoardServiceImpl implements MessageBoardService{
 @Resource
 private MessageBoardMapper mbMapper;
@@ -21,7 +22,6 @@ private MessageBoardMapper mbMapper;
 	}
 
 	public MessageBoard FindBymbId(int mbid) {
-		// TODO Auto-generated method stub
 		return mbMapper.FindBymbId(mbid);
 	}
 

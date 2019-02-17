@@ -6,6 +6,7 @@ package com.MyBlog.quartz;
 
 
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -30,7 +31,8 @@ public class EmailTask {
 		
 		for(int i=0;i<emailqueue.size();i++) {
 			
-			qqeamil= emailqueue.take();
+			qqeamil= emailqueue.poll();
+			if(qqeamil!=null)
 			qqeamil.SendAttMail();
 		}
 		}

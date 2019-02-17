@@ -244,13 +244,13 @@ private TrainServiceImpl tsi;
 
 	tsi.StopTask();
 	
-	return "redirect:../"+request.getContextPath()+"/trainquery";
+	return "redirect:.."+request.getContextPath()+"/trainquery";
 	}
 	@RequestMapping("restarttraintask")
 	public String trainRestart(HttpServletRequest request,Model model) {
 
 	tsi.restartTask();
 	
-	return "redirect:../"+request.getContextPath()+"/trainquery";
+	return "redirect:.."+request.getContextPath()+"/trainquery";
 	}
 }

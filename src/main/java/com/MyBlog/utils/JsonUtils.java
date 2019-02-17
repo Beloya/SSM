@@ -32,8 +32,8 @@ public class JsonUtils {
 	
 	public static Object trainJsonQuery(String data) {
 	    List<Map<String,String>> Multimap =new ArrayList<>(); 
-	    String mapstr=null,tempdata=null,queryResult=null,nstr="--";
-		JSONObject jsonObjectone = null,queryResultJson=null;
+	    String mapstr,tempdata,queryResult,nstr="--";
+		JSONObject jsonObjectone ,queryResultJson;
 		try {
 	    jsonObjectone=JSONObject.parseObject(data);
         tempdata=jsonObjectone.getString("data");
@@ -95,8 +95,7 @@ public class JsonUtils {
 			return null;
 		}
 		finally {
-			Multimap =null;mapstr=null;tempdata=null;queryResult=null;nstr=null;
-			jsonObjectone = null;queryResultJson=null;
+		
 		}
 	}
 	

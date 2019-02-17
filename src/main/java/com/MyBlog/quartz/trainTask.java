@@ -14,11 +14,11 @@ import com.MyBlog.ServiceImpl.TrainServiceImpl;
 public class trainTask{
 	
 	  @Async
-	@Scheduled(cron = " 0/5 * 8,9,10,11,12,13,14,15,16,17,18 * * ?  ")
+	@Scheduled(cron = " 0/7 * 8,9,10,11,12,13,14,15,16,17,18,19,20,21,22 * * ?  ")
 	public void tryBuy(){
 		
 	
-		  if(!TrainServiceImpl.buyTask.isEmpty())
+		
 		  for (Object object :  TrainServiceImpl.buyTask) {
 			  trainRequest t=(trainRequest) object;
 			  if(t.getUserTrain().isStart()&&!t.getUserTrain().isComplete()) {
@@ -26,6 +26,7 @@ public class trainTask{
 			
 			  
 			  }
+			  
 		}
 	
 		  
@@ -33,11 +34,11 @@ public class trainTask{
 	  
 	  
 	
-	@Scheduled(cron = " 0/20 * 19,20,21,22,23,0,1,2,3,4,5,6,7 * * ?  ")
+	@Scheduled(cron = " 0/20 * 23,0,1,2,3,4,5,6,7 * * ?  ")
 	public void keepConnect(){
 		
 	
-		  if(!TrainServiceImpl.buyTask.isEmpty())
+		
 		  for (Object object :  TrainServiceImpl.buyTask) {
 			  trainRequest t=(trainRequest) object;
 			  if(t.getUserTrain().isStart()&&!t.getUserTrain().isComplete()) {

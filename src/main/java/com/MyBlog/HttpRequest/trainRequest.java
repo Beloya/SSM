@@ -1,37 +1,17 @@
 package com.MyBlog.HttpRequest;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+
 import java.net.URLDecoder;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
-import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.CookieStore;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.impl.cookie.BasicClientCookie;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 
 import com.MyBlog.Logger.MyLogger;
 import com.MyBlog.ServiceImpl.TrainServiceImpl;
@@ -93,13 +73,17 @@ public   boolean processTask() {
 	  }
 	  
 	  if(LocalDateTime.now().plusHours(1).
-			  compareTo(trainDate)>0)
+			  compareTo(trainDate)>0) {
 		  TrainServiceImpl.faileAndStopBuyTask(this, 
 					LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))+
 					"已过抢票时间，停止抢票");
+		  return false;
+	  }
 	  
-	if(!userTrain.isStart()||userTrain.isComplete())
+	if(!userTrain.isStart()||userTrain.isComplete()) {
+		System.out.println("isStart:"+userTrain.isStart()+" isComplete:"+userTrain.isComplete());
 		return true;
+	}
 	Calendar c=Calendar.getInstance();
 	JSONObject jsonObjectone = null;
 	  List<Map<String,String>> Multimap =null;
@@ -117,19 +101,10 @@ try {
 	  //拉取余票信息
 	  Multimap=(List<Map<String, String>>) TrainServiceImpl.queryTicket(this,userTrain.getFromStationTelecode(),userTrain.getToStationTelecode(),userTrain.getTrainQueryDate());
 	
-	  if(Multimap==null) {
-		 return false; 
-	 }
-
-	  //检查用户状态
-	  jsonObjectone=(JSONObject) TrainServiceImpl.CheckUser(this);
-if(!jsonObjectone.getBoolean("status")
-		||!JSONObject.parseObject(jsonObjectone.getString("data")).getBoolean("flag")) {
-	TrainServiceImpl.faileAndStopBuyTask(this, 
-			LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))+
-			"登录也许或许已经失效了，停止运行");
-		return false;
-	} 
+if(Multimap==null) {
+	userTrain.addMsgList(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))+" 获取余票信息失败");
+return false;
+}
 
 //无访问错误将恢复间隔时间
 userTrain.setDelayTime(0L);	 
@@ -155,10 +130,25 @@ userTrain.setDelayTime(0L);
 			
 			break;
 		}
+		
 	
 	}
-
+if(postMap.get("secretStr")==null) {
+	userTrain.addMsgList(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))+" 获取车次信息失败");	
+return false;
+}
 	 
+//检查用户状态
+jsonObjectone=(JSONObject) TrainServiceImpl.CheckUser(this);
+if(!jsonObjectone.getBoolean("status")
+	||!JSONObject.parseObject(jsonObjectone.getString("data")).getBoolean("flag")) {
+TrainServiceImpl.faileAndStopBuyTask(this, 
+		LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))+
+		"登录也许或许已经失效了，停止运行");
+	return false;
+} 
+
+
 	  postMap.put("tour_flag", userTrain.getTour_flag());
 	  postMap.put("to_station_name", userTrain.getToStationTeleName());
 	  postMap.put("query_from_station_name", userTrain.getFromStationName());
@@ -251,10 +241,10 @@ return true;
 catch (Exception e) {
 	MyLogger.error(getClass(), e.getMessage());
 	e.printStackTrace();
-userTrain.setDelayTime(userTrain.getDelayTime()<180?userTrain.getDelayTime()+((int)Math.random( )*5+5):userTrain.getDelayTime());
+userTrain.setDelayTime(userTrain.getDelayTime()<30?userTrain.getDelayTime()+((int)Math.random( )*5+5):userTrain.getDelayTime());
 userTrain.addMsgList(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))+
 		"状态异常，将在"+userTrain.getDelayTime()+"秒后重新启动抢票");
-return false;
+
 }
 finally{
 

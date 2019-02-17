@@ -28,7 +28,7 @@ import com.MyBlog.entity.Users;
 import com.MyBlog.entity.Archives;
 import com.MyBlog.entity.Archivesvisibility;
 import com.MyBlog.entity.archivesFlag;
-import com.MyBlog.utils.StringUtils;
+import com.MyBlog.utils.myStringUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 
@@ -141,7 +141,7 @@ public class archivesServiceImpl implements archivesService{
 		PageHelper.startPage(pager.getPage(), pager.getSize());
 		pager.setTotal((int)archivescount);
 		archivelist.parallelStream().peek(archive->{
-	archive.setContext(StringUtils.subStringHTML(archive.getContext(),600));
+	archive.setContext(myStringUtils.subStringHTML(archive.getContext(),600));
 }).collect(Collectors.toList());
 
 		return archivelist;
@@ -153,7 +153,7 @@ public class archivesServiceImpl implements archivesService{
 		archives=amapper.FindByStatus(Status);
 
 		archives=archives.parallelStream().peek(archive->{
-			archive.setContext(StringUtils.subStringHTML(archive.getContext(),600));
+			archive.setContext(myStringUtils.subStringHTML(archive.getContext(),600));
 		}).collect(Collectors.toList());
 		return archives;
 	}

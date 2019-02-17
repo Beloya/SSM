@@ -134,7 +134,7 @@
      </bean>
      -->
      <!--  -->
-       <bean id="StringUtils" class="com.MyBlog.utils.StringUtils">
+       <bean id="StringUtils" class="com.MyBlog.utils.myStringUtils">
         <property name="LOGIN_URL" value="${LOGIN_URL}"/>   
         <!-- 踢出提示 -->
             <property name="KICKED_OUT" value="${LOGIN_URL}"/>   
@@ -169,6 +169,7 @@
         <bean id="shiroFilter" class="com.MyBlog.Shiro.Filter.myShiroFilterFactoryBean">
 <property name="securityManager" ref="securityManager"/>
  <property name="loginUrl" value="${LOGIN_URL}" />
+ <property name="suffix" value=".do"></property>
         <!--  property name="successUrl" value="jsp/suc.htm" /-->
         <property name="unauthorizedUrl" value="${UNAUTHORIZED_URL}" />
                  <property name="filters">

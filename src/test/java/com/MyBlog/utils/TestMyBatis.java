@@ -97,6 +97,8 @@ import com.MyBlog.learn.GuavaMyBlog;
 import com.MyBlog.learn.HandSomeBoy;
 import com.MyBlog.learn.Observer;
 import com.MyBlog.learn.capt1;
+import com.MyBlog.learn.sub;
+import com.MyBlog.learn.superClass;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
@@ -203,7 +205,8 @@ MyBlog.publishArticle("设计模式-观察者模式");
 	public void GuavaTest() {
 	
 
-String path=this.getClass().getClassLoader().getResource("").getPath();
+superClass sc= new sub();
+sc.doprocess(0);
 /*File file=new File(path+"station.text");
 //System.out.println(path);
 	System.out.println(file.exists());
