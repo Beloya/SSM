@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,7 +12,7 @@ import com.MyBlog.Dao.BlogMapper;
 import com.MyBlog.Service.blogService;
 import com.MyBlog.entity.Blog;
 
-@Service
+@Component
 public class blogServiceImpl implements blogService{
 	
 	@Resource

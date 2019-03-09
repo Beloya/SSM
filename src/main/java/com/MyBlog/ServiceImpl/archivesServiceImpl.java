@@ -12,6 +12,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.subject.Subject;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -32,7 +33,7 @@ import com.MyBlog.utils.myStringUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 
-@Service
+@Component
 public class archivesServiceImpl implements archivesService{
 
 	@Resource

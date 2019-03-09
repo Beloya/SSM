@@ -4,13 +4,15 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.MyBlog.Dao.archivescommitMapper;
 import com.MyBlog.Service.archivescommitService;
 import com.MyBlog.entity.Archivescommit;
-@Service
+
+@Component
 public class archivescommitServiceImpl implements archivescommitService{
 
 	@Resource
@@ -36,7 +38,8 @@ public class archivescommitServiceImpl implements archivescommitService{
 
 	
 	public int Archivescommit(com.MyBlog.entity.Archivescommit a) {
-		// TODO Auto-generated method stub
+		
+
 		return acmapper.AddArchivescommit(a);
 	}
 

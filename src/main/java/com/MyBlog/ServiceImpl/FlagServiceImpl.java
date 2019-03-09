@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,7 +12,7 @@ import com.MyBlog.Dao.FlagMapper;
 import com.MyBlog.Service.FlagService;
 import com.MyBlog.entity.Flag;
 
-@Service
+@Component
 public class FlagServiceImpl implements FlagService{
 
 	@Resource

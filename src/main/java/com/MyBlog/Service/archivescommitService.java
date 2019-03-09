@@ -2,8 +2,10 @@ package com.MyBlog.Service;
 
 import java.util.List;
 
-import com.MyBlog.entity.Archivescommit;
+import org.springframework.stereotype.Service;
 
+import com.MyBlog.entity.Archivescommit;
+@Service
 public interface archivescommitService {
 	public List<Archivescommit> FindAll();
 	public List<Archivescommit> FindByAId(int AID);

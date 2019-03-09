@@ -10,6 +10,6 @@ public interface BlogMapper {
 	public Blog FindByUserName(String UserName);
 	public List<Blog> FindAll();
 	public Blog FindById(int ID);
-	public void AddBlog(Blog a);
-	public void delete(int ID);
+	public  void AddBlog(Blog a);
+	public  void delete(int ID) ;
 }

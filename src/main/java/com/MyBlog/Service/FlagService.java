@@ -2,8 +2,10 @@ package com.MyBlog.Service;
 
 import java.util.List;
 
-import com.MyBlog.entity.Flag;
+import org.springframework.stereotype.Service;
 
+import com.MyBlog.entity.Flag;
+@Service
 public interface FlagService {
 
 		public List<Flag> FindAll();

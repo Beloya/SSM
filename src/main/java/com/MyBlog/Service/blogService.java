@@ -2,8 +2,10 @@ package com.MyBlog.Service;
 
 import java.util.List;
 
-import com.MyBlog.entity.Blog;
+import org.springframework.stereotype.Service;
 
+import com.MyBlog.entity.Blog;
+@Service
 public interface blogService {
 	public Blog FindByUserName(String UserName);
 	public List<Blog> FindAll();

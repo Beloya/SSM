@@ -2,8 +2,10 @@ package com.MyBlog.Service;
 
 import java.util.List;
 
-import com.MyBlog.entity.Archivesvisibility;
+import org.springframework.stereotype.Service;
 
+import com.MyBlog.entity.Archivesvisibility;
+@Service
 public interface ArchivesvisibilityService {
 	public List<Archivesvisibility> FindAll();
 	public void Addarchivesvisibilit(Archivesvisibility archivesvisibility);

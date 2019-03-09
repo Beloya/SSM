@@ -2,10 +2,12 @@ package com.MyBlog.Service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.MyBlog.entity.Pager;
 import com.MyBlog.entity.Archives;
 import com.MyBlog.entity.archivesFlag;
-
+@Service
 public interface archivesService {
 	public List<Archives> FindAll();
 	public List<Archives> IndexShow(int Status,Pager pager);

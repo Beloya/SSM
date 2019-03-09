@@ -2,8 +2,10 @@ package com.MyBlog.Service;
 
 import java.util.List;
 
-import com.MyBlog.entity.type;
+import org.springframework.stereotype.Service;
 
+import com.MyBlog.entity.type;
+@Service
 public interface typeService {
 	public List<type> FindAll();
 	public List<type> FindById(type type);

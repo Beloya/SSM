@@ -2,8 +2,10 @@ package com.MyBlog.Service;
 
 import java.util.List;
 
-import com.MyBlog.entity.MessageBoard;
+import org.springframework.stereotype.Service;
 
+import com.MyBlog.entity.MessageBoard;
+@Service
 public interface MessageBoardService {
 	public List<MessageBoard> FindAll();
 	public MessageBoard FindBymbId(int mbid);

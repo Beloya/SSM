@@ -3,12 +3,14 @@ package com.MyBlog.ServiceImpl;
 
 import java.util.List;
 import javax.annotation.Resource;
+
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import com.MyBlog.Dao.typeMapper;
 import com.MyBlog.Service.typeService;
 import com.MyBlog.entity.type;
 
-@Service
+@Component
 public class typeServiceImpl implements typeService{
 
 	@Resource

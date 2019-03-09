@@ -2,8 +2,10 @@ package com.MyBlog.Service;
 
 import java.util.List;
 
-import com.MyBlog.entity.UrlPermissions;
+import org.springframework.stereotype.Service;
 
+import com.MyBlog.entity.UrlPermissions;
+@Service
 public interface UrlPermissionsService {
 	public List<UrlPermissions> FindAll();
 	public UrlPermissions FindById(int upID);

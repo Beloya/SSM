@@ -4,8 +4,10 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.MyBlog.entity.Users;
+import org.springframework.stereotype.Service;
 
+import com.MyBlog.entity.Users;
+@Service
 public interface userService {
 	public Users FindByUserName(String UserName);
 	public Object Login(Users user,String RememberMe);

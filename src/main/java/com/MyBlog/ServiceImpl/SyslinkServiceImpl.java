@@ -4,12 +4,13 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.MyBlog.Dao.SyslinkMapper;
 import com.MyBlog.Service.SyslinkService;
 import com.MyBlog.entity.Syslink;
-@Service
+@Component
 public class SyslinkServiceImpl implements SyslinkService{
 
 	@Resource

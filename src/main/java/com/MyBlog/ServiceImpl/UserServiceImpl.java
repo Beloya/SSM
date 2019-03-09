@@ -18,6 +18,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +28,7 @@ import com.MyBlog.entity.Users;
 import com.MyBlog.utils.myStringUtils;
 import com.github.pagehelper.util.StringUtil;
 
-@Service
+@Component
 public class UserServiceImpl implements userService{
 	@Resource
 	private UsersMapper uMapper;
@@ -124,11 +125,13 @@ public class UserServiceImpl implements userService{
          subject.login(usernamePasswordToken);
          
          Login(user, "off");
+         
 		} catch (Exception e) {
 			e.printStackTrace();
 			Msg.put("code","1");
 			Msg.put("msg","系统错误");
 		}
+	
 		 return Msg;
 	}
 

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -22,10 +23,11 @@ import com.MyBlog.HttpRequest.trainRequest;
 import com.MyBlog.Logger.MyLogger;
 import com.MyBlog.Message.QQEmail;
 import com.MyBlog.Service.SyslinkService;
+import com.MyBlog.Service.TrainService;
 import com.MyBlog.Service.UrlPermissionsService;
 import com.MyBlog.Service.archivesService;
 import com.MyBlog.Service.blogService;
-import com.MyBlog.ServiceImpl.TrainServiceImpl;
+import com.MyBlog.ServiceImpl.TrainBuyService;
 import com.MyBlog.entity.Blog;
 import com.MyBlog.entity.Syslink;
 import com.MyBlog.entity.Archives;
@@ -42,6 +44,9 @@ public class BlogInfoLoad  implements ApplicationListener<ContextRefreshedEvent>
 	private archivesService as;
 	@Autowired
 	private UrlPermissionsService upService;
+	@Autowired
+	@Qualifier("trainTask")
+	private TrainService train_service;
 	public  void BlogInfoInit() {
 		Blog blog=null;
 		List<Syslink> syslinks=null;
@@ -85,14 +90,14 @@ public class BlogInfoLoad  implements ApplicationListener<ContextRefreshedEvent>
 	public void destroy() throws Exception {
 		QQEmail qqeamil=new QQEmail();
 		BlockingQueue<QQEmail> emailqueue=qqeamil.getEmailqueue();
-		 for (Object object :  TrainServiceImpl.buyTask) {
+		 for (Object object :  TrainService.getBuyTask()) {
 			  trainRequest t=(trainRequest) object;
 			  if(t.getUserTrain().isStart()&&!t.getUserTrain().isComplete()) {
-				  TrainServiceImpl.faileAndStopBuyTask(t,"服务重启中，任务已重置");
-				
+				  train_service.setTrainrequest(t);
+				  train_service.faileAndStopBuyTask("服务重启中，任务已重置"); 
 			  }
 		}
-		 TrainServiceImpl.p.shutdown();
+		 trainRequest.p.shutdown();
 		for(int i=0;i<emailqueue.size();i++) {
 			
 			qqeamil= emailqueue.take();

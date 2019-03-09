@@ -2,8 +2,10 @@ package com.MyBlog.Service;
 
 import java.util.List;
 
-import com.MyBlog.entity.Syslink;
+import org.springframework.stereotype.Service;
 
+import com.MyBlog.entity.Syslink;
+@Service
 public interface SyslinkService {
 	public List<Syslink> FindAll();
 	public List<Syslink> FindBase();

@@ -1,14 +1,19 @@
 package com.MyBlog.utils;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringBufferInputStream;
+import java.math.RoundingMode;
 import java.security.GeneralSecurityException;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -30,6 +35,12 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TimeZone;
+import java.util.TimerTask;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -73,6 +84,7 @@ import com.MyBlog.Message.EmailUtil;
 import com.MyBlog.Message.EmailUtilFactory;
 import com.MyBlog.Service.SyslinkService;
 import com.MyBlog.Service.archivesService;
+import com.MyBlog.Service.archivescommitService;
 import com.MyBlog.Service.blogService;
 import com.MyBlog.Service.typeService;
 import com.MyBlog.Service.userService;
@@ -86,6 +98,7 @@ import com.MyBlog.entity.Role_Permissions;
 import com.MyBlog.entity.Syslink;
 import com.MyBlog.entity.Users;
 import com.MyBlog.entity.Archives;
+import com.MyBlog.entity.Archivescommit;
 import com.MyBlog.entity.Archivesvisibility;
 import com.MyBlog.entity.area;
 import com.MyBlog.entity.type;
@@ -128,10 +141,6 @@ final	String  station_names ="";
 
 	@Autowired
 	private archivesService aservice;
-	@Resource 
-	private UsersMapper uMapper;
-	@Resource
-	private BlogMapper bMapper;
 	@Autowired
 	private userService userivce;
 	@Autowired
@@ -142,6 +151,8 @@ final	String  station_names ="";
 	private typeService tservice;
 	@Autowired
 	private SyslinkService service;
+	@Autowired
+	private archivescommitService acs;
 
 	@Resource
 	private archivesMapper amapper;
@@ -416,5 +427,105 @@ l1=l1.next;
 		  String Text=mapper.writeValueAsString(jd);
 		  System.out.println(Text);
 	}*/
+	public static long currSize=0;
+	public static long fileSize=0;
+	@Test
+	public void transaction() throws IOException {
+		String  fileName="D:\\300_v201901241.zip";
+		String outfileName="F:\\300_v201901241\\300_v201901241.zip";
+		
+		
+	File file=new File(fileName);
+	File outfile=new File(outfileName);
+	FileInputStream fis=new FileInputStream(file);
+	BufferedInputStream bis=new BufferedInputStream(fis);
+	int len=0;
+	currSize=0;
+	byte[] b=new byte[1024];
+    fileSize=file.length();
+    IOTest mt=new IOTest(fileSize);
+	FileOutputStream fileOut=new FileOutputStream(outfile);
+	BufferedOutputStream bos=new BufferedOutputStream(fileOut);
+	DecimalFormat df = new DecimalFormat("0%");
+	df.setMaximumFractionDigits(2);
+	df.setRoundingMode(RoundingMode.HALF_UP);
+	new Thread(mt).start();
+	while((len=bis.read(b))!=-1) {
+		currSize=currSize+len;
+		double precent= (double)currSize/(double)fileSize;
+		
+		bos.write(b);
+	}
 
+	bos.flush();
+	bos.close();
+	fileOut.close();
+		//System.in.read(new byte[1024]);
+	}
+	
+	public class IOTest   implements Runnable{
+		private long currSize=0;
+		private double precent=0;
+		private long totalSize=0;
+		private long oldSize=0;
+		private String precentStr;
+		private double sudu;
+		private ReentrantReadWriteLock rlock=new ReentrantReadWriteLock();
+	public IOTest() {
+		
+	}
+	public IOTest(long totalSize) {
+		this.totalSize=totalSize;
+		Compute() ;
+	}
+	public void Compute() {
+		try {
+			if(rlock.writeLock().tryLock()) {
+				oldSize=currSize;
+        this.currSize=TestMyBatis.currSize;
+		this.totalSize=TestMyBatis.fileSize;
+		DecimalFormat df = new DecimalFormat("0%");
+		df.setMaximumFractionDigits(2);
+		df.setRoundingMode(RoundingMode.HALF_UP);
+		double precent= (double)currSize/(double)totalSize;
+		sudu=(currSize-oldSize)/1024/1024;
+		precentStr=df.format(precent);
+			}
+			else {
+				System.out.println("操作中。。请等待");
+			}
+		}
+		finally{
+			rlock.writeLock().unlock();
+		}
+	}
+		@Override
+		public void run() {
+			try {
+				while(true) {
+					Compute();
+					System.out.println("当前文件复制尺寸"+(currSize/1024/1024)+"MB /"+(fileSize/1024/1024)+"MB  进度："+precentStr+" 速率："+sudu+"MB/S");
+					Thread.sleep(1000);
+					
+				}
+			}
+			catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			finally {
+				rlock.readLock().unlock();
+			}
+			
+			
+		}
+		public long getCurrSize() {
+			return currSize;
+		}
+		public void setCurrSize(long currSize) {
+			this.currSize = currSize;
+		}
+	
+		
+	}
 }

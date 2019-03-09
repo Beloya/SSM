@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.expression.spel.ast.OpInc;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +24,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.MyBlog.HttpRequest.trainRequest;
 import com.MyBlog.Logger.MyLogger;
-import com.MyBlog.ServiceImpl.TrainServiceImpl;
+import com.MyBlog.Service.TrainService;
+import com.MyBlog.ServiceImpl.TrainBuyService;
 import com.MyBlog.entity.Users;
 import com.MyBlog.entity.trainData;
 import com.alibaba.fastjson.JSONArray;
@@ -33,8 +35,8 @@ import com.alibaba.fastjson.JSONObject;
 @Controller
 public class trainFunctionController {
 @Autowired
-private TrainServiceImpl tsi;
-	
+@Qualifier("TrainBuy")
+private TrainService tsi;
 	@RequestMapping("trainquery")
 	public String trainquery(Model model) {
 		Calendar c=  Calendar.getInstance();
@@ -46,7 +48,7 @@ private TrainServiceImpl tsi;
 	
 			Principaluser= (Users) Optional.ofNullable(subject.getPrincipal()).orElse(null);
 			username=Principaluser!=null?Principaluser.getUserName():"";
-			train=(trainRequest) TrainServiceImpl.sessionTaskGet(username);
+			train=(trainRequest) TrainBuyService.sessionTaskGet(username);
 
 		model.addAttribute("trainData", train!=null?train.getUserTrain():null);
 		model.addAttribute("nowDay", nowDay);

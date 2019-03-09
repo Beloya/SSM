@@ -4,13 +4,14 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.MyBlog.Dao.UrlPermissionsMapper;
 import com.MyBlog.Service.UrlPermissionsService;
 import com.MyBlog.entity.UrlPermissions;
 
-@Service
+@Component
 public class UrlPermissionsServiceImpl implements UrlPermissionsService{
 @Resource
 private UrlPermissionsMapper upMapper;

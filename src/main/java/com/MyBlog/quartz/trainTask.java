@@ -6,7 +6,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import com.MyBlog.HttpRequest.trainRequest;
-import com.MyBlog.ServiceImpl.TrainServiceImpl;
+import com.MyBlog.ServiceImpl.TrainBuyService;
 
 
 @EnableAsync
@@ -19,12 +19,10 @@ public class trainTask{
 		
 	
 		
-		  for (Object object :  TrainServiceImpl.buyTask) {
+		  for (Object object :  TrainBuyService.getBuyTask()) {
 			  trainRequest t=(trainRequest) object;
 			  if(t.getUserTrain().isStart()&&!t.getUserTrain().isComplete()) {
-				  TrainServiceImpl.p.execute(t);
-			
-			  
+				  trainRequest.p.execute(t);
 			  }
 			  
 		}
@@ -39,10 +37,10 @@ public class trainTask{
 		
 	
 		
-		  for (Object object :  TrainServiceImpl.buyTask) {
+		  for (Object object :  TrainBuyService.getBuyTask()) {
 			  trainRequest t=(trainRequest) object;
 			  if(t.getUserTrain().isStart()&&!t.getUserTrain().isComplete()) {
-				  TrainServiceImpl.p.execute(t);
+				  trainRequest.p.execute(t); 
 			
 			
 			  
